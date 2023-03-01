@@ -2,10 +2,10 @@ import transformerDirective from "@unocss/transformer-directives";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-  // shopware: {
-  //   shopwareEndpoint: "http://localhost:8000",
-  //   shopwareAccessToken: "your-access-token",
-  // },
+   shopware: {
+    shopwareEndpoint: "https://shopwareapi.nwtlab.com",
+    shopwareAccessToken: "SWSCUNHMWEPGQND4QUK4EGH2MA",
+  },
   alias: {
     /**
      * TODO: Temp fix until new VueUse published:
