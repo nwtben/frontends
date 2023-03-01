@@ -1,15 +1,11 @@
 import transformerDirective from "@unocss/transformer-directives";
-// use a webservice 
-
-// Determine whether the sentiment of text is positive
-// Use a web service to determine whether the sentiment of text is positive
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-  shopware: {
-    shopwareEndpoint: "https://shopwareapi.nwtlab.com",
-    shopwareAccessToken: "SWSCUNHMWEPGQND4QUK4EGH2MA",
-  },
+  // shopware: {
+  //   shopwareEndpoint: "http://localhost:8000",
+  //   shopwareAccessToken: "your-access-token",
+  // },
   alias: {
     /**
      * TODO: Temp fix until new VueUse published:
