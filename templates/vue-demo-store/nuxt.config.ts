@@ -1,7 +1,8 @@
 import transformerDirective from "@unocss/transformer-directives";
-
+import { NuxtConfig } from '@nuxt/types';
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+
    shopware: {
     shopwareEndpoint: "https://shopwareapi.nwtlab.com",
     shopwareAccessToken: "SWSCUNHMWEPGQND4QUK4EGH2MA",
@@ -23,7 +24,6 @@ export default defineNuxtConfig({
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
-    "@nuxt/devtools"
   ],
   // components: true,
   components: {
@@ -65,4 +65,6 @@ export default defineNuxtConfig({
       linkExactActiveClass: "text-brand-primary",
     },
   },
+  ssr: true,
+
 });
