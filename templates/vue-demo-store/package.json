@@ -11,9 +11,7 @@
     "analyze": "nuxi analyze"
   },
   "dependencies": {
-    "@nuxt/bridge": "^0.10.1",
     "@nuxt/types": "^2.16.0",
-    "@nuxt/typescript-build": "^2.1.0",
     "@shopware-pwa/api-client": "canary",
     "@shopware-pwa/cms-base": "canary",
     "@shopware-pwa/composables-next": "canary",
