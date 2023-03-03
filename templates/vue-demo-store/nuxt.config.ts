@@ -3,10 +3,10 @@ import { NuxtConfig } from '@nuxt/types';
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
 
-//   shopware: {
-  //  shopwareEndpoint: "https://shopwareapi.nwtlab.com",
-    //shopwareAccessToken: "SWSCUNHMWEPGQND4QUK4EGH2MA",
- // },
+   shopware: {
+    shopwareEndpoint: "https://shopware.nwtsaas.com,
+    shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
+  },
   alias: {
     /**
      * TODO: Temp fix until new VueUse published:
