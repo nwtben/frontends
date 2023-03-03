@@ -4,7 +4,7 @@ import { NuxtConfig } from '@nuxt/types';
 export default defineNuxtConfig({
 
    shopware: {
-    shopwareEndpoint: "https://shopware.nwtsaas.com,
+    shopwareEndpoint: "https://shopware.nwtsaas.com",
     shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
   },
   alias: {
