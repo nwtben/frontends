@@ -12,7 +12,7 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
 
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <nav class="hidden lg:flex space-x-4 items-center lg:w-7/12">
+  <nav class="hidden lg:flex space-x-7 items-center">
     <div
       v-for="navigationElement in navigationElements"
       :key="navigationElement.id"
@@ -22,9 +22,10 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
     >
       <RouterLink
         :to="'/' + navigationElement.seoUrls?.[0]?.seoPathInfo"
-        class="text-base font-medium text-gray-500 hover:text-gray-900"
+        class="flex items-center gap-1 text-base font-medium uppercase text-brand-dark"
       >
         {{ getTranslatedProperty(navigationElement, "name") }}
+        <span class="h-5 w-5 i-carbon-chevron-down" />
       </RouterLink>
 
       <!--

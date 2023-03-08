@@ -7,38 +7,37 @@ const isSidebarOpen = inject("isSidebarOpen");
 </script>
 
 <template>
-  <div class="relative bg-white">
-    <div class="mx-auto px-4 sm:px-6">
+  <div class="relative border-b-2 border-gray-100">
+    <div class="container mx-auto">
+      <div class="flex justify-end">
+        <LayoutLanguage />
+      </div>
       <div
-        class="flex justify-between items-center border-b-2 border-gray-100 py-6 space-x-4"
+        class="flex justify-between items-center pb-3 space-x-4"
       >
-        <div class="flex justify-start lg:flex-1 w-full md:w-1/3 lg:w-1/12">
-          <div class="order-2 lg:order-1 ml-4 lg:ml-0">
+        <div class="flex-[2_2_0%]">
+          <LayoutTopNavigation />
+        </div>
+        <div class="flex-1 flex justify-center">
+          <div class="py-3 lg:p-0">
+            <LayoutSideMenu />
+          </div>
+          <div class="ml-4 lg:ml-0">
             <RouterLink to="/">
-              <span class="sr-only">Shopware</span>
+              <span class="sr-only">LUXED</span>
               <img
-                class="h-8 w-auto sm:h-10"
+                class="h-5 w-auto"
                 src="/logo.svg"
                 alt="Logo"
-                width="40px"
-                height="40px"
               >
             </RouterLink>
           </div>
-          <div class="order-1 lg:order-2 py-3 lg:p-0">
-            <LayoutSideMenu />
-          </div>
         </div>
 
-        <LayoutTopNavigation />
-
-        <div class="hidden md:block w-full md:w-1/3 lg:w-2/12">
+        <div class="flex-[2_2_0%] flex gap-4 items-center justify-end">
           <LayoutStoreSearch />
-        </div>
-
-        <div class="w-full md:w-1/3 lg:w-2/12 flex items-center justify-end">
           <AccountMenu />
-          <div class="flex ml-4 flow-root lg:ml-6">
+          <div class="flex flow-root">
             <button
               class="group -m-2 p-2 flex items-center relative"
               aria-label="wishlist"
@@ -57,7 +56,7 @@ const isSidebarOpen = inject("isSidebarOpen");
             </button>
           </div>
           <!-- Cart -->
-          <div class="flex ml-4 flow-root lg:ml-6">
+          <div class="flex flow-root">
             <button
               class="group -m-2 p-2 flex items-center relative"
               aria-label="cart"
@@ -66,7 +65,7 @@ const isSidebarOpen = inject("isSidebarOpen");
             >
               <!-- Heroicon name: outline/shopping-bag -->
               <div
-                class="w-7 h-7 i-carbon-shopping-bag text-gray-600 hover:text-brand-primary"
+                class="w-7 h-7 i-carbon-shopping-cart text-gray-600 hover:text-brand-primary"
               />
               <span
                 v-if="count > 0"
@@ -78,6 +77,7 @@ const isSidebarOpen = inject("isSidebarOpen");
             </button>
           </div>
         </div>
+
       </div>
     </div>
   </div>

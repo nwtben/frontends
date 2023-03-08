@@ -53,10 +53,11 @@ export default defineNuxtConfig({
       },
       colors: {
         brand: {
-          primary: "#189eff",
+          primary: "#1F2937",
           light: "#5ebbff",
-          dark: "#0081df",
+          dark: "#374151",
         },
+        gray: "#F3F4F6"
       },
     },
   },
