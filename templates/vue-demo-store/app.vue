@@ -72,6 +72,7 @@ provide("isSideMenuOpened", isSideMenuOpened);
 <style>
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  @apply text-brand-dark;
 }
 
 h2 {

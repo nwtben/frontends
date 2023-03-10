@@ -71,7 +71,7 @@ watch(enter, (value) => {
 <template>
   <div
     ref="searchContainer"
-    class="relative group bg-gray p-3 pr-0 transition duration-300 hover:shadow-md inline-block"
+    class="relative group bg-gray-500 p-3 pr-0 transition duration-300 hover:shadow-md inline-block"
     :class="[active ? 'shadow-lg' : 'shadow']"
   >
     <div class="flex items-center">

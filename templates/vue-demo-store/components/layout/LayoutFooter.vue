@@ -11,23 +11,16 @@ const gridColumns = computed<number>(() =>
 </script>
 
 <template>
-  <footer class="px-4 sm:px-6">
-    <menu class="border-t-2 border-gray-100 flex justify-center">
+  <footer class="w-full bg-brand-primary">
+    <menu class="container mx-auto flex flex-col justify-center">
       <div
-        class="py-10 w-full max-w-screen-xl"
-        :class="`grid grid-cols-2 md:grid-cols-${gridColumns}`"
+        class="w-full py-10 grid grid-cols-2 md:grid-cols-4"
       >
-        <div class="hidden md:block">
-          <RouterLink to="/">
-            <span class="sr-only">Shopware</span>
-            <img class="h-15 w-auto sm:h-15" src="/logo.svg" alt="Logo" />
-          </RouterLink>
-        </div>
         <div
           v-for="navigationElement in navigationElements"
           :key="navigationElement.id"
         >
-          <h4 class="mb-5">
+          <h4 class="mb-5 text-gray-300 uppercase font-semibold text-sm">
             {{ getTranslatedProperty(navigationElement, "name") }}
           </h4>
           <template v-if="navigationElement.childCount > 0">
@@ -39,7 +32,7 @@ const gridColumns = computed<number>(() =>
               >
                 <RouterLink
                   :to="'/' + navigationChild.seoUrls[0]?.seoPathInfo"
-                  class="text-base font-normal text-gray-500 hover:text-gray-900"
+                  class="text-base font-normal text-gray-200"
                 >
                   {{ getTranslatedProperty(navigationChild, "name") }}
                 </RouterLink>
@@ -47,26 +40,35 @@ const gridColumns = computed<number>(() =>
             </ul>
           </template>
         </div>
-        <div class="hidden md:block">
-          <ul class="list-none">
-            <li class="pb-1">
-              <a
-                href="mailto:info@shopware.com"
-                class="text-base font-medium text-gray-500 hover:text-gray-900"
-                >info@shopware.com</a
-              >
-            </li>
-            <li class="pb-1">
-              <a
-                href="tel:0080074676260"
-                class="text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Worldwide: 00 800 746 7626 0
-              </a>
-            </li>
-          </ul>
+      </div>
+      <div
+        class="w-full py-10 grid grid-cols-1 gap-8 md:gap-0 md:grid-cols-2"
+      >
+        <div>
+          <h4 class="mb-2 text-gray-300 uppercase font-semibold text-sm">
+            SOCIAL
+          </h4>
+          <div class="flex space-x-4">
+            <div class="text-gray-200 w-5 h-5 i-custom:facebook" />
+            <div class="text-gray-200 w-5 h-5 i-carbon-logo-instagram" />
+            <div class="text-gray-200 w-5 h-5 i-carbon-logo-twitter" />
+            <div class="text-gray-200 w-5 h-5 i-carbon-logo-youtube" />
+          </div>
+        </div>
+        <div>
+          <h4 class="mb-2 text-gray-300 uppercase font-semibold text-sm">
+            PAYMENT
+          </h4>
+          <div class="flex space-x-4">
+            <img src="/svg/klarna.svg" />
+            <img src="/svg/visa.svg" />
+            <img src="/svg/mastercard.svg" />
+            <img src="/svg/swish.svg" />
+          </div>
         </div>
       </div>
+      <div class="border-t border-gray-600"></div>
+      <p class="text-gray-300 mt-8 mb-16 text-center">© 2023 Stylad, All rights reserved.</p>
     </menu>
   </footer>
 </template>
