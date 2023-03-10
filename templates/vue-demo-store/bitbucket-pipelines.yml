@@ -5,9 +5,9 @@ pipelines:
     - step:
         name: Build
         script:
-          - pnpm install && pnpm run build
+          - npm install && npm run build
         artifacts:
-          - dist/**
+          - build/**
 
     - step:
         name: Deploy to Firebase
