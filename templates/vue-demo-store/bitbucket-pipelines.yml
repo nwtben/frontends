@@ -7,7 +7,7 @@ pipelines:
         script:
           - pnpm install && pnpm run build
         artifacts:
-          - .output/public/**
+          - dist/**
 
     - step:
         name: Deploy to Firebase
