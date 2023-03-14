@@ -23,7 +23,10 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
-    "@shopware-pwa/cms-base",
+    "@shopware-pwa/cms-base"
+  ],
+  plugins: [
+    "~/plugins/vue-gtm.client.js"
   ],
   // components: true,
   components: {
@@ -65,6 +68,5 @@ export default defineNuxtConfig({
       linkExactActiveClass: "text-brand-primary",
     },
   },
-  ssr: true,
-
+  ssr: true
 });
