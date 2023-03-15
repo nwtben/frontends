@@ -70,6 +70,11 @@ provide("isSideMenuOpened", isSideMenuOpened);
 </template>
 
 <style>
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  @apply text-brand-dark;
+}
+
 h2 {
   @apply text-4xl py-4;
 }
