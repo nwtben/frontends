@@ -20,4 +20,5 @@ pipelines:
               FIREBASE_TOKEN: $FIREBASE_TOKEN
               PROJECT_ID: $FIREBASE_PROJECT
               PUBLIC_DIR: '.output/public'
+              NODE_JS_VERSION: '18'
 
