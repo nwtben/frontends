@@ -7,7 +7,7 @@ pipelines:
         script:
           - npm install && npm run build
         artifacts:
-          - build/**
+          - .output/**
 
     - step:
         name: Deploy to Firebase
@@ -17,4 +17,5 @@ pipelines:
             variables:
               FIREBASE_TOKEN: $FIREBASE_TOKEN
               PROJECT_ID: $FIREBASE_PROJECT
+              PUBLIC_DIR: '.output/public'
 
