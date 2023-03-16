@@ -1,13 +1,30 @@
 {
   "hosting": {
     "headers": [
-      {"source": "/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}
+      {
+        "source": "/service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
     ],
+    "site": "vue-shopware",
     "public": ".output/public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "cleanUrls": "true",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "server"
+      }
     ]
   }
 }
+
