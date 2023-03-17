@@ -10,6 +10,7 @@ pipelines:
           - npm install && npm run build
         artifacts:
           - .output/**
+          - .nuxt/**
 
     - step:
         name: Deploy to Firebase
