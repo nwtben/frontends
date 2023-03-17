@@ -1,19 +1,10 @@
 {
-  "functions": { "source": ".output/server" },
   "hosting": {
-    "site": "vue-shopware",
     "public": ".output/public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "cleanUrls": true,
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "server"
-      }
     ]
   }
 }
