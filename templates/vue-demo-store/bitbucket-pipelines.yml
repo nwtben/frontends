@@ -8,8 +8,8 @@ pipelines:
           - node
         script:
           - npm install
-          - npm run build
           - npm run generate
+          - npm run build
         artifacts:
           - .output/**
           - .nuxt/**
