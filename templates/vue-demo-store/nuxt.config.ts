@@ -24,6 +24,7 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image-edge",
+    "@twicpics/components/nuxt3"
   ],
   // components: true,
   components: {
@@ -84,7 +85,7 @@ export default defineNuxtConfig({
   image: {
     provider: 'twicpics',
     twicpics: {
-      baseURL: 'https://nuxt-demo.twic.pics'
+      baseURL: 'https://turnkey-shopware.twic.pics'
     }
   },
   ssr: true,
