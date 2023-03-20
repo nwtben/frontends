@@ -24,12 +24,15 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image-edge",
-    "@twicpics/components/nuxt3",
-    {
-      domain: "https://turnkey-shopware.twic.pics",
-      anticipation: 0.5,
-      step: 100,
-    },
+    [
+      `@twicpics/components/nuxt3`,
+      {
+        domain: `https://turnkey-shopware.twic.pics/`,
+        anticipation: 0.5,
+        step: 50
+      },
+    ],
+    
   ],
   // components: true,
   components: {
