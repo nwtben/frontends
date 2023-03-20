@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
+    "@nuxt/image-edge",
   ],
   // components: true,
   components: {
@@ -79,6 +80,12 @@ export default defineNuxtConfig({
     options: {
       linkExactActiveClass: "text-brand-primary",
     },
+  },
+  image: {
+    provider: 'twicpics',
+    twicpics: {
+      baseURL: 'https://nuxt-demo.twic.pics'
+    }
   },
   ssr: true,
 
