@@ -1,5 +1,4 @@
 {
-  "functions": { "source": ".output/server" },
   "hosting": {
     "public": ".output/public",
     "ignore": [
@@ -11,7 +10,6 @@
     "rewrites": [
       { 
         "source": "**", 
-        "function": "server" 
       }
     ]
   }
