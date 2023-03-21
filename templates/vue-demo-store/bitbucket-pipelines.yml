@@ -41,6 +41,6 @@ pipelines:
   - <<: *build
   - <<: *release-dev
   branches:
-    develop:
+    feature/*:
     - <<: *build
     - <<: *push
