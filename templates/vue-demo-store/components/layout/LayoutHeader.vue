@@ -4,10 +4,45 @@ import { RouterLink } from "vue-router";
 const { count } = useCart();
 const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
+const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
+const route = useRoute();
+
+const path = computed(() => route.path || '');
+
+const handleScroll = () => {
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+    headerMode.value = 'default';
+  } else {
+    headerMode.value = 'transparent';
+  }
+}
+
+const controlHeader = () => {
+  if (path.value === '/') {
+    headerMode.value = 'transparent';
+    window.addEventListener('scroll', handleScroll);
+  } else {
+    headerMode.value = 'default';
+    window.removeEventListener('scroll', handleScroll);
+  }
+}
+
+watch(path, () => {
+  controlHeader();
+});
+
+onMounted(() => {
+  controlHeader();
+})
+
 </script>
 
 <template>
-  <div class="relative border-b-2 border-gray-100">
+  <div :class="{
+    'z-10 transition': true,
+    'text-white bg-transparent fixed w-full': headerMode === 'transparent',
+    'sticky top-0 relative bg-white border-b-2 border-gray-100 text-brand-dark': headerMode === 'default',
+  }">
     <!-- For Desktop -->
     <div class="hidden lg:block container mx-auto">
       <div class="flex justify-end">
@@ -21,13 +56,9 @@ const isSidebarOpen = inject("isSidebarOpen");
         </div>
         <div class="flex-1 flex justify-center">
           <div>
-            <RouterLink to="/">
+            <RouterLink to="/" class="text-current">
               <span class="sr-only">LUXED</span>
-              <img
-                class="h-5 w-auto"
-                src="/logo.svg"
-                alt="Logo"
-              >
+              <div class="text-current w-40 i-custom:logo" />
             </RouterLink>
           </div>
         </div>
@@ -43,7 +74,7 @@ const isSidebarOpen = inject("isSidebarOpen");
               @click="$router.push('/wishlist')"
             >
               <div
-                class="w-7 h-7 i-carbon-favorite text-gray-600 hover:text-brand-primary"
+                class="w-7 h-7 i-carbon-favorite text-current hover:text-brand-primary"
               />
               <span
                 v-if="wishlistCount > 0"
@@ -63,7 +94,7 @@ const isSidebarOpen = inject("isSidebarOpen");
             >
               <!-- Heroicon name: outline/shopping-bag -->
               <div
-                class="w-7 h-7 i-carbon-shopping-cart text-gray-600 hover:text-brand-primary"
+                class="w-7 h-7 i-carbon-shopping-cart text-current hover:text-brand-primary"
               />
               <span
                 v-if="count > 0"
@@ -89,13 +120,9 @@ const isSidebarOpen = inject("isSidebarOpen");
         </div>
         <div class="flex-1 flex justify-center">
           <div>
-            <RouterLink to="/">
+            <RouterLink to="/" class="text-current">
               <span class="sr-only">LUXED</span>
-              <img
-                class="h-5 w-auto"
-                src="/logo.svg"
-                alt="Logo"
-              >
+              <div class="text-current w-40 i-custom:logo" />
             </RouterLink>
           </div>
         </div>
@@ -110,7 +137,7 @@ const isSidebarOpen = inject("isSidebarOpen");
               @click="$router.push('/wishlist')"
             >
               <div
-                class="w-7 h-7 i-carbon-favorite text-gray-600 hover:text-brand-primary"
+                class="w-7 h-7 i-carbon-favorite text-current hover:text-brand-primary"
               />
               <span
                 v-if="wishlistCount > 0"
@@ -130,7 +157,7 @@ const isSidebarOpen = inject("isSidebarOpen");
             >
               <!-- Heroicon name: outline/shopping-bag -->
               <div
-                class="w-7 h-7 i-carbon-shopping-cart text-gray-600 hover:text-brand-primary"
+                class="w-7 h-7 i-carbon-shopping-cart text-current hover:text-brand-primary"
               />
               <span
                 v-if="count > 0"
