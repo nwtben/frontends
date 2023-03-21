@@ -22,7 +22,7 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
     >
       <RouterLink
         :to="'/' + navigationElement.seoUrls?.[0]?.seoPathInfo"
-        class="flex items-center gap-1 text-base font-medium uppercase text-brand-dark"
+        class="flex items-center gap-1 text-base font-medium uppercase text-current"
       >
         {{ getTranslatedProperty(navigationElement, "name") }}
         <span class="h-5 w-5 i-carbon-chevron-down" />

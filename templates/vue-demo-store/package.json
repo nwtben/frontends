@@ -29,6 +29,7 @@
     "@iconify-json/carbon": "^1.1.16",
     "@nuxt/devtools": "^0.2.3",
     "@nuxt/image-edge": "^1.0.0-27968280.9739e4d",
+    "@nuxtjs/i18n": "8.0.0-beta.10",
     "@vue/eslint-config-typescript": "^11.0.2",
     "eslint-plugin-vue": "^9.9.0",
     "firebase-admin": "^11.5.0",

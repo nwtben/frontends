@@ -4,6 +4,8 @@ import { getProductUrl } from "@shopware-pwa/helpers-next";
 
 import { onClickOutside, useFocus, useMagicKeys } from "@vueuse/core";
 
+const headerMode = useState<'default' | 'transparent'>('headerMode');
+
 withDefaults(
   defineProps<{
     displayTotal?: number;
@@ -72,11 +74,11 @@ watch(enter, (value) => {
   <div
     ref="searchContainer"
     class="relative group bg-gray-500 p-3 pr-0 transition duration-300 hover:shadow-md inline-block"
-    :class="[active ? 'shadow-lg' : 'shadow']"
+    :class="[active ? 'shadow-lg' : 'shadow', headerMode === 'transparent' ? 'bg-opacity-25 text-white' : 'text-gray-400']"
   >
     <div class="flex items-center">
       <div
-        class="sw-search-input i-carbon-search flex-none h-6 w-6 text-gray-400 group-hover:text-brand-primary cursor-pointer"
+        class="sw-search-input i-carbon-search flex-none h-6 w-6 text-current cursor-pointer"
       />
 
       <input
@@ -84,7 +86,7 @@ watch(enter, (value) => {
         v-model="typingQuery"
         data-testid="layout-search-input"
         type="text"
-        class="bg-transparent sw-search-input text-gray-400 placeholder:text-gray-400 focus:text-gray-700 p-2 ml-2 lg:ml-0 xl:ml-2 grow h-6 transition duration-200 focus:outline-none w-56 lg:w-10/12"
+        class="bg-transparent sw-search-input text-current placeholder:text-current p-2 ml-2 lg:ml-0 xl:ml-2 grow h-6 transition duration-200 focus:outline-none w-56 lg:w-10/12"
         placeholder="Search"
         @click="active = true"
       >

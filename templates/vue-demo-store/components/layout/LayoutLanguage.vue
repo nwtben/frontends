@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { useLanguage } from '../../composables/useLanguage';
+
+const { fetchLang, setLanguage, languages, currentLanguage } = useLanguage();
+
+onMounted(async () => {
+  await fetchLang();
+})
 </script>
 <template>
   <div
@@ -6,15 +13,18 @@
     data-testid="language-switcher"
   >
      <select
-      id="salutation"
-      name="salutation"
-      autocomplete="salutation-name"
-      class="min-w-[80px] py-2.5 bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light sm:text-sm"
-    >
-      <option
-        :value="'en'"
+      id="language"
+      name="language"
+      :value="currentLanguage?.id"
+      class="caret-current min-w-[70px] py-2.5 bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light sm:text-sm"
+      @change="(e: any) => setLanguage(e.target.value)"
       >
-        English
+      <option
+        v-for="lang of languages"
+        :key="lang.translationCode?.code"
+        :value="lang.id"
+      >
+        {{ lang.name }}
       </option>
     </select>
   </div>
