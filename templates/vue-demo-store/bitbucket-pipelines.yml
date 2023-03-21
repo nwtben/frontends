@@ -1,7 +1,6 @@
 image: node:18
 
-pipelines:
-  default:
+build: &build
     - step:
         name: Build
         caches:
@@ -11,15 +10,24 @@ pipelines:
           - npm run generate
         artifacts:
           - .output/**
+          
+push: &push
+  step:
+      name: Deploy to Firebase
+      deployment: production
+      script:
+        - pipe: atlassian/firebase-deploy:3.1.1
+          variables:
+            FIREBASE_TOKEN: $FIREBASE_TOKEN
+            PROJECT_ID: $FIREBASE_STAGE_PROJECT
+            PUBLIC_DIR: '.output/public'
+            NODE_JS_VERSION: '18'
 
-    - step:
-        name: Deploy to Firebase
-        deployment: production
-        script:
-          - pipe: atlassian/firebase-deploy:3.1.1
-            variables:
-              FIREBASE_TOKEN: $FIREBASE_TOKEN
-              PROJECT_ID: $FIREBASE_PROJECT
-              PUBLIC_DIR: '.output/public'
-              NODE_JS_VERSION: '18'
-
+pipelines:
+  default:
+  - <<: *build
+  - <<: *release-dev
+  branches:
+    develop:
+    - <<: *build
+    - <<: *push
