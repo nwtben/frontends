@@ -13,13 +13,26 @@ build: &build
           
 push: &push
   step:
-      name: Deploy to Firebase
-      deployment: production
+      name: Deploy to Firebase Stage
+      deployment: stage
       script:
         - pipe: atlassian/firebase-deploy:3.1.1
           variables:
             FIREBASE_TOKEN: $FIREBASE_TOKEN
             PROJECT_ID: $FIREBASE_STAGE_PROJECT
+            PUBLIC_DIR: '.output/public'
+            NODE_JS_VERSION: '18'
+
+release-dev: &release-dev
+  step:
+      name: Deploy to Firebase Production
+      deployment: production
+      trigger: manual
+      script:
+        - pipe: atlassian/firebase-deploy:3.1.1
+          variables:
+            FIREBASE_TOKEN: $FIREBASE_TOKEN
+            PROJECT_ID: $FIREBASE_PROJECT
             PUBLIC_DIR: '.output/public'
             NODE_JS_VERSION: '18'
 
