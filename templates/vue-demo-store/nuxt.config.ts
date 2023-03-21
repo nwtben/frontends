@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     strict: true,
   },
   modules: [
+    '@nuxtjs/i18n',
     "@vueuse/nuxt",
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
@@ -89,5 +90,19 @@ export default defineNuxtConfig({
     },
   },
   ssr: true,
-
+  i18n: {
+    locales: [
+      {
+        code: 'en-GB',
+        file: 'en-GB.json'
+      },
+      {
+        code: 'sv-SE',
+        file: 'sv-SE.json'
+      },
+    ],
+    langDir: 'locales',
+    lazy: true,
+    defaultLocale: 'sv-SE'
+  },
 });

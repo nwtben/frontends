@@ -45,7 +45,8 @@ onMounted(() => {
   }">
     <!-- For Desktop -->
     <div class="hidden lg:block container mx-auto">
-      <div class="flex justify-end">
+      <div class="flex justify-end gap-4">
+        <LayoutCurrency />
         <LayoutLanguage />
       </div>
       <div
