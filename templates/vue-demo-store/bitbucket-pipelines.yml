@@ -7,7 +7,7 @@ build: &build
           - node
         script:
           - npm install
-          - npm run generate
+          - npm run build
         artifacts:
           - .output/**
           
