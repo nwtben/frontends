@@ -18,10 +18,12 @@ push: &push
       script:
         - pipe: atlassian/firebase-deploy:3.1.1
           variables:
-            FIREBASE_TOKEN: $FIREBASE_TOKEN
+            KEY_FILE: $STAGE_GOOGLE_APPLICATION_CREDENTIALS
             PROJECT_ID: $FIREBASE_STAGE_PROJECT
             PUBLIC_DIR: '.output/public'
             NODE_JS_VERSION: '18'
+      caches:
+        - docker
 
 release-dev: &release-dev
   step:
@@ -31,10 +33,12 @@ release-dev: &release-dev
       script:
         - pipe: atlassian/firebase-deploy:3.1.1
           variables:
-            FIREBASE_TOKEN: $FIREBASE_TOKEN
+            KEY_FILE: $GOOGLE_APPLICATION_CREDENTIALS
             PROJECT_ID: $FIREBASE_PROJECT
             PUBLIC_DIR: '.output/public'
             NODE_JS_VERSION: '18'
+      caches:
+        - docker
 
 pipelines:
   default:
