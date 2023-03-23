@@ -12,7 +12,7 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
 
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <nav class="hidden lg:flex space-x-4 items-center lg:w-7/12">
+  <nav class="hidden lg:flex space-x-7 items-center">
     <div
       v-for="navigationElement in navigationElements"
       :key="navigationElement.id"
@@ -22,9 +22,10 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
     >
       <RouterLink
         :to="'/' + navigationElement.seoUrls?.[0]?.seoPathInfo"
-        class="text-base font-medium text-gray-500 hover:text-gray-900"
+        class="flex items-center gap-1 text-base font-medium uppercase text-current"
       >
         {{ getTranslatedProperty(navigationElement, "name") }}
+        <span class="h-5 w-5 i-carbon-chevron-down" />
       </RouterLink>
 
       <!--
@@ -43,21 +44,18 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
             currentMenuPosition === navigationElement.id &&
               navigationElement?.children?.length
           "
-          class="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md xl:max-w-screen-sm sm:px-0 lg:ml-0 lg:left-1/4 lg:-translate-x-1/4"
+          class="bg-white absolute z-10 mt-3 rounded-lg shadow-lg transform px-10 py-10 w-screen max-w-md xl:max-w-screen-sm lg:ml-0 lg:left-1/4 lg:-translate-x-1/6"
           @mouseleave="currentMenuPosition = null"
         >
-          <div
-            class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+          <ul
+            class="flex gap-5"
           >
             <template
               v-for="(childElement, index) in navigationElement.children"
               :key="childElement.id"
             >
-              <div
-                :class="{
-                  'sm:pb-0': index !== navigationElement.children.length - 1,
-                }"
-                class="relative grid gap-6 bg-white px-3 py-2 sm:gap-6 sm:p-3"
+              <li
+                class="relative min-w-[150px]"
               >
                 <RouterLink
                   v-if="
@@ -65,10 +63,10 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
                       'undefined'
                   "
                   :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo"
-                  class="flex justify-between rounded-lg hover:bg-gray-50 p-2"
+                  class="hover:bg-gray-50"
                 >
                   <div
-                    class="flex flex-col flex-grow pl-2"
+                    class="flex flex-col flex-grow"
                     :class="{
                       'max-w-200px md:max-w-300px': !!childElement.media,
                     }"
@@ -76,23 +74,6 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
                     <p class="text-base font-medium text-gray-900">
                       {{ getTranslatedProperty(childElement, "name") }}
                     </p>
-                    <p
-                      v-if="getTranslatedProperty(childElement, 'description')"
-                      class="mt-1 text-sm text-gray-500"
-                      v-html="
-                        getTranslatedProperty(childElement, 'description')
-                      "
-                    />
-                  </div>
-                  <div
-                    v-if="childElement.media"
-                    class="flex"
-                  >
-                    <img
-                      :src="getSmallestThumbnailUrl(childElement.media)"
-                      class="object-scale-down h-48 w-px-200 rounded-md"
-                      alt="Category image"
-                    >
                   </div>
                 </RouterLink>
                 <div
@@ -103,17 +84,37 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
                     {{ getTranslatedProperty(childElement, "name") }}
                   </p>
                 </div>
-              </div>
+                <ul
+                  class="flex flex-col gap-4 mt-4"
+                >
+                  <template
+                    v-for="(subChildElement, ind) in childElement.children"
+                    :key="subChildElement.id"
+                  >
+                    <RouterLink
+                      v-if="
+                        typeof subChildElement?.seoUrls?.[0]?.seoPathInfo !==
+                          'undefined'
+                      "
+                      :to="'/' + subChildElement?.seoUrls?.[0]?.seoPathInfo"
+                      class="hover:bg-gray-50"
+                    >
+                      <div
+                        class="flex flex-col flex-grow"
+                        :class="{
+                          'max-w-200px md:max-w-300px': !!subChildElement.media,
+                        }"
+                      >
+                        <p class="text-base font-normal text-gray-400">
+                          {{ getTranslatedProperty(subChildElement, "name") }}
+                        </p>
+                      </div>
+                    </RouterLink>
+                  </template>
+                </ul>
+              </li>
             </template>
-            <div
-              class="px-5 py-5 bg-gray-50 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8"
-            >
-              <div
-                class="flow-root"
-                v-html="getTranslatedProperty(navigationElement, 'description')"
-              />
-            </div>
-          </div>
+          </ul>
         </div>
       </client-only>
     </div>
