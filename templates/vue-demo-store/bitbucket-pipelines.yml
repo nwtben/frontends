@@ -22,6 +22,8 @@ push: &push
             PROJECT_ID: $FIREBASE_STAGE_PROJECT
             PUBLIC_DIR: '.output/public'
             NODE_JS_VERSION: '18'
+      caches:
+        - docker
 
 release-dev: &release-dev
   step:
