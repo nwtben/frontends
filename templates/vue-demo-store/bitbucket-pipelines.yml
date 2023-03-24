@@ -7,19 +7,19 @@ build: &build
           - node
         script:
           - npm install
-          - npm run build
+          - npm run build && cd .output/server && rm -rf node_modules && npm i
         artifacts:
           - .output/**
           
 push: &push
   step:
-      name: Deploy to Firebase Stage
-      deployment: staging
+      name: Deploy to Firebase
+      deployment: production
       script:
         - pipe: atlassian/firebase-deploy:3.1.1
           variables:
-            KEY_FILE: $STAGE_GOOGLE_APPLICATION_CREDENTIALS
-            PROJECT_ID: $FIREBASE_STAGE_PROJECT
+            KEY_FILE: $GOOGLE_APPLICATION_CREDENTIALS
+            PROJECT_ID: $FIREBASE_PROJECT
             PUBLIC_DIR: '.output/public'
             NODE_JS_VERSION: '18'
       caches:
