@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     shopwareEndpoint: "https://shopware.nwtsaas.com",
     shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
   },
+  build: {
+    transpile: ['@headlessui/vue']
+  },
   alias: {
     /**
      * TODO: Temp fix until new VueUse published:
