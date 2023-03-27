@@ -11,8 +11,9 @@ const gridColumns = computed<number>(() =>
 </script>
 
 <template>
-  <footer class="w-full bg-brand-primary">
-    <menu class="container mx-auto flex flex-col justify-center">
+  <footer class="w-full bg-brand-primary" aria-labelledby="footer-heading">
+    <h2 id="footer-heading" class="sr-only">Footer</h2>
+    <div class="container mx-auto flex flex-col justify-center">
       <div
         class="w-full py-10 grid grid-cols-2 md:grid-cols-4"
       >
@@ -24,7 +25,7 @@ const gridColumns = computed<number>(() =>
             {{ getTranslatedProperty(navigationElement, "name") }}
           </h4>
           <template v-if="navigationElement.childCount > 0">
-            <ul class="list-none p-0 mb-5">
+            <ul role="list" class="list-none p-0 mb-5">
               <li
                 v-for="navigationChild in navigationElement.children"
                 :key="navigationChild.id"
@@ -69,6 +70,6 @@ const gridColumns = computed<number>(() =>
       </div>
       <div class="border-t border-gray-600"></div>
       <p class="text-gray-300 mt-8 mb-16 text-center">© 2023 Stylad, All rights reserved.</p>
-    </menu>
+    </div>
   </footer>
 </template>
