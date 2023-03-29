@@ -18,7 +18,7 @@ async function invokeLogout() {
           data-testid="header-sign-in-link"
           @click="modal.open('AccountLoginForm')"
         >
-          Sign in
+          {{ $t('Sign in') }}
         </button>
       </div>
       <div v-if="isLoggedIn">

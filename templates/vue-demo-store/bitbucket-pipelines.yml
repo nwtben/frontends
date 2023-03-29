@@ -1,0 +1,50 @@
+image: node:18
+
+build: &build
+    - step:
+        name: Build
+        caches:
+          - node
+        script:
+          - npm install
+          - npm run build && cd .output/server && rm -rf node_modules && npm i
+        artifacts:
+          - .output/**
+          
+push: &push
+  step:
+      name: Deploy to Firebase
+      deployment: production
+      script:
+        - pipe: atlassian/firebase-deploy:3.1.1
+          variables:
+            KEY_FILE: $GOOGLE_APPLICATION_CREDENTIALS
+            PROJECT_ID: $FIREBASE_PROJECT
+            PUBLIC_DIR: '.output/public'
+            NODE_JS_VERSION: '18'
+      caches:
+        - docker
+
+release-dev: &release-dev
+  step:
+      name: Deploy to Firebase Production
+      deployment: production
+      trigger: manual
+      script:
+        - pipe: atlassian/firebase-deploy:3.1.1
+          variables:
+            KEY_FILE: $GOOGLE_APPLICATION_CREDENTIALS
+            PROJECT_ID: $FIREBASE_PROJECT
+            PUBLIC_DIR: '.output/public'
+            NODE_JS_VERSION: '18'
+      caches:
+        - docker
+
+pipelines:
+  default:
+  - <<: *build
+  - <<: *release-dev
+  branches:
+    feature/*:
+    - <<: *build
+    - <<: *push

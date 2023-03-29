@@ -58,9 +58,9 @@ const toggleCollapse = (navigationElement: Category) => {
           </div>
           <div class="max-w-2xl">
             <aside aria-label="Sidebar">
-              <div class="px-5 pb-3">
+              <!-- <div class="px-5 pb-3">
                 <LayoutStoreSearch />
-              </div>
+              </div> -->
               <div class="overflow-y-auto">
                 <ul class="flex flex-col p-0 space-y-2">
                   <li
