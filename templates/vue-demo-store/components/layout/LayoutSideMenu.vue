@@ -1,140 +1,117 @@
 <script setup lang="ts">
+import { getTranslatedProperty } from "@shopware-pwa/helpers-next";
 import { RouterLink } from "vue-router";
 import {
   getCategoryUrl,
-  getCategoryImageUrl,
 } from "@shopware-pwa/helpers-next";
-import { Category } from "@shopware-pwa/types";
+import { StoreNavigationElement } from "@shopware-pwa/types";
+import {
+  Dialog,
+  DialogPanel,
+} from '@headlessui/vue';
+import {
+  XMarkIcon,
+  Bars3Icon
+} from '@heroicons/vue/24/outline'
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/20/solid'
 
 const { navigationElements } = useNavigation();
 
-const isSideMenuOpened = inject("isSideMenuOpened", ref(false));
-const expandedIds = ref<Array<string>>([]);
+const currentNavigationElement = ref<StoreNavigationElement | null>();
+const currentChildNavigationElement = ref<StoreNavigationElement | null>();
 
-function isCollapsed(navigationelement: Category): boolean {
-  return !expandedIds.value.includes(navigationelement.id);
-}
+const isSideMenuOpened = inject("isSideMenuOpened", ref(false));
 
 const sideMenuElement = ref(null);
-onClickOutside(sideMenuElement, () => (isSideMenuOpened.value = false));
+onClickOutside(sideMenuElement, () => close());
 
-const toggleCollapse = (navigationElement: Category) => {
-  if (!isCollapsed(navigationElement)) {
-    expandedIds.value = expandedIds.value.filter(
-      (el) => el !== navigationElement.id
-    );
-  } else {
-    expandedIds.value.push(navigationElement.id);
-  }
-};
+const close = () => {
+  isSideMenuOpened.value = false;
+  currentNavigationElement.value = null;
+  currentChildNavigationElement.value = null;
+}
 </script>
 
 <template>
   <button class="lg:hidden" aria-label="menu" @click="isSideMenuOpened = true">
-    <div class="i-carbon-menu text-xl" />
+    <span class="sr-only">Open main menu</span>
+    <Bars3Icon class="h-6 w-6" aria-hidden="true" />
   </button>
-  <client-only>
-    <div
-      v-if="isSideMenuOpened"
-      class="relative z-40 lg:hidden"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div class="fixed inset-0 bg-black opacity-25" />
-      <div class="fixed inset-0 z-40 flex max-w-xs">
-        <div
-          ref="sideMenuElement"
-          class="relative flex flex-col w-full overflow-y-auto bg-white shadow-xl"
-        >
-          <div class="flex px-4 py-5">
-            <button
-              type="button"
-              class="inline-flex items-center justify-center p-2 -m-2 text-gray-400 rounded-md"
-              @click="isSideMenuOpened = false"
-            >
-              <span class="sr-only">Close menu</span>
-              <div class="i-carbon-close text-3xl" />
-            </button>
-          </div>
-          <div class="max-w-2xl">
-            <aside aria-label="Sidebar">
-              <!-- <div class="px-5 pb-3">
-                <LayoutStoreSearch />
-              </div> -->
-              <div class="overflow-y-auto">
-                <ul class="flex flex-col p-0 space-y-2">
-                  <li
-                    v-for="navigationElement in navigationElements"
-                    :key="navigationElement.id"
-                  >
-                    <RouterLink
-                      :to="getCategoryUrl(navigationElement)"
-                      class="flex items-center w-full px-5 py-3 text-base font-normal text-gray-900 break-all hover:bg-gray-100"
-                      @click="isSideMenuOpened = false"
-                    >
-                      <span class="flex-1">
-                        {{ navigationElement.name }}
-                      </span>
-                      <button
-                        v-if="navigationElement?.children?.length"
-                        class="flex items-center w-12 p-4 -m-4 h-11"
-                        @click.stop.prevent="toggleCollapse(navigationElement)"
-                      >
-                        <span
-                          :class="[
-                            'text-xl',
-                            !isCollapsed(navigationElement)
-                              ? 'i-carbon-chevron-up '
-                              : 'i-carbon-chevron-down',
-                          ]"
-                        />
-                      </button>
-                    </RouterLink>
-
-                    <div
-                      v-if="
-                        navigationElement.media &&
-                        !isCollapsed(navigationElement)
-                      "
-                      class="relative"
-                    >
-                      <div class="overflow-hidden">
-                        <img
-                          :src="getCategoryImageUrl(navigationElement)"
-                          class="object-cover object-center"
-                          alt="Category image"
-                        />
-                      </div>
-                    </div>
-                    <ul
-                      v-if="
-                        navigationElement?.children?.length &&
-                        !isCollapsed(navigationElement)
-                      "
-                      class="px-0 py-2 m-0"
-                    >
-                      <li
-                        v-for="childElement in navigationElement.children"
-                        :key="childElement.id"
-                      >
-                        <RouterLink
-                          :to="getCategoryUrl(childElement)"
-                          class="flex items-center p-3 text-base font-normal text-gray-500 break-all hover:bg-gray-100 pl-11"
-                          @click="isSideMenuOpened = false"
-                        >
-                          <span>
-                            {{ childElement.name }}
-                          </span>
-                        </RouterLink>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-            </aside>
+  <Dialog as="div" class="lg:hidden" @close="close" :open="isSideMenuOpened">
+    <div class="fixed inset-0 z-10" />
+    <DialogPanel class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+      <div class="px-6 flex items-center justify-between">
+        <div></div>
+        <div>
+          <h4>Menu</h4>
+        </div>
+        <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
+          <span class="sr-only">Close menu</span>
+          <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
+      <div class="mt-6 flow-root">
+        <div class="-my-6 divide-y divide-gray-500/10">
+          <div class="py-6">
+            <a v-for="navigationElement in navigationElements" :key="navigationElement.id" class="cursor-pointer flex justify-between items-center border-b border-gray-100 px-6 -mx-3 block py-3 text-base leading-7 text-gray-900 hover:bg-gray-50" @click="currentNavigationElement = navigationElement">
+              {{ getTranslatedProperty(navigationElement, "name") }}
+              <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+            </a>
+            <div class="flex gap-5 items-center bg-gray-100 px-6 -mx-3 block py-3 text-base leading-7 text-gray-900 hover:bg-gray-50">
+              <LayoutCurrency />
+              <LayoutLanguage />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </client-only>
+    </DialogPanel>
+    <DialogPanel v-if="currentNavigationElement" class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+      <div class="px-6 flex items-center justify-between">
+        <div><ChevronLeftIcon class="h-6 w-6" aria-hidden="true" @click="currentNavigationElement = null" /></div>
+        <div>
+          <h4>{{ getTranslatedProperty(currentNavigationElement, "name") }}</h4>
+        </div>
+        <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
+          <span class="sr-only">Close menu</span>
+          <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
+      <div class="mt-6 flow-root">
+        <div class="-my-6 divide-y divide-gray-500/10">
+          <div class="py-6">
+            <a v-for="navigationElement in currentNavigationElement.children" :key="navigationElement.id" class="cursor-pointer flex justify-between items-center border-b border-gray-100 px-6 -mx-3 block rounded-lg py-3 text-base leading-7 text-gray-900 hover:bg-gray-50" @click="currentChildNavigationElement = navigationElement">
+              {{ getTranslatedProperty(navigationElement, "name") }}
+              <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </DialogPanel>
+    <DialogPanel v-if="currentChildNavigationElement" class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+      <div class="px-6 flex items-center justify-between">
+        <div><ChevronLeftIcon class="h-6 w-6" aria-hidden="true" @click="currentChildNavigationElement = null" /></div>
+        <div>
+          <h4>{{ getTranslatedProperty(currentChildNavigationElement, "name") }}</h4>
+        </div>
+        <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
+          <span class="sr-only">Close menu</span>
+          <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
+      <div class="mt-6 flow-root">
+        <div class="-my-6 divide-y divide-gray-500/10">
+          <div class="py-6">
+            <RouterLink
+              v-for="navigationElement in currentChildNavigationElement.children" 
+              :key="navigationElement.id"
+              @click="close"
+              :to="getCategoryUrl(navigationElement)"
+              class="cursor-pointer flex justify-between items-center border-b border-gray-100 px-6 -mx-3 block rounded-lg py-3 text-base leading-7 text-gray-900 hover:bg-gray-50">
+                {{ getTranslatedProperty(navigationElement, "name") }}
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+    </DialogPanel>
+  </Dialog>
 </template>

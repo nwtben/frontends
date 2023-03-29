@@ -85,6 +85,7 @@ export default defineNuxtConfig({
           dark: "#374151",
         },
         gray: {
+          100: '#F9FAFB',
           200: '#D1D5DB',
           300: '#9CA3AF',
           400: '#6B7280',
