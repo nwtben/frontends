@@ -29,7 +29,6 @@ useBreadcrumbs([
   },
 ]);
 
-newsletter.value = await isNewsletterSubscriber();
 
 const updateNewsletterStatus = async () => {
   try {
@@ -54,6 +53,7 @@ const updateNewsletterStatus = async () => {
 };
 
 onBeforeMount(async () => {
+  newsletter.value = await isNewsletterSubscriber();
   if (user?.value?.salutationId) {
     await loadSalutation(user.value.salutationId);
   }
