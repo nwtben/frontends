@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     strict: true,
   },
   modules: [
+    "@nuxtjs/partytown",
     '@nuxtjs/i18n',
     "@vueuse/nuxt",
     "@unocss/nuxt",
@@ -30,10 +31,12 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
     `@twicpics/components/nuxt3`,
   ],
-  "twicpics": {
-        domain: `https://turnkey-shopware.twic.pics`,
-        anticipation: 0.5,
-        step: 50
+  twicpics: {
+    domain: `https://turnkey-shopware.twic.pics`,
+    anticipation: 0.5,
+    step: 50
+  },
+  partytown: {
   },
   // components: true,
   components: {
