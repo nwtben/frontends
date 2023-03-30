@@ -12,32 +12,14 @@ async function invokeLogout() {
 <template>
   <div class="md:w-auto">
     <div class="my-account-area">
-      <div v-show="!isLoggedIn">
-        <button
-          class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-          data-testid="header-sign-in-link"
-          @click="modal.open('AccountLoginForm')"
-        >
-          {{ $t('Sign in') }}
-        </button>
-      </div>
+      <div
+        @click="modal.open('AccountLoginForm')"
+        class="w-7 h-7 i-carbon-user text-current hover:text-brand-primary"
+      />
       <div v-if="isLoggedIn">
         <div
           class="inset-y-2 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
-          <div
-            class="w-7 h-7 i-carbon-user text-gray-600 hover:text-brand-primary sm:hidden hover:text-brand-primary"
-            @click="isAccountMenuOpen = !isAccountMenuOpen"
-          />
-          <button
-            type="button"
-            class="text-sm text-gray-700 focus:outline-none hidden sm:block"
-            data-testid="account-menu-hello-button"
-            @click="isAccountMenuOpen = !isAccountMenuOpen"
-          >
-            Hello, {{ user?.firstName }}!
-          </button>
-
           <!-- Profile dropdown -->
           <div class="relative">
             <div>

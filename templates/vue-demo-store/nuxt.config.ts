@@ -72,6 +72,7 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
+    safelist: ['max-w-2xl'],
     theme: {
       extend: {
         width: "width",

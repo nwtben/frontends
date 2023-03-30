@@ -60,7 +60,7 @@ onMounted(() => {
             <div>
               <RouterLink to="/" class="text-current">
                 <span class="sr-only">LUXED</span>
-                <div class="text-current w-40 i-custom:logo" />
+                <div class="text-current w-40 h-5 i-custom:logo" />
               </RouterLink>
             </div>
           </div>
@@ -124,7 +124,7 @@ onMounted(() => {
             <div>
               <RouterLink to="/" class="text-current">
                 <span class="sr-only">LUXED</span>
-                <div class="text-current w-40 i-custom:logo" />
+                <div class="text-current w-40 h-5 i-custom:logo" />
               </RouterLink>
             </div>
           </div>
