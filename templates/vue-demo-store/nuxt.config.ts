@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   image: {
     provider: "twicpics",
     twicpics: {
-      domain: "https://turnkey-shopware.twic.pics",
+      baseURL: "https://turnkey-shopware.twic.pics",
       anticipation: 0.5,
       step: 50
     }
