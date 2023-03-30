@@ -31,10 +31,12 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
     `@twicpics/components/nuxt3`,
   ],
-  twicpics: {
-    domain: `https://turnkey-shopware.twic.pics`,
-    anticipation: 0.5,
-    step: 50
+  image: {
+    twicpics: {
+      domain: `https://turnkey-shopware.twic.pics`,
+      anticipation: 0.5,
+      step: 50
+    }
   },
   partytown: {
   },
