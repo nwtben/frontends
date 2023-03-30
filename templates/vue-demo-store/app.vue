@@ -78,8 +78,16 @@ provide("isSideMenuOpened", isSideMenuOpened);
 h2 {
   @apply text-4xl py-4;
 }
-
 h3 {
   @apply text-3xl py-3;
+}
+h4 {
+  @apply text-2xl py-3;
+}
+h5 {
+  @apply text-xl;
+}
+h6 {
+  @apply text-lg font-medium;
 }
 </style>
