@@ -29,12 +29,11 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image-edge",
-    `@twicpics/components/nuxt3`,
   ],
   image: {
-    provider: 'twicpics',
+    provider: "twicpics",
     twicpics: {
-      domain: `https://turnkey-shopware.twic.pics`,
+      domain: "https://turnkey-shopware.twic.pics",
       anticipation: 0.5,
       step: 50
     }
