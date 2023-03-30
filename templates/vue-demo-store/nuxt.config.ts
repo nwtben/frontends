@@ -29,12 +29,16 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image-edge",
-    `@twicpics/components/nuxt3`,
   ],
-  twicpics: {
-    domain: `https://turnkey-shopware.twic.pics`,
-    anticipation: 0.5,
-    step: 50
+  image: {
+    provider: "vercel",
+    vercel: {
+      modifiers: {
+        format: 'WebP',
+        effect: 'sharpen:100',
+        quality: 'auto:best',
+      }
+    }
   },
   partytown: {
   },
