@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     `@twicpics/components/nuxt3`,
   ],
   image: {
+    provider: 'twicpics',
     twicpics: {
       domain: `https://turnkey-shopware.twic.pics`,
       anticipation: 0.5,
