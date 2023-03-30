@@ -1,89 +1,42 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { getTranslatedProperty, getSmallestThumbnailUrl } from "@shopware-pwa/helpers-next";
+import { getTranslatedProperty } from "@shopware-pwa/helpers-next";
+import {
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+} from '@headlessui/vue';
+import {
+  ChevronDownIcon,
+} from '@heroicons/vue/24/outline';
+
 const { navigationElements } = useNavigation();
-
-const currentMenuPosition = ref<string | null>(null);
-
-const menuHtmlElement = ref(null);
-
-onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
 </script>
 
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <nav class="hidden lg:flex space-x-7 items-center">
-    <div
+  <PopoverGroup class="hidden lg:flex space-x-7 items-center">
+    <Popover
       v-for="navigationElement in navigationElements"
       :key="navigationElement.id"
-      ref="menuHtmlElement"
       class="relative"
-      @mouseover="currentMenuPosition = navigationElement.id"
     >
-      <RouterLink
-        :to="'/' + navigationElement.seoUrls?.[0]?.seoPathInfo"
-        class="flex items-center gap-1 text-base font-medium uppercase text-brand-dark"
-      >
+      <PopoverButton class="flex items-center gap-1 text-base font-medium uppercase text-current">
         {{ getTranslatedProperty(navigationElement, "name") }}
-        <span class="h-5 w-5 i-carbon-chevron-down" />
-      </RouterLink>
+        <ChevronDownIcon v-if="navigationElement.children?.length" class="h-5 w-5 flex-none text-current" aria-hidden="true" />
+      </PopoverButton>
 
-      <!--
-            Flyout menu, show/hide based on flyout menu state.
-
-            Entering: "transition ease-out duration-200"
-              From: "opacity-0 translate-y-1"
-              To: "opacity-100 translate-y-0"
-            Leaving: "transition ease-in duration-150"
-              From: "opacity-100 translate-y-0"
-              To: "opacity-0 translate-y-1"
-          -->
-      <client-only>
-        <div
-          v-if="
-            currentMenuPosition === navigationElement.id &&
-              navigationElement?.children?.length
-          "
-          class="bg-white absolute z-10 mt-3 rounded-lg shadow-lg transform px-10 py-10 w-screen max-w-md xl:max-w-screen-sm lg:ml-0 lg:left-1/4 lg:-translate-x-1/6"
-          @mouseleave="currentMenuPosition = null"
-        >
-          <ul
-            class="flex gap-5"
-          >
-            <template
-              v-for="(childElement, index) in navigationElement.children"
-              :key="childElement.id"
-            >
-              <li
-                class="relative min-w-[150px]"
-              >
-                <RouterLink
-                  v-if="
-                    typeof childElement?.seoUrls?.[0]?.seoPathInfo !==
-                      'undefined'
-                  "
-                  :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo"
-                  class="hover:bg-gray-50"
-                >
-                  <div
-                    class="flex flex-col flex-grow"
-                    :class="{
-                      'max-w-200px md:max-w-300px': !!childElement.media,
-                    }"
-                  >
-                    <p class="text-base font-medium text-gray-900">
-                      {{ getTranslatedProperty(childElement, "name") }}
-                    </p>
-                  </div>
+      <transition v-if="navigationElement.children?.length" enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
+        <PopoverPanel class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden bg-white shadow-lg ring-1 ring-gray-900/5">
+          <div class="flex gap-4 p-4">
+            <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+              <div class="flex-auto">
+                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-semibold text-gray-900">
+                  {{ childElement.name }}
+                  <span class="absolute inset-0" />
                 </RouterLink>
-                <div
-                  v-else
-                  class="px-4 py-2 sm:py-3"
-                >
-                  <p class="text-base font-medium text-gray-500">
-                    {{ getTranslatedProperty(childElement, "name") }}
-                  </p>
-                </div>
+                <p class="mt-1 text-gray-600">{{ childElement.description }}</p>
                 <ul
                   class="flex flex-col gap-4 mt-4"
                 >
@@ -112,11 +65,11 @@ onClickOutside(menuHtmlElement, () => (currentMenuPosition.value = null));
                     </RouterLink>
                   </template>
                 </ul>
-              </li>
-            </template>
-          </ul>
-        </div>
-      </client-only>
-    </div>
-  </nav>
+              </div>
+            </div>
+          </div>
+        </PopoverPanel>
+      </transition>
+    </Popover>
+  </PopoverGroup>
 </template>
