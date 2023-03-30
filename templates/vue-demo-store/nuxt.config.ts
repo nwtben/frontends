@@ -31,11 +31,13 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
   ],
   image: {
-    provider: "twicpics",
-    twicpics: {
-      baseURL: "https://turnkey-shopware.twic.pics",
-      anticipation: 0.5,
-      step: 50
+    provider: "vercel",
+    vercel: {
+      modifiers: {
+        format: 'WebP',
+        effect: 'sharpen:100',
+        quality: 'auto:best',
+      }
     }
   },
   partytown: {
