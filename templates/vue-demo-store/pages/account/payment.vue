@@ -94,7 +94,7 @@ onMounted(async () => {
             />
             <label
               :for="paymentMethod.id"
-              class="ml-3 block text-sm font-medium text-gray-700"
+              class="ml-3 block text-sm font-medium text-gray-900"
             >
               {{ paymentMethod.name }}
             </label>

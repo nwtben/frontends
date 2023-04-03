@@ -20,7 +20,7 @@ export default {
     <div class="my-10 md:grid md:grid-cols-3 md:gap-8">
       <ul
         role="list"
-        class="divide-y pl-0 divide-gray-200 md:col-span-2 border-t"
+        class="divide-y pl-0 divide-gray-300 md:col-span-2 border-t"
       >
         <li v-for="cartItem in cartItems" :key="cartItem.id" class="flex py-6">
           <CheckoutCartItem :cart-item="cartItem" />

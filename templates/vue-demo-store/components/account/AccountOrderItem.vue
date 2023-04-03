@@ -17,7 +17,7 @@ const productOptions = computed(() =>
 <template>
   <div
     v-if="!isPromotion"
-    class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+    class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-300"
   >
     <img
       :src="getMainImageUrl(orderItem)"

@@ -6,8 +6,7 @@ import { EntityResult, Language } from "@shopware-pwa/types";
 
 export function useLanguage() {
   const { apiInstance } = useShopwareContext();
-  const { refreshSessionContext, sessionContext } = useSessionContext();
-  const { locale } = useI18n();
+  const { refreshSessionContext } = useSessionContext();
   
   const languages = useState<Language[]>('languages', () => []);
   const currentLanguage = ref<Language>();
@@ -40,25 +39,12 @@ export function useLanguage() {
     currentLanguage.value = response.data.elements?.[0];
   };
 
-  watch(currentLanguage, () => {
-    locale.value = currentLanguage.value?.locale?.code || '';
-  });
-  
-  watch(
-    () => sessionContext.value?.salesChannel?.languageId,
-    async (newLanguageId) => {
-      syncLanguageData(newLanguageId!);
-    },
-    {
-      immediate: true
-    }
-  );
-
   return {
     fetchLang,
     languages: computed(() => languages.value),
     setLanguage,
-    currentLanguage
+    currentLanguage,
+    syncLanguageData
   }
 }
 

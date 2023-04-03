@@ -141,7 +141,7 @@ const formatDate = (date: Date) =>
             </template>
           </div>
         </div>
-        <div class="border-t border-gray-200 flex">
+        <div class="border-t border-gray-300 flex">
           <div class="flex-1 flex-col ml-4">
             <div
               class="flex flex-col md:flex-row gap-5 md:gap-0 md:flex-wrap py-6 md:py-10"
@@ -244,7 +244,7 @@ const formatDate = (date: Date) =>
         <div class="space-y-1">
           <div class="text-gray-400">
             <div
-              class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-1/2"
+              class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-1/2"
             />
           </div>
         </div>
@@ -252,34 +252,34 @@ const formatDate = (date: Date) =>
           <div class="pt-8">
             <div>
               <div
-                class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 px-2 py-6"
+                class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 px-2 py-6"
               />
               <div class="px-2 py-4">
                 <div class="grid grid-cols-5 gap-y-10 pb-4 text-gray-400">
                   <div
-                    class="col-span-2 h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-1/2"
+                    class="col-span-2 h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-1/2"
                   />
                   <div
-                    class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-1/2"
+                    class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-1/2"
                   />
                   <div
-                    class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-1/4"
+                    class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-1/4"
                   />
                   <div
-                    class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-full"
+                    class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-full"
                   />
                 </div>
                 <div
-                  class="grid grid-cols-5 gap-y-10 gap-x-6 py-4 border-t border-gray-200 text-gray-400 items-center"
+                  class="grid grid-cols-5 gap-y-10 gap-x-6 py-4 border-t border-gray-300 text-gray-400 items-center"
                 >
                   <div class="flex items-center col-span-2 text-gray-900">
-                    <div class="i-carbon-image bg-gray-200 h-18 w-18 mr-2" />
+                    <div class="i-carbon-image bg-gray-300 h-18 w-18 mr-2" />
                     <div
-                      class="h-4 ml-4 bg-gray-200 rounded-full dark:bg-gray-700 w-full"
+                      class="h-4 ml-4 bg-gray-300 rounded-full dark:bg-gray-700 w-full"
                     />
                   </div>
                   <div
-                    class="h-4 ml-4 bg-gray-200 rounded-full dark:bg-gray-700 w-1/4"
+                    class="h-4 ml-4 bg-gray-300 rounded-full dark:bg-gray-700 w-1/4"
                   />
                   <div>
                     <div
@@ -287,46 +287,46 @@ const formatDate = (date: Date) =>
                       data-testid="order-item-unitprice"
                     >
                       <div
-                        class="h-4 ml-4 bg-gray-200 rounded-full dark:bg-gray-700 w-1/4"
+                        class="h-4 ml-4 bg-gray-300 rounded-full dark:bg-gray-700 w-1/4"
                       />
                     </div>
                   </div>
                   <div
-                    class="h-4 ml-4 bg-gray-200 rounded-full dark:bg-gray-700 w-1/2"
+                    class="h-4 ml-4 bg-gray-300 rounded-full dark:bg-gray-700 w-1/2"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div class="border-t border-gray-200 flex">
+          <div class="border-t border-gray-300 flex">
             <div class="flex-1 flex-col ml-4">
               <div class="md:flex md:flex-wrap py-6 md:py-10">
                 <div class="w-auto md:w-1/2 w-1/2 pr-4">
                   <div
-                    class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+                    class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-48 mb-4"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-32"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-32"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-8"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-8"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 w-48"
                   />
                 </div>
                 <div class="w-auto md:w-1/2">
                   <div
-                    class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+                    class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-48 mb-4"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-32"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-32"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-8"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-8"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 w-48"
                   />
                 </div>
               </div>
@@ -335,58 +335,58 @@ const formatDate = (date: Date) =>
               >
                 <div class="w-auto md:w-1/2">
                   <div
-                    class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+                    class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-48 mb-4"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-32"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-32"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-8"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-8"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 w-48"
                   />
                 </div>
                 <div class="w-auto md:w-1/2">
                   <div
-                    class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+                    class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-48 mb-4"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-32"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-32"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-8"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-8"
                   />
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 w-48"
                   />
                 </div>
               </div>
               <div class="border-t border-gray-100 py-6 md:py-10 space-y-4">
                 <div class="flex justify-between text-base font-medium">
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-12"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-12"
                   />
                   <div
                     class="flex gap-1 text-gray-600 font-normal"
                     data-testid="order-subtotal"
                   >
                     <div
-                      class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-16"
+                      class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-16"
                     />
                   </div>
                 </div>
                 <!--v-if-->
                 <div class="flex justify-between text-base font-medium">
                   <div
-                    class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-12"
+                    class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-12"
                   />
                   <div
                     class="flex gap-1 text-gray-600 font-normal"
                     data-testid="order-total"
                   >
                     <div
-                      class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 w-20"
+                      class="h-2 bg-gray-300 rounded-full dark:bg-gray-700 mb-2.5 w-20"
                     />
                   </div>
                 </div>

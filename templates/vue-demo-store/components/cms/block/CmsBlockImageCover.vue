@@ -14,8 +14,8 @@ const cmsContent = getSlotContent("image");
     <CmsGenericElement v-if="cmsContent" :content="cmsContent" />
     <div class="absolute bottom-0 left-1/2 translate -translate-x-1/2 text-white text-center" v-if="props.content.name?.toLowerCase() === 'introduction'">
       <p class="font-semibold mb-2">NEW COLLECTION</p>
-      <p class="text-4xl mb-8">Shop the new <br/> Signature Collection</p>
-      <button class="mb-16 bg-white border border-gray-200 text-brand-dark py-3 px-6 font-medium">Show collection</button>
+      <p class="text-3xl md:text-4xl mb-8 whitespace-nowrap">Shop the new <br/> Signature Collection</p>
+      <button class="mb-16 bg-white border border-gray-300 text-brand-dark hover:bg-gray-50 hover:border-gray-50 py-3 px-6 font-medium">Show collection</button>
     </div>
   </div>
 </template>

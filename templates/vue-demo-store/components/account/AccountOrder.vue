@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template>
-  <div class="border border-gray-200 mb-8 rounded">
+  <div class="border border-gray-300 mb-8 rounded">
     <AccountOrderSummary>
       <div class="lg:col-span-2">
         {{ order.orderNumber }}

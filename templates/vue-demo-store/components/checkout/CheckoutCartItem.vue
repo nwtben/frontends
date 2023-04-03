@@ -52,7 +52,7 @@ const removeCartItem = async () => {
 <template>
   <div
     v-if="!isPromotion"
-    class="mr-4 h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+    class="mr-4 h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-300"
   >
     <img
       :src="getSmallestThumbnailUrl(cartItem.cover)"

@@ -11,9 +11,10 @@ import {
 } from '@headlessui/vue';
 import {
   XMarkIcon,
-  Bars3Icon
+  Bars3Icon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from '@heroicons/vue/24/outline'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/20/solid'
 
 const { navigationElements } = useNavigation();
 
@@ -43,7 +44,7 @@ const close = () => {
       <div class="px-6 flex items-center justify-between">
         <div></div>
         <div>
-          <h4>Menu</h4>
+          <h4 class="font-medium text-lg text-gray-900">Menu</h4>
         </div>
         <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
           <span class="sr-only">Close menu</span>
@@ -53,11 +54,11 @@ const close = () => {
       <div class="mt-6 flow-root">
         <div class="-my-6 divide-y divide-gray-500/10">
           <div class="py-6">
-            <a v-for="navigationElement in navigationElements" :key="navigationElement.id" class="cursor-pointer flex justify-between items-center border-b border-gray-100 px-6 -mx-3 block py-3 text-base leading-7 text-gray-900 hover:bg-gray-50" @click="currentNavigationElement = navigationElement">
+            <a v-for="navigationElement in navigationElements" :key="navigationElement.id" class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-6 -mx-3 block py-3 text-base leading-7 text-brand-dark hover:bg-gray-50" @click="currentNavigationElement = navigationElement">
               {{ getTranslatedProperty(navigationElement, "name") }}
               <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
             </a>
-            <div class="flex gap-5 items-center bg-gray-100 px-6 -mx-3 block py-3 text-base leading-7 text-gray-900 hover:bg-gray-50">
+            <div class="flex gap-5 items-center bg-gray-50 px-6 -mx-3 block py-3 text-base leading-7 text-gray-900 hover:bg-gray-50">
               <LayoutCurrency />
               <LayoutLanguage />
             </div>
@@ -67,9 +68,9 @@ const close = () => {
     </DialogPanel>
     <DialogPanel v-if="currentNavigationElement" class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div class="px-6 flex items-center justify-between">
-        <div><ChevronLeftIcon class="h-6 w-6" aria-hidden="true" @click="currentNavigationElement = null" /></div>
+        <div><ChevronLeftIcon class="h-6 w-6 text-gray-700" aria-hidden="true" @click="currentNavigationElement = null" /></div>
         <div>
-          <h4>{{ getTranslatedProperty(currentNavigationElement, "name") }}</h4>
+          <h4 class="font-medium text-lg text-gray-900">{{ getTranslatedProperty(currentNavigationElement, "name") }}</h4>
         </div>
         <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
           <span class="sr-only">Close menu</span>
@@ -79,7 +80,7 @@ const close = () => {
       <div class="mt-6 flow-root">
         <div class="-my-6 divide-y divide-gray-500/10">
           <div class="py-6">
-            <a v-for="navigationElement in currentNavigationElement.children" :key="navigationElement.id" class="cursor-pointer flex justify-between items-center border-b border-gray-100 px-6 -mx-3 block rounded-lg py-3 text-base leading-7 text-gray-900 hover:bg-gray-50" @click="currentChildNavigationElement = navigationElement">
+            <a v-for="navigationElement in currentNavigationElement.children" :key="navigationElement.id" class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-6 -mx-3 block rounded-lg py-3 text-base leading-7 text-gray-900 hover:bg-gray-50" @click="currentChildNavigationElement = navigationElement">
               {{ getTranslatedProperty(navigationElement, "name") }}
               <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
             </a>
@@ -89,9 +90,9 @@ const close = () => {
     </DialogPanel>
     <DialogPanel v-if="currentChildNavigationElement" class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div class="px-6 flex items-center justify-between">
-        <div><ChevronLeftIcon class="h-6 w-6" aria-hidden="true" @click="currentChildNavigationElement = null" /></div>
+        <div><ChevronLeftIcon class="h-6 w-6 text-gray-700" aria-hidden="true" @click="currentChildNavigationElement = null" /></div>
         <div>
-          <h4>{{ getTranslatedProperty(currentChildNavigationElement, "name") }}</h4>
+          <h4 class="font-medium text-lg text-gray-900">{{ getTranslatedProperty(currentChildNavigationElement, "name") }}</h4>
         </div>
         <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
           <span class="sr-only">Close menu</span>
@@ -106,7 +107,7 @@ const close = () => {
               :key="navigationElement.id"
               @click="close"
               :to="getCategoryUrl(navigationElement)"
-              class="cursor-pointer flex justify-between items-center border-b border-gray-100 px-6 -mx-3 block rounded-lg py-3 text-base leading-7 text-gray-900 hover:bg-gray-50">
+              class="cursor-pointer flex justify-between items-center border-b border-gray-200 px-6 -mx-3 block rounded-lg py-3 text-base leading-7 text-gray-900 hover:bg-gray-50">
                 {{ getTranslatedProperty(navigationElement, "name") }}
             </RouterLink>
           </div>

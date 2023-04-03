@@ -71,18 +71,18 @@ provide("isSideMenuOpened", isSideMenuOpened);
 
 <style>
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   @apply text-brand-dark;
 }
 
 h2 {
-  @apply text-4xl py-4;
+  @apply text-4xl;
 }
 h3 {
-  @apply text-3xl py-3;
+  @apply text-2xl md:text-3xl;
 }
 h4 {
-  @apply text-2xl py-3;
+  @apply text-2xl;
 }
 h5 {
   @apply text-xl;

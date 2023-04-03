@@ -28,7 +28,7 @@ const toggleTabs = (tabNumber: number) => {
 
 <template>
   <div class="container mx-auto my-8">
-    <div class="mb-4 border-b border-gray-200">
+    <div class="mb-4 border-b border-gray-300">
       <ul
         id="myTab"
         class="flex flex-wrap -mb-px font-medium md:text-2xl md:space-x-8"
