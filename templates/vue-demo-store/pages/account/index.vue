@@ -29,7 +29,6 @@ useBreadcrumbs([
   },
 ]);
 
-newsletter.value = await isNewsletterSubscriber();
 
 const updateNewsletterStatus = async () => {
   try {

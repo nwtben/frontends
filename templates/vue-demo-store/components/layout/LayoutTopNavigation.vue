@@ -22,7 +22,7 @@ const { navigationElements } = useNavigation();
       :key="navigationElement.id"
       class="relative"
     >
-      <PopoverButton class="flex items-center gap-1 text-base font-medium uppercase text-current">
+      <PopoverButton class="flex items-center gap-1 text-sm font-medium uppercase text-current">
         {{ getTranslatedProperty(navigationElement, "name") }}
         <ChevronDownIcon v-if="navigationElement.children?.length" class="h-5 w-5 flex-none text-current" aria-hidden="true" />
       </PopoverButton>
@@ -33,7 +33,7 @@ const { navigationElements } = useNavigation();
             <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <div class="flex-auto">
                 <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-semibold text-gray-900">
-                  {{ childElement.name }}
+                  {{ getTranslatedProperty(childElement, "name") }}
                   <span class="absolute inset-0" />
                 </RouterLink>
                 <p class="mt-1 text-gray-600">{{ childElement.description }}</p>

@@ -71,7 +71,7 @@ const { cartItems, totalPrice, isEmpty } = useCart();
                   <ul
                     v-if="!isEmpty"
                     role="list"
-                    class="-my-6 px-0 divide-y divide-gray-200"
+                    class="-my-6 px-0 divide-y divide-gray-300"
                   >
                     <li
                       v-for="cartItem in cartItems"
@@ -88,7 +88,7 @@ const { cartItems, totalPrice, isEmpty } = useCart();
               </div>
             </div>
 
-            <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
+            <div class="border-t border-gray-300 py-6 px-4 sm:px-6">
               <div
                 class="flex justify-between text-base font-medium text-gray-900"
               >

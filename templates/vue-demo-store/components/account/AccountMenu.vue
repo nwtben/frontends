@@ -53,7 +53,7 @@ async function invokeLogout() {
                 <button
                   id="user-menu-item-1"
                   data-testid="header-my-account-link"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  class="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 w-full text-left"
                   role="menuitem"
                   tabindex="-1"
                   @click="$router.push('/account')"
@@ -63,7 +63,7 @@ async function invokeLogout() {
                 <button
                   id="user-menu-item-2"
                   data-testid="header-sing-out-link"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  class="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 w-full text-left"
                   role="menuitem"
                   tabindex="-2"
                   @click="invokeLogout"

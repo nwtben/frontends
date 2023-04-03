@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { CmsBlockTextThreeColumn } from "@shopware-pwa/composables-next";
-
+import {
+  TruckIcon,
+  LockClosedIcon,
+  ArrowsRightLeftIcon
+} from '@heroicons/vue/24/outline';
 const props = defineProps<{
   content: CmsBlockTextThreeColumn;
 }>();
@@ -20,17 +24,17 @@ const centerContent = getSlotContent("center");
       <CmsGenericElement :content="rightContent" class="" />
     </template>
     <template v-else>
-      <div class="flex gap-4">
-        <div class="i-carbon-delivery-truck text-2xl inline-block" />
-        <CmsGenericElement :content="leftContent" class="" />
+      <div class="flex">
+        <TruckIcon class="h-7 w-7 mr-4" />
+        <CmsGenericElement :content="leftContent" class="flex-1" />
       </div>
-      <div class="flex gap-4">
-        <div class="i-carbon-arrows-horizontal text-2xl inline-block" />
-        <CmsGenericElement :content="centerContent" class="" />
+      <div class="flex">
+        <ArrowsRightLeftIcon class="h-7 w-7 mr-4" />
+        <CmsGenericElement :content="centerContent" class="flex-1" />
       </div>
-      <div class="flex gap-4">
-        <div class="i-carbon-locked text-2xl inline-block" />
-        <CmsGenericElement :content="rightContent" class="" />
+      <div class="flex">
+        <LockClosedIcon class="h-7 w-7 mr-4" />
+        <CmsGenericElement :content="rightContent" class="flex-1" />
       </div>
     </template>
   </article>

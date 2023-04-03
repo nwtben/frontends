@@ -1,7 +1,18 @@
 import transformerDirective from "@unocss/transformer-directives";
 import { NuxtConfig } from '@nuxt/types';
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
+
 export default defineNuxtConfig({
+  app: {
+    head: {
+      link: [
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap",
+        },
+      ],
+    }
+  },
   shopware: {
     shopwareEndpoint: "https://shopware.nwtsaas.com",
     shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
@@ -76,7 +87,7 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
-    safelist: ['max-w-2xl'],
+    safelist: ['container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-8', 'mt-8'],
     theme: {
       extend: {
         width: "width",
@@ -84,6 +95,7 @@ export default defineNuxtConfig({
       },
       container: {
         padding: '1rem',
+        center: true,
       },
       colors: {
         current: 'currentColor',
@@ -92,13 +104,23 @@ export default defineNuxtConfig({
           light: "#5ebbff",
           dark: "#374151",
         },
+        light: {
+          primary: '#F1F2F3'
+        },
+        dark: {
+          primary: '#1D1F22'
+        },
         gray: {
-          100: '#F9FAFB',
-          200: '#D1D5DB',
-          300: '#9CA3AF',
-          400: '#6B7280',
-          500: '#F3F4F6',
-          600: '#4B5563'
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
         },
       },
     },

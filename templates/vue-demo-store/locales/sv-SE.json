@@ -1,3 +1,8 @@
 {
-    "Sign in": "Logga in"
+  "search": "sök",
+  "sign_in": "logga in",
+  "social": "social",
+  "payment": "betalning",
+  "newsletter_success_text": "Vi bryr oss om skyddet av dina uppgifter. Läs vår",
+  "privacy_policy": "Integritetspolicy"
 }

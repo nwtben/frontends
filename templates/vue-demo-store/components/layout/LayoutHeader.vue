@@ -6,6 +6,9 @@ const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const route = useRoute();
+const { locale } = useI18n();
+const { fetchLang, currentLanguage, languages, syncLanguageData } = useLanguage();
+const { sessionContext } = useSessionContext();
 
 const path = computed(() => route.path || '');
 
@@ -34,6 +37,23 @@ watch(path, () => {
 onMounted(() => {
   controlHeader();
 })
+
+watch(currentLanguage, () => {
+  locale.value = currentLanguage.value?.locale?.code || '';
+});
+
+watch(
+  () => sessionContext.value?.salesChannel?.languageId,
+  async (newLanguageId) => {
+    if (!languages.value.length) {
+      await fetchLang();
+    }
+    if (newLanguageId) {
+      await syncLanguageData(newLanguageId!);
+    }
+  }, {
+    immediate: true
+  });
 
 </script>
 

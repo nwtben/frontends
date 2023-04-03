@@ -255,7 +255,7 @@ async function invokeLogout() {
                 <div class="col-span-6">
                   <label
                     for="salutation"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >Salutation</label
                   >
                   <select
@@ -289,7 +289,7 @@ async function invokeLogout() {
                 <div class="col-span-6 sm:col-span-3">
                   <label
                     for="first-name"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >First name</label
                   >
                   <input
@@ -314,7 +314,7 @@ async function invokeLogout() {
                 <div class="col-span-6 sm:col-span-3">
                   <label
                     for="last-name"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >Last name</label
                   >
                   <input
@@ -347,7 +347,7 @@ async function invokeLogout() {
                     />
                     <label
                       for="create-account"
-                      class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >Do not create a customer account.</label
                     >
                   </div>
@@ -356,7 +356,7 @@ async function invokeLogout() {
                 <div class="col-span-6 sm:col-span-3">
                   <label
                     for="email-address"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >Email address</label
                   >
                   <input
@@ -382,7 +382,7 @@ async function invokeLogout() {
                   <div v-if="!state.guest">
                     <label
                       for="password"
-                      class="block text-sm font-medium text-gray-700"
+                      class="block text-sm font-medium text-gray-900"
                       >Password</label
                     >
                     <input
@@ -407,7 +407,7 @@ async function invokeLogout() {
                 <div class="col-span-6">
                   <label
                     for="street-address"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >Street address</label
                   >
                   <input
@@ -433,7 +433,7 @@ async function invokeLogout() {
                 <div class="col-span-6 sm:col-span-3">
                   <label
                     for="postal-code"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >ZIP / Postal code</label
                   >
                   <input
@@ -459,7 +459,7 @@ async function invokeLogout() {
                 <div class="col-span-6 sm:col-span-3">
                   <label
                     for="city"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >City</label
                   >
                   <input
@@ -485,7 +485,7 @@ async function invokeLogout() {
                 <div class="col-span-6">
                   <label
                     for="country"
-                    class="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-900"
                     >Country</label
                   >
                   <select
@@ -577,7 +577,7 @@ async function invokeLogout() {
               <label
                 :for="singleShippingMethod.id"
                 :class="{ 'animate-pulse': isLoading[singleShippingMethod.id] }"
-                class="ml-2 block text-sm font-medium text-gray-700"
+                class="ml-2 block text-sm font-medium text-gray-900"
               >
                 {{ singleShippingMethod.name }}
               </label>
@@ -619,7 +619,7 @@ async function invokeLogout() {
               <label
                 :for="singlePaymentMethod.id"
                 :class="{ 'animate-pulse': isLoading[singlePaymentMethod.id] }"
-                class="ml-2 block text-sm font-medium text-gray-700"
+                class="ml-2 block text-sm font-medium text-gray-900"
               >
                 {{ singlePaymentMethod.name }}
               </label>
@@ -753,7 +753,7 @@ async function invokeLogout() {
               </h3>
               <p class="text-sm text-gray-600">Order details and totals.</p>
             </div>
-            <ul role="list" class="-my-4 divide-y divide-gray-200 pl-0">
+            <ul role="list" class="-my-4 divide-y divide-gray-300 pl-0">
               <li
                 v-for="cartItem in cartItems"
                 :key="cartItem.id"

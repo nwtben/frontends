@@ -90,7 +90,7 @@ provide("swNavigation-footer-navigation", footerData);
                     </RouterLink>
                   </li>
                 </ul>
-                <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200">
+                <ul class="pt-4 mt-4 space-y-2 border-t border-gray-300">
                   <li>
                     <RouterLink
                       to="/account/order"

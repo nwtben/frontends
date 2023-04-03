@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { useLanguage } from '../../composables/useLanguage';
+const { setLanguage, languages, currentLanguage } = useLanguage();
 
-const { fetchLang, setLanguage, languages, currentLanguage } = useLanguage();
-
-onMounted(async () => {
-  await fetchLang();
-})
 </script>
 <template>
   <div

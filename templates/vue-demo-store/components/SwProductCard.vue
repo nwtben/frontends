@@ -104,7 +104,7 @@ const ratingAverage: Ref<number> = computed(() =>
         </template>
       </client-only>
     </button>
-    <div class="min-h-80 aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+    <div class="aspect-w-2 aspect-h-3 w-full overflow-hidden bg-gray-300 lg:aspect-none group-hover:opacity-75">
       <img
         :src="getProductThumbnailUrl(product)"
         :alt="getProductName({ product }) || ''"
@@ -115,7 +115,7 @@ const ratingAverage: Ref<number> = computed(() =>
       <div>
         <h3 class="text-base p-0">
           <RouterLink
-            class="line-clamp-2 h-6 font-medium text-base"
+            class="line-clamp-2 h-6 font-medium text-base text-start"
             :to="getProductUrl(product)"
             data-testid="product-box-product-name-link"
           >

@@ -1,3 +1,8 @@
 {
-    "Sign in": "Sign in"
+  "search": "search",
+  "sign_in": "sign in",
+  "social": "social",
+  "payment": "payment",
+  "newsletter_success_text": "We care about the protection of your data. Read our",
+  "privacy_policy": "Privacy policy"
 }
