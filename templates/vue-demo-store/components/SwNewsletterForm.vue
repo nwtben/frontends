@@ -118,7 +118,7 @@ const invokeSubmit = async () => {
             </div>
           </div>
           <p class="mt-3 text-sm text-gray-300">
-            {{ $t('newsletter_success_text') }}<a class="text-white border-b">{{ $t('privacy_policy') }}</a>
+            {{$t('newsletter_success_text')}} <a class="text-white border-b">{{ $t('privacy_policy') }}</a>
           </p>
         </div>
       </template>

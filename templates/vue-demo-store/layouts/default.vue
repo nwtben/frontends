@@ -24,7 +24,7 @@ provide("swNavigation-footer-navigation", footerData);
     <SharedModal />
     <LayoutHeader />
     <LayoutNotifications />
-    <div class="mx-auto">
+    <div class="min-h-[50vh] mx-auto">
       <!-- <LayoutBreadcrumbs /> -->
       <slot />
     </div>

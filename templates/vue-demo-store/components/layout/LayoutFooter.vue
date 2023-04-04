@@ -47,7 +47,7 @@ const gridColumns = computed<number>(() =>
       >
         <div>
           <h4 class="mb-2 text-gray-400 uppercase font-semibold text-sm">
-            SOCIAL
+            {{$t('social')}}
           </h4>
           <div class="flex space-x-7">
             <div class="text-gray-400 w-5 h-5 i-custom:facebook" />
@@ -58,7 +58,7 @@ const gridColumns = computed<number>(() =>
         </div>
         <div>
           <h4 class="mb-2 text-gray-400 uppercase font-semibold text-sm">
-            PAYMENT
+            {{$t('payment')}}
           </h4>
           <div class="flex space-x-6">
             <img src="/svg/klarna.svg" />
@@ -69,7 +69,7 @@ const gridColumns = computed<number>(() =>
         </div>
       </div>
       <div class="border-t border-gray-600 my-8"></div>
-      <p class="text-gray-400 text-sm text-center">© 2023 Stylad, All rights reserved.</p>
+      <p class="text-gray-400 text-sm text-center">{{ $t('copyright') }}</p>
     </div>
   </footer>
 </template>

@@ -9,7 +9,7 @@ export function useLanguage() {
   const { refreshSessionContext } = useSessionContext();
   
   const languages = useState<Language[]>('languages', () => []);
-  const currentLanguage = ref<Language>();
+  const currentLanguage = useState<Language>('current-language');
 
   const fetchLang = async () => {
     const response: EntityResult<"language", Language> = await getAvailableLanguages(apiInstance);
@@ -18,7 +18,9 @@ export function useLanguage() {
 
   const setLanguage = async (languageId: string) => {
     await setCurrentLanguage(languageId, apiInstance);
-    refreshSessionContext();
+    apiInstance.config.languageId = languageId;
+    await refreshSessionContext();
+    location.reload();
   };
 
   const syncLanguageData = async (languageId: string) => {
@@ -43,7 +45,7 @@ export function useLanguage() {
     fetchLang,
     languages: computed(() => languages.value),
     setLanguage,
-    currentLanguage,
+    currentLanguage: computed(() => currentLanguage.value),
     syncLanguageData
   }
 }

@@ -59,7 +59,7 @@ watch(
 
 <template>
   <header :class="{
-    'z-10 transition': true,
+    'z-50 transition': true,
     'text-white bg-transparent fixed w-full': headerMode === 'transparent',
     'sticky top-0 relative bg-white border-b-2 border-gray-100 text-brand-dark': headerMode === 'default',
   }">

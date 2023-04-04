@@ -31,7 +31,7 @@ const prev = () => {
 </script>
 <template>
   <div class="relative">
-    <button class="hidden md:flex z-50 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
+    <button class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
     <carousel ref="carouselEl" :snapAlign="'start'" :itemsToShow="2.5" :itemsToScroll="1" :breakpoints="breakpoints" :style="{marginLeft: `-${gap}px`, marginRight: `-${gap}px`}">
       <slide v-for="(child, index) of childrenRaw" :key="index" :style="{padding: `0 ${gap}px`}">
         <component :is="child" />
@@ -40,7 +40,7 @@ const prev = () => {
         <Pagination :style="{paddingLeft: `${gap}px`, paddingRight: `${gap}px`}"/>
       </template>
     </carousel>
-    <button class="hidden md:flex z-50 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
+    <button class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
   </div>
 </template>
 <style>
