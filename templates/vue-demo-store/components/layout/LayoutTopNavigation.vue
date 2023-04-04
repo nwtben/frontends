@@ -22,19 +22,18 @@ const { navigationElements } = useNavigation();
       :key="navigationElement.id"
       class="relative"
     >
-      <PopoverButton class="flex items-center gap-1 text-sm font-medium uppercase text-current">
+      <PopoverButton class="flex items-center gap-1 text-sm font-medium uppercase text-current outline-none">
         {{ getTranslatedProperty(navigationElement, "name") }}
         <ChevronDownIcon v-if="navigationElement.children?.length" class="h-5 w-5 flex-none text-current" aria-hidden="true" />
       </PopoverButton>
 
       <transition v-if="navigationElement.children?.length" enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-        <PopoverPanel class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden bg-white shadow-lg ring-1 ring-gray-900/5">
-          <div class="flex gap-4 p-4">
-            <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+        <PopoverPanel class="absolute -left-8 top-full z-10 mt-3 overflow-hidden bg-white shadow-lg ring-1 ring-gray-900/5">
+          <div class="flex gap-8 py-12 px-18">
+            <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group min-w-[218px] relative flex text-sm leading-6">
               <div class="flex-auto">
-                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-semibold text-gray-900">
+                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-medium text-sm text-gray-900">
                   {{ getTranslatedProperty(childElement, "name") }}
-                  <span class="absolute inset-0" />
                 </RouterLink>
                 <p class="mt-1 text-gray-600">{{ childElement.description }}</p>
                 <ul
@@ -50,7 +49,6 @@ const { navigationElements } = useNavigation();
                           'undefined'
                       "
                       :to="'/' + subChildElement?.seoUrls?.[0]?.seoPathInfo"
-                      class="hover:bg-gray-50"
                     >
                       <div
                         class="flex flex-col flex-grow"
@@ -58,7 +56,7 @@ const { navigationElements } = useNavigation();
                           'max-w-200px md:max-w-300px': !!subChildElement.media,
                         }"
                       >
-                        <p class="text-base font-normal text-gray-400">
+                        <p class="text-sm font-normal text-gray-500">
                           {{ getTranslatedProperty(subChildElement, "name") }}
                         </p>
                       </div>

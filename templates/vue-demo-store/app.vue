@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { getSessionContext } from "@shopware-pwa/api-client";
-import { SessionContext } from "@shopware-pwa/types";
-
 /**
  * Init breadcrumbs context
  */
@@ -15,21 +12,11 @@ useHead({
   },
 });
 
-const { refreshSessionContext } = useSessionContext();
+const { sessionContext, refreshSessionContext } = useSessionContext();
 onBeforeMount(async () => {
   await refreshSessionContext();
   getWishlistProducts();
 });
-
-const { apiInstance } = useShopwareContext();
-const { data: sessionContextData } = await useAsyncData(
-  "sessionContext",
-  async () => {
-    return await getSessionContext(apiInstance);
-  }
-);
-useSessionContext(sessionContextData.value as SessionContext);
-
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
 
@@ -64,7 +51,7 @@ provide("isSideMenuOpened", isSideMenuOpened);
 </script>
 
 <template>
-  <NuxtLayout>
+  <NuxtLayout v-if="sessionContext">
     <NuxtPage />
   </NuxtLayout>
 </template>
