@@ -46,18 +46,18 @@ const gridColumns = computed<number>(() =>
         class="w-full grid grid-cols-1 gap-8 md:gap-0 md:grid-cols-2"
       >
         <div>
-          <h4 class="mb-2 text-gray-400 uppercase font-semibold text-sm">
+          <h4 class="mb-4 text-gray-400 uppercase font-semibold text-sm">
             {{$t('social')}}
           </h4>
           <div class="flex space-x-7">
-            <div class="text-gray-400 w-5 h-5 i-custom:facebook" />
-            <div class="text-gray-400 w-5 h-5 i-carbon-logo-instagram" />
-            <div class="text-gray-400 w-5 h-5 i-carbon-logo-twitter" />
-            <div class="text-gray-400 w-5 h-5 i-carbon-logo-youtube" />
+            <div class="text-gray-400 w-5 h-5 md:w-6 md:h-6 i-custom:facebook" />
+            <div class="text-gray-400 w-5 h-5 md:w-6 md:h-6 i-carbon-logo-instagram" />
+            <div class="text-gray-400 w-5 h-5 md:w-6 md:h-6 i-carbon-logo-twitter" />
+            <div class="text-gray-400 w-5 h-5 md:w-6 md:h-6 i-carbon-logo-youtube" />
           </div>
         </div>
         <div>
-          <h4 class="mb-2 text-gray-400 uppercase font-semibold text-sm">
+          <h4 class="mb-4 text-gray-400 uppercase font-semibold text-sm">
             {{$t('payment')}}
           </h4>
           <div class="flex space-x-6">

@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { SharedModal } from "~~/components/shared/SharedModal.vue";
+import {
+  UserIcon,
+} from '@heroicons/vue/24/outline';
+
 const { isLoggedIn, logout, user, refreshUser } = useUser();
 const isAccountMenuOpen = ref(false);
 const modal = inject<SharedModal>("modal") as SharedModal;
@@ -12,9 +16,9 @@ async function invokeLogout() {
 <template>
   <div class="md:w-auto">
     <div class="my-account-area">
-      <div
+      <UserIcon
         @click="modal.open('AccountLoginForm')"
-        class="w-7 h-7 i-carbon-user text-current hover:text-brand-primary"
+        class="w-6 h-6 text-current hover:text-brand-primary"
       />
       <div v-if="isLoggedIn">
         <div

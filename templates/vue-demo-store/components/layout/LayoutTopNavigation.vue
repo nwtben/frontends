@@ -15,8 +15,7 @@ const { navigationElements } = useNavigation();
 </script>
 
 <template>
-  <!-- eslint-disable vue/no-v-html -->
-  <PopoverGroup class="hidden lg:flex space-x-7 items-center">
+  <PopoverGroup class="hidden md:flex space-x-7 items-center">
     <Popover
       v-for="navigationElement in navigationElements"
       :key="navigationElement.id"
@@ -32,7 +31,7 @@ const { navigationElements } = useNavigation();
           <div class="flex gap-8 py-12 px-18">
             <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group min-w-[218px] relative flex text-sm leading-6">
               <div class="flex-auto">
-                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-medium text-sm text-gray-900">
+                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-medium text-gray-900 text-sm">
                   {{ getTranslatedProperty(childElement, "name") }}
                 </RouterLink>
                 <p class="mt-1 text-gray-600">{{ childElement.description }}</p>

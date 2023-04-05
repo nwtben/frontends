@@ -110,7 +110,7 @@ const { cartItems, totalPrice, isEmpty } = useCart();
                 </NuxtLink>
 
                 <RouterLink
-                  class="flex items-center justify-center py-3 text-sm font-medium text-brand-dark"
+                  class="flex items-center justify-center py-3 text-sm font-medium text-gray-700"
                   to="/checkout/cart"
                   data-testid="cart-checkout-shopping-cart"
                   @click="isOpen = false"
@@ -119,7 +119,7 @@ const { cartItems, totalPrice, isEmpty } = useCart();
                 </RouterLink>
               </div>
               <div
-                class="mt-6 flex justify-center text-center text-sm text-brand-dark"
+                class="mt-6 flex justify-center text-center text-sm text-gray-700"
               >
                 <p>
                   or

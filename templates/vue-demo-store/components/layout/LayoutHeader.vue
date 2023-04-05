@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import {
+  HeartIcon,
+  ShoppingCartIcon
+} from '@heroicons/vue/24/outline';
 
 const { count } = useCart();
 const { count: wishlistCount } = useWishlist();
@@ -61,11 +65,11 @@ watch(
   <header :class="{
     'z-50 transition': true,
     'text-white bg-transparent fixed w-full': headerMode === 'transparent',
-    'sticky top-0 relative bg-white border-b-2 border-gray-100 text-brand-dark': headerMode === 'default',
+    'sticky top-0 relative bg-white border-b-2 border-gray-100 text-gray-700': headerMode === 'default',
   }">
     <nav aria-label="Global">
       <!-- For Desktop -->
-      <div class="hidden lg:block container mx-auto">
+      <div class="hidden md:block container mx-auto">
         <div class="flex justify-end gap-4">
           <LayoutCurrency />
           <LayoutLanguage />
@@ -80,7 +84,11 @@ watch(
             <div>
               <RouterLink to="/" class="text-current">
                 <span class="sr-only">LUXED</span>
-                <div class="text-current w-40 h-5 i-custom:logo" />
+                <div :class="[
+                    'w-40 h-5 i-custom:logo',
+                    headerMode === 'transparent' ? 'text-white' : 'text-black'
+                  ]"
+                />
               </RouterLink>
             </div>
           </div>
@@ -95,8 +103,8 @@ watch(
                 data-testid="wishlist-button"
                 @click="$router.push('/wishlist')"
               >
-                <div
-                  class="w-7 h-7 i-carbon-favorite text-current hover:text-brand-primary"
+                <HeartIcon
+                  class="w-6 h-6 text-current hover:text-brand-primary"
                 />
                 <span
                   v-if="wishlistCount > 0"
@@ -114,9 +122,8 @@ watch(
                 data-testid="cart-button"
                 @click="isSidebarOpen = true"
               >
-                <!-- Heroicon name: outline/shopping-bag -->
-                <div
-                  class="w-7 h-7 i-carbon-shopping-cart text-current hover:text-brand-primary"
+                <ShoppingCartIcon
+                  class="w-6 h-6 text-current hover:text-brand-primary"
                 />
                 <span
                   v-if="count > 0"
@@ -132,7 +139,7 @@ watch(
         </div>
       </div>
       <!-- For Mobile -->
-      <div class="block lg:hidden container mx-auto">
+      <div class="block md:hidden container mx-auto">
         <div
           class="flex justify-between items-center py-5 space-x-4"
         >
@@ -144,7 +151,11 @@ watch(
             <div>
               <RouterLink to="/" class="text-current">
                 <span class="sr-only">LUXED</span>
-                <div class="text-current w-40 h-5 i-custom:logo" />
+                <div :class="[
+                    'w-40 h-5 i-custom:logo',
+                    headerMode === 'transparent' ? 'text-white' : 'text-black'
+                  ]"
+                />
               </RouterLink>
             </div>
           </div>
@@ -158,8 +169,8 @@ watch(
                 data-testid="wishlist-button"
                 @click="$router.push('/wishlist')"
               >
-                <div
-                  class="w-7 h-7 i-carbon-favorite text-current hover:text-brand-primary"
+                <HeartIcon
+                  class="w-6 h-6 text-current hover:text-brand-primary"
                 />
                 <span
                   v-if="wishlistCount > 0"
@@ -177,9 +188,8 @@ watch(
                 data-testid="cart-button"
                 @click="isSidebarOpen = true"
               >
-                <!-- Heroicon name: outline/shopping-bag -->
-                <div
-                  class="w-7 h-7 i-carbon-shopping-cart text-current hover:text-brand-primary"
+                <ShoppingCartIcon
+                  class="w-6 h-6 text-current hover:text-brand-primary"
                 />
                 <span
                   v-if="count > 0"

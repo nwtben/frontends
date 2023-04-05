@@ -87,15 +87,30 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
-    safelist: ['container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8'],
+    safelist: ['container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4'],
     theme: {
       extend: {
         width: "width",
         height: "height",
       },
       container: {
-        padding: '1rem',
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1rem',
+          md: '2rem',
+          lg: '2rem',
+          xl: '1rem',
+          '2xl': '1rem'
+        },
         center: true,
+        maxWidth: {
+          DEFAULT: 'unset',
+          sm: 'unset',
+          md: 'unset',
+          lg: 'unset',
+          xl: '1248px',
+          '2xl': '1536px'
+        },
       },
       colors: {
         current: 'currentColor',

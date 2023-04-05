@@ -82,7 +82,7 @@ watch(enter, (value) => {
     <div class="flex items-center">
       <MagnifyingGlassIcon
         :class="[
-          'sw-search-input-icon i-carbon-search flex-none h-6 w-6 cursor-pointer',
+          'sw-search-input-icon flex-none h-6 w-6 cursor-pointer',
           headerMode === 'transparent' ? 'text-white' : 'text-gray-700'
         ]"
       />
@@ -93,7 +93,7 @@ watch(enter, (value) => {
         data-testid="layout-search-input"
         type="text"
         :class="[
-          'sw-search-input text-base md:text-sm placeholder:capitalize font-normal mx-2.5 lg:ml-0 xl:ml-2 grow h-6 transition duration-200 focus:outline-none w-56 lg:w-10/12',
+          'sw-search-input text-base md:text-sm placeholder:capitalize font-normal mx-2.5 md:ml-0 xl:ml-2 grow h-6 transition duration-200 focus:outline-none w-56 md:w-10/12',
           headerMode === 'transparent' ? 'bg-transparent placeholder:text-white text-white' : 'bg-gray-100 placeholder:text-gray-500 text-gray-700'
         ]"
         :placeholder="$t('search')"
