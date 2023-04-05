@@ -87,7 +87,7 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
-    safelist: ['container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4'],
+    safelist: ['container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4',' mt-20', 'md:mt-40', 'mb-20', 'md:mb-53'],
     theme: {
       extend: {
         width: "width",
@@ -118,6 +118,12 @@ export default defineNuxtConfig({
           primary: "#1F2937",
           light: "#5ebbff",
           dark: "#374151",
+        },
+        red: {
+          900: '#991B1B'
+        },
+        green: {
+          500: '#10B981'
         },
         light: {
           primary: '#F1F2F3'

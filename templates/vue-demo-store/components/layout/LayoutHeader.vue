@@ -8,39 +8,10 @@ import {
 const { count } = useCart();
 const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
-const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
-const route = useRoute();
+const headerMode = useState<'default' | 'transparent'>('headerMode');
 const { locale } = useI18n();
 const { fetchLang, currentLanguage, languages, syncLanguageData } = useLanguage();
 const { sessionContext } = useSessionContext();
-
-const path = computed(() => route.path || '');
-
-const handleScroll = () => {
-  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-    headerMode.value = 'default';
-  } else {
-    headerMode.value = 'transparent';
-  }
-}
-
-const controlHeader = () => {
-  if (path.value === '/') {
-    headerMode.value = 'transparent';
-    window.addEventListener('scroll', handleScroll);
-  } else {
-    headerMode.value = 'default';
-    window.removeEventListener('scroll', handleScroll);
-  }
-}
-
-watch(path, () => {
-  controlHeader();
-});
-
-onMounted(() => {
-  controlHeader();
-})
 
 watch(currentLanguage, () => {
   locale.value = currentLanguage.value?.locale?.code || '';
