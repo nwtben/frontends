@@ -76,7 +76,7 @@ watch(enter, (value) => {
 <template>
   <div
     ref="searchContainer"
-    class="relative group p-3 pr-0 transition duration-300 hover:shadow-md inline-block"
+    class="lg:min-w-[240px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 hover:shadow-md inline-block"
     :class="[active ? 'shadow-lg' : 'shadow', headerMode === 'transparent' ? 'bg-white bg-opacity-25 text-white' : 'bg-gray-100 text-gray-400']"
   >
     <div class="flex items-center">

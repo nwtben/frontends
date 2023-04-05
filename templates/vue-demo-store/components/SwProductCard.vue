@@ -99,14 +99,14 @@ const ratingAverage: Ref<number> = computed(() =>
       <client-only>
         <HeartSolidIcon
           v-if="isInWishlist"
-          class="h-5 w-5 c-red-500"
+          class="h-6 w-6 c-red-500"
         />
         <HeartIcon
           v-else
-          class="h-5 w-5"
+          class="h-6 w-6"
         />
         <template #placeholder>
-          <HeartIcon class="h-5 w-5" />
+          <HeartIcon class="h-6 w-6" />
         </template>
       </client-only>
     </button>

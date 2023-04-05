@@ -25,15 +25,15 @@ const centerContent = getSlotContent("center");
     </template>
     <template v-else>
       <div class="flex">
-        <TruckIcon class="h-6 w-6 mr-4" />
+        <TruckIcon class="h-6 w-6 mr-3" />
         <CmsGenericElement :content="leftContent" class="flex-1" />
       </div>
       <div class="flex">
-        <ArrowsRightLeftIcon class="h-6 w-6 mr-4" />
+        <ArrowsRightLeftIcon class="h-6 w-6 mr-3" />
         <CmsGenericElement :content="centerContent" class="flex-1" />
       </div>
       <div class="flex">
-        <LockClosedIcon class="h-6 w-6 mr-4" />
+        <LockClosedIcon class="h-6 w-6 mr-3" />
         <CmsGenericElement :content="rightContent" class="flex-1" />
       </div>
     </template>
