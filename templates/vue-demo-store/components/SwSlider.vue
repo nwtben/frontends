@@ -14,9 +14,26 @@ const childrenRaw = computed(
 
 const gap = ref(16);
 
+const resizeHandler = useDebounceFn((e: any) => {
+  if (e.target.innerWidth <= 768) {
+    gap.value = 8;
+  } else {
+    gap.value = 16;
+  }
+}, 500);
+
+onMounted(() => {
+  window.addEventListener('resize', resizeHandler);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', resizeHandler);
+});
+
 const breakpoints = ref({
-  700: {
+  768: {
     itemsToShow: 4,
+    itemsToScroll: 2
   },
 })
 

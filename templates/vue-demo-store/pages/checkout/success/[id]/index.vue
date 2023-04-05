@@ -118,7 +118,7 @@ const formatDate = (date: Date) =>
               </div>
               <div>{{ getTranslatedProperty(state, "name") }}</div>
               <div
-                class="hidden sm:block justify-self-end text-brand-dark cursor-pointer"
+                class="hidden sm:block justify-self-end text-gray-700 cursor-pointer"
                 :aria-expanded="isExpand"
                 @click="toggleView"
               >
@@ -127,7 +127,7 @@ const formatDate = (date: Date) =>
             </AccountOrderSummary>
             <div>
               <div
-                class="block sm:hidden text-center text-brand-dark cursor-pointer bg-gray-100 py-2"
+                class="block sm:hidden text-center text-gray-700 cursor-pointer bg-gray-100 py-2"
                 :aria-expanded="isExpand"
                 @click="toggleView"
               >

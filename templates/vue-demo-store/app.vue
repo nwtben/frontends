@@ -59,7 +59,7 @@ provide("isSideMenuOpened", isSideMenuOpened);
 <style>
 :root {
   font-family: 'Inter', sans-serif;
-  @apply text-brand-dark;
+  @apply text-gray-900;
 }
 
 h2 {

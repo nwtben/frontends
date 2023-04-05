@@ -97,7 +97,7 @@ const invokeSubmit = async () => {
                 ]"
                 v-model="state.email"
                 @blur="$v.email.$touch()"
-                class="appearance-none relative block w-full px-3 py-2 border placeholder:text-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                class="appearance-none relative block w-full px-3 py-2 border placeholder:text-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
               />
               <span
@@ -109,7 +109,7 @@ const invokeSubmit = async () => {
             </div>
             <div class="flex-1 md:flex-initial">
               <button
-                class="w-full group relative flex justify-center py-2 px-4 border border-white text-sm font-medium bg-white hover:bg-gray-100 hover:border-gray-100 text-brand-dark focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-75"
+                class="w-full group relative flex justify-center py-2 px-4 border border-white text-sm font-medium bg-white hover:bg-gray-100 hover:border-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-75"
                 type="submit"
                 :disabled="loading"
               >

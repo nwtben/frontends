@@ -19,6 +19,14 @@ import {
 } from "@shopware-pwa/types";
 import { Ref } from "vue";
 import SwListingProductPrice from "./SwListingProductPrice.vue";
+import {
+  StarIcon,
+  HeartIcon as HeartSolidIcon
+} from '@heroicons/vue/24/solid';
+
+import {
+  HeartIcon,
+} from '@heroicons/vue/24/outline';
 
 const { pushSuccess, pushError } = useNotifications();
 
@@ -89,22 +97,20 @@ const ratingAverage: Ref<number> = computed(() =>
       data-testid="product-box-toggle-wishlist-button"
     >
       <client-only>
-        <div
+        <HeartSolidIcon
           v-if="isInWishlist"
-          class="h-5 w-5 i-carbon-favorite-filled c-red-500"
-          data-testid="product-box-wishlist-icon-in"
-        ></div>
-        <div
+          class="h-6 w-6 c-red-500"
+        />
+        <HeartIcon
           v-else
-          class="h-5 w-5 i-carbon-favorite"
-          data-testid="product-box-wishlist-icon-not-in"
-        ></div>
+          class="h-6 w-6"
+        />
         <template #placeholder>
-          <div class="h-5 w-5 i-carbon-favorite"></div>
+          <HeartIcon class="h-6 w-6" />
         </template>
       </client-only>
     </button>
-    <div class="aspect-w-2 aspect-h-3 w-full overflow-hidden bg-gray-300 lg:aspect-none group-hover:opacity-75">
+    <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300">
       <img
         :src="getProductThumbnailUrl(product)"
         :alt="getProductName({ product }) || ''"
@@ -127,16 +133,18 @@ const ratingAverage: Ref<number> = computed(() =>
           class="ml-auto"
           data-testid="product-box-product-price"
         />
-        <div class="flex">
-          <div
-            v-for="value in ratingAverage"
-            class="w-5 h-5 i-carbon-star-filled"
-          ></div>
-          <div
-            v-for="value in (5 - ratingAverage)"
-            class="w-5 h-5 i-carbon-star"
-          ></div>
-          <span class="pl-2">(8)</span>
+        <div class="flex items-center">
+          <div class="flex">
+            <StarIcon
+              v-for="value in ratingAverage"
+              class="w-4 h-4 text-black"
+            />
+            <StarIcon
+              v-for="value in (5 - ratingAverage)"
+              class="w-4 h-4 text-gray-300"
+            />
+          </div>
+          <span class="pl-1.5 text-sm">(8)</span>
         </div>
       </div>
     </div>

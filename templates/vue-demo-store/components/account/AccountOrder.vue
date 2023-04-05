@@ -33,7 +33,7 @@ export default {
       <div>{{ orderDate }}</div>
       <div>{{ order.stateMachineState.name }}</div>
       <div
-        class="hidden sm:block justify-self-end text-brand-dark cursor-pointer"
+        class="hidden sm:block justify-self-end text-gray-700 cursor-pointer"
         :aria-expanded="isExpand"
         @click="toggleView"
       >
@@ -42,7 +42,7 @@ export default {
     </AccountOrderSummary>
     <div>
       <div
-        class="block sm:hidden text-center text-brand-dark cursor-pointer bg-gray-100 py-2"
+        class="block sm:hidden text-center text-gray-700 cursor-pointer bg-gray-100 py-2"
         :aria-expanded="isExpand"
         @click="toggleView"
       >

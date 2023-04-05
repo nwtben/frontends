@@ -113,7 +113,7 @@ const invokeSubmit = async () => {
           <select
             id="salutation"
             name="salutation"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             :class="[
               $v.salutationId.$error
                 ? 'border-red-600 focus:border-red-600'
@@ -145,7 +145,7 @@ const invokeSubmit = async () => {
             name="first-name"
             type="text"
             autocomplete="first-name"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             :class="[
               $v.firstName.$error
                 ? 'border-red-600 focus:border-red-600'
@@ -170,7 +170,7 @@ const invokeSubmit = async () => {
             type="text"
             autocomplete="last-name"
             v-model="state.lastName"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             :class="[
               $v.lastName.$error
                 ? 'border-red-600 focus:border-red-600'
@@ -200,7 +200,7 @@ const invokeSubmit = async () => {
             ]"
             v-model="state.email"
             @blur="$v.email.$touch()"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Enter email address..."
           />
           <span
@@ -219,7 +219,7 @@ const invokeSubmit = async () => {
             autocomplete="phone"
             v-model="state.phone"
             @blur="$v.phone.$touch()"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             :class="[
               $v.phone.$error
                 ? 'border-red-600 focus:border-red-600'
@@ -243,7 +243,7 @@ const invokeSubmit = async () => {
             autocomplete="subject"
             v-model="state.subject"
             @blur="$v.subject.$touch()"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             :class="[
               $v.subject.$error
                 ? 'border-red-600 focus:border-red-600'
@@ -267,7 +267,7 @@ const invokeSubmit = async () => {
             autocomplete="comment"
             @blur="$v.comment.$touch()"
             v-model="state.comment"
-            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 rounded-md focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
             :class="[
               $v.comment.$error
                 ? 'border-red-600 focus:border-red-600'

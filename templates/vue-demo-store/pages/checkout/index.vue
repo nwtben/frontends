@@ -243,7 +243,7 @@ async function invokeLogout() {
                 Register or
                 <a
                   href="#"
-                  class="whitespace-nowrap font-medium text-brand-primary hover:text-brand-dark"
+                  class="whitespace-nowrap font-medium text-brand-primary hover:text-gray-700"
                   data-testid="checkout-sign-in-link"
                   @click="modal.open('AccountLoginForm')"
                 >
@@ -534,7 +534,7 @@ async function invokeLogout() {
               >! You can log out
               <a
                 href="#"
-                class="text-brand-primary hover:text-brand-dark"
+                class="text-brand-primary hover:text-gray-700"
                 data-testid="checkout-logout"
                 @click="invokeLogout"
                 >here</a
@@ -677,7 +677,7 @@ async function invokeLogout() {
             </div>
             <button
               type="button"
-              class="flex font-medium text-brand-dark"
+              class="flex font-medium text-gray-700"
               @click="
                 modal.open('AccountAddressForm', {
                   countries: getCountries,
@@ -731,7 +731,7 @@ async function invokeLogout() {
               </div>
               <button
                 type="button"
-                class="flex font-medium text-brand-dark"
+                class="flex font-medium text-gray-700"
                 @click="
                   modal.open('AccountAddressForm', {
                     countries: getCountries,
