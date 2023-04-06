@@ -105,6 +105,7 @@ const next = () => {
 const prev = () => {
   carouselEl.value.prev();
 }
+
 </script>
 <template>
   <div class="relative">
@@ -116,7 +117,14 @@ const prev = () => {
         <component :is="child" />
       </slide>
       <template #addons>
-        <Pagination v-if="props.navigationDots" :style="{ paddingLeft: `calc(${gap}/2)`, paddingRight: `calc(${gap}/2)` }"/>
+        <Pagination 
+          v-if="props.navigationDots" 
+          :class="[
+            props.navigationDots === 'outside' && 'carousel__pagination__outside',
+            props.navigationDots === 'inside' && 'carousel__pagination__inside',
+          ]"
+          :style="{ paddingLeft: `calc(${gap}/2)`, paddingRight: `calc(${gap}/2)` }"
+        />
       </template>
     </carousel>
     <button v-if="props.navigationArrows" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
@@ -132,21 +140,38 @@ const prev = () => {
 .carousel__slide {
   @apply items-start;
 }
-.carousel__pagination {
+
+/* custom pagination outside */
+.carousel__pagination__outside {
   @apply flex mt-10 md:mt-13;
 }
-.carousel__pagination-item {
+.carousel__pagination__outside .carousel__pagination-item {
   @apply flex-1;
 }
-.carousel__pagination-button {
+.carousel__pagination__outside .carousel__pagination-button {
   @apply w-full p-0;
 }
-.carousel__pagination-button::after {
+.carousel__pagination__outside .carousel__pagination-button::after {
   @apply w-full bg-light-primary;
   height: 2px;
 }
-.carousel__pagination-button--active::after {
+.carousel__pagination__outside .carousel__pagination-button--active::after {
   @apply bg-dark-primary;
+}
+
+/* custom pagination inside */
+.carousel__pagination__inside {
+  @apply absolute bottom-2 left-1/2 translate -translate-x-1/2
+}
+.carousel__pagination__inside .carousel__pagination-button {
+  padding: 2px;
+}
+.carousel__pagination__inside .carousel__pagination-button::after {
+  @apply bg-gray-100 w-4;
+  height: 2px;
+}
+.carousel__pagination__inside .carousel__pagination-button--active::after {
+  @apply bg-gray-900;
 }
 
 </style>

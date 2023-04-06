@@ -59,7 +59,7 @@ const breakpoints = ref({
         :itemsToScroll="1"
         :itemsToShow="2.5"
         :breakpoints="breakpoints"
-        :navigationDots="'inside'"
+        :navigationDots="'outside'"
         :navigationArrows="'inside'"
         gap="1rem"
       >

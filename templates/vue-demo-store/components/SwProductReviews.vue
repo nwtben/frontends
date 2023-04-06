@@ -39,8 +39,8 @@ const formatDate = (date: string) => format(new Date(date), 'd LLL yyyy')
       class="h-15 w-15 i-carbon-progress-bar-round animate-spin c-gray-500"
     />
   </div>
-  <div class="w-1/2" v-else-if="reviewsList.length">
-    <div class="flex justify-between">
+  <div class="w-full md:w-1/2" v-else-if="reviewsList.length">
+    <div class="flex justify-between mb-6">
       <h4 class="font-semibold">{{ reviews?.length }} Reviews</h4>
       <div class="flex flex-col">
         <SharedReviews :product="product" />

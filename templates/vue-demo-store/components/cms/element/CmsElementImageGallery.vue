@@ -30,6 +30,12 @@ function changeCover(i: number) {
   if (i === currentSlideIndex.value) return;
   currentSlideIndex.value = i;
 }
+
+const breakpoints = ref({
+  768: {
+    touchDrag: false,
+  },
+});
 </script>
 
 <template>
@@ -92,8 +98,9 @@ function changeCover(i: number) {
         :navigationDots="navigationDots"
         :navigationArrows="navigationArrows"
         :mouseDrag="false"
-        :touchDrag="false"
+        :touchDrag="true"
         :dynamicHeight="true"
+        :breakpoints="breakpoints"
       >
         <CmsElementImage
           v-for="image of mediaGallery"

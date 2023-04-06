@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/vue'
 import type { CmsElementProductDescriptionReviews } from "@shopware-pwa/composables-next";
+import {
+  ChevronUpIcon,
+  ChevronDownIcon
+} from '@heroicons/vue/24/outline'
 import {
   getTranslatedProperty,
   getProductName,
@@ -64,15 +73,45 @@ watch(
 
 <template>
   <div
-    class="cms-block-product-description-reviews flex flex-wrap"
+    class="cms-element-product-description-reviews flex flex-wrap mt-8 mb-10 md:my-20"
     v-if="product"
   >
-    <div class="sm:hidden">
-      <label for="tabs" class="sr-only">Select a tab</label>
-      <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-sm font-medium text-gray-700 focus:border-gray-500 focus:outline-none focus:ring-gray-500">
-        <option v-for="tab in tabs" :key="tab.name" :selected="currentTabHash === tab.href">{{ tab.name }}</option>
-      </select>
+    <!-- For mobile -->
+    <div class="sm:hidden w-full">
+      <Disclosure as="div" v-for="tab in tabs" :key="tab.name" v-slot="{ open }" :defaultOpen="tab.href === currentTabHash">
+        <h3>
+          <DisclosureButton class="group relative flex w-full items-center justify-between py-4 text-left border-t border-gray-200">
+            <span :class="[open ? 'text-gray-900' : 'text-gray-700', 'text-base font-medium']">{{ tab.name }}</span>
+            <span class="ml-6 flex items-center">
+              <ChevronDownIcon v-if="!open" class="block h-6 w-6 text-gray-900" aria-hidden="true" />
+              <ChevronUpIcon v-else class="block h-6 w-6 text-gray-900" aria-hidden="true" />
+            </span>
+          </DisclosureButton>
+        </h3>
+        <DisclosurePanel as="div" class="prose prose-sm pb-6">
+          <div
+            :class="[
+              'cms-element-product-description-reviews__description',
+              tab.href === tabs[0].href ? 'block' : 'hidden',
+            ]"
+          >
+            <p class="text-xl font-bold mt-3">
+              {{ getProductName({ product }) }}
+            </p>
+            <div class="mt-2" v-html="description"></div>
+          </div>
+          <div
+            :class="[
+              'cms-element-product-description-reviews__reviews mt-4',
+              tab.href === tabs[2].href ? 'block' : 'hidden',
+            ]"
+          >
+            <SwProductReviews :product="product" :reviews="reviews" />
+          </div>
+        </DisclosurePanel>
+      </Disclosure>
     </div>
+    <!-- For desktop -->
     <div class="w-full hidden sm:block">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
@@ -80,11 +119,11 @@ watch(
         </nav>
       </div>
     </div>
-    <div class="w-full mt-10">
+    <div class="w-full hidden sm:block mt-10">
       <div class="tab-content tab-space">
         <div
           :class="[
-            'cms-block-product-description-reviews__description',
+            'cms-element-product-description-reviews__description',
             currentTabHash !== tabs[0].href ? 'hidden' : 'block',
           ]"
         >
@@ -95,7 +134,7 @@ watch(
         </div>
         <div
           :class="[
-            'cms-block-product-description-reviews__reviews',
+            'cms-element-product-description-reviews__reviews',
             currentTabHash !== tabs[2].href ? 'hidden' : 'block',
           ]"
         >
