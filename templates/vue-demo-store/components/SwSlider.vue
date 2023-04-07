@@ -25,6 +25,7 @@ const props = withDefaults(
     touchDrag?: boolean;
     dynamicHeight?: boolean;
     currentSlideIndex?: number;
+    fullContentMobile?: boolean;
   }>(),
   {
     snapAlign: 'start',
@@ -64,6 +65,10 @@ const settings = computed(() => ({
   touchDrag: props.touchDrag,
 }));
 
+const carouselStyling = ref({});
+const slideStyling = ref({});
+const navigationStyling = ref({});
+
 const resizeHandler = useDebounceFn((e: any) => {
   const screenwidth = e.target.innerWidth;
   handleGap(screenwidth);
@@ -82,6 +87,30 @@ const handleGap = (screenwidth: number) => {
   }
   if (!screen) {
     gap.value = props.gap;
+  }
+
+  // responsive
+  if (screenwidth < 768) {
+    carouselStyling.value = {
+      marginRight: `-${gap.value}`
+    }
+    slideStyling.value = {
+      paddingRight: `${gap.value}`
+    }
+    navigationStyling.value = {
+      paddingRight: `${gap.value}`
+    }
+  } else {
+    carouselStyling.value = {
+      marginLeft: `calc(-${gap.value}/2)`, 
+      marginRight: `calc(-${gap.value}/2)`
+    }
+    slideStyling.value = {
+      padding: `0 calc(${gap.value}/2)`
+    }
+    navigationStyling.value = {
+      paddingRight: `0 calc(${gap.value}/2)`
+    }
   }
 }
 
@@ -110,10 +139,10 @@ const prev = () => {
 <template>
   <div class="relative">
     <button v-if="props.navigationArrows"  class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
-    <carousel :modelValue="currentSlideIndex" ref="carouselEl" :settings="settings" :style="{ marginLeft: `calc(-${gap}/2)`, marginRight: `calc(-${gap}/2)` }">
+    <carousel :modelValue="currentSlideIndex" ref="carouselEl" :settings="settings" :style="carouselStyling">
       <slide :class="{
         'carousel__slide__dynamic__height': props.dynamicHeight
-      }" v-for="(child, index) of childrenRaw" :key="index" :style="{ padding: `0 calc(${gap}/2)` }">
+      }" v-for="(child, index) of childrenRaw" :key="index" :style="slideStyling">
         <component :is="child" />
       </slide>
       <template #addons>
@@ -123,7 +152,7 @@ const prev = () => {
             props.navigationDots === 'outside' && 'carousel__pagination__outside',
             props.navigationDots === 'inside' && 'carousel__pagination__inside',
           ]"
-          :style="{ paddingLeft: `calc(${gap}/2)`, paddingRight: `calc(${gap}/2)` }"
+          :style="navigationStyling"
         />
       </template>
     </carousel>
@@ -143,7 +172,7 @@ const prev = () => {
 
 /* custom pagination outside */
 .carousel__pagination__outside {
-  @apply flex mt-10 md:mt-13;
+  @apply flex mt-4 md:mt-8;
 }
 .carousel__pagination__outside .carousel__pagination-item {
   @apply flex-1;

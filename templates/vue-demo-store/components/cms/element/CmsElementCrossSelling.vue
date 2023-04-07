@@ -72,6 +72,7 @@ const breakpoints = ref({
           :breakpoints="breakpoints"
           :navigationDots="'outside'"
           :navigationArrows="'inside'"
+          :fullContentMobile="true"
           gap="1rem"
         >
           <SwProductCard

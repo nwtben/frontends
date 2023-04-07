@@ -73,14 +73,14 @@ watch(
 
 <template>
   <div
-    class="cms-element-product-description-reviews flex flex-wrap mt-8 mb-10 md:my-20"
+    class="cms-element-product-description-reviews flex flex-wrap mt-8 mb-10 md:my-20 -mx-4 md:mx-0"
     v-if="product"
   >
     <!-- For mobile -->
     <div class="sm:hidden w-full">
       <Disclosure as="div" v-for="tab in tabs" :key="tab.name" v-slot="{ open }" :defaultOpen="tab.href === currentTabHash">
         <h3>
-          <DisclosureButton class="group relative flex w-full items-center justify-between py-4 text-left border-t border-gray-200">
+          <DisclosureButton class="group relative flex w-full items-center justify-between p-4 text-left border-t border-gray-200">
             <span :class="[open ? 'text-gray-900' : 'text-gray-700', 'text-base font-medium']">{{ tab.name }}</span>
             <span class="ml-6 flex items-center">
               <ChevronDownIcon v-if="!open" class="block h-6 w-6 text-gray-900" aria-hidden="true" />
@@ -88,7 +88,7 @@ watch(
             </span>
           </DisclosureButton>
         </h3>
-        <DisclosurePanel as="div" class="prose prose-sm pb-6">
+        <DisclosurePanel as="div" class="prose prose-sm mt-4 mb-8 px-4">
           <div
             :class="[
               'cms-element-product-description-reviews__description',
@@ -102,7 +102,7 @@ watch(
           </div>
           <div
             :class="[
-              'cms-element-product-description-reviews__reviews mt-4',
+              'cms-element-product-description-reviews__reviews',
               tab.href === tabs[2].href ? 'block' : 'hidden',
             ]"
           >

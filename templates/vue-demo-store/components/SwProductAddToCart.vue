@@ -37,7 +37,7 @@ const addToCartProxy = async () => {
     </div>
     <div>
       <SwAddToWishlist 
-        class="w-[50px] h-[50px] border border-gray-300 flex items-center justify-center bg-white opacity-50 p-1"
+        class="w-[50px] h-[50px] border border-gray-300 flex items-center justify-center bg-white bg-opacity-50 p-1"
         :product="product"
       />
     </div>

@@ -41,7 +41,7 @@ const formatDate = (date: string) => format(new Date(date), 'd LLL yyyy')
   </div>
   <div class="w-full md:w-1/2" v-else-if="reviewsList.length">
     <div class="flex justify-between mb-6">
-      <h4 class="font-semibold">{{ reviews?.length }} Reviews</h4>
+      <h4 class="text-xl md:text-2xl font-semibold">{{ reviews?.length }} Reviews</h4>
       <div class="flex flex-col">
         <SharedReviews :product="product" />
         <a class="underline text-right font-medium">Add review</a>
@@ -59,7 +59,7 @@ const formatDate = (date: string) => format(new Date(date), 'd LLL yyyy')
         {{ review.content }}
       </p>
     </div>
-    <div class="w-full justify-center flex">
+    <div class="w-full justify-center flex pt-2 md:pt-0">
       <SwPagination />
     </div>
   </div>

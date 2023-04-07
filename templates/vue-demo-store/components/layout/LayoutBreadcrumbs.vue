@@ -3,18 +3,18 @@ const { breadcrumbs } = useBreadcrumbs();
 </script>
 <template>
   <nav
-    class="container flex my-6"
+    class="container flex my-4 md:my-6"
     aria-label="Breadcrumb"
   >
     <ol class="inline-flex items-center space-x-2">
       <li class="inline-flex items-center">
         <nuxt-link
           to="/"
-          class="text-gray-500 inline-flex items-center text-sm font-medium"
+          class="text-gray-500 inline-flex items-center text-xs md:text-sm font-medium"
         >
           Home
         </nuxt-link>
-        <span class="font-medium ml-2 px-2 text-sm text-gray-500">/</span>
+        <span class="font-medium ml-2 w-5 h-5 text-center text-sm text-gray-300">/</span>
       </li>
       <li
         class="inline-flex items-center"
@@ -25,7 +25,7 @@ const { breadcrumbs } = useBreadcrumbs();
           v-if="breadcrumb.path"
           :to="breadcrumb.path"
           :class="[
-            'inline-flex items-center text-sm font-medium text-gray-500',
+            'inline-flex items-center text-xs md:text-sm font-medium text-gray-500',
             (index === breadcrumbs.length - 1) ? 'text-gray-900' : 'text-gray-500'
           ]"
         >
@@ -34,13 +34,13 @@ const { breadcrumbs } = useBreadcrumbs();
         <span
           v-else
           :class="[
-            'inline-flex items-center text-sm font-medium',
+            'inline-flex items-center text-xs md:text-sm font-medium',
             (index === breadcrumbs.length - 1) ? 'text-gray-900' : 'text-gray-500'
           ]"
         >
           {{ breadcrumb.name }}
         </span>
-        <span v-if="index !== breadcrumbs.length - 1" class="ml-2 font-medium px-2 text-sm text-gray-500">/</span>
+        <span v-if="index !== breadcrumbs.length - 1" class="ml-2 font-medium w-5 h-5 text-center text-sm text-gray-300">/</span>
       </li>
     </ol>
   </nav>

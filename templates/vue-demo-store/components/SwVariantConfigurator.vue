@@ -84,9 +84,9 @@ const onHandleChange = async () => {
           <RadioGroupLabel class="sr-only"> Choose a size </RadioGroupLabel>
           <div class="flex gap-4">
             <RadioGroupOption @click="handleChange(optionGroup.name, size.id, onHandleChange)" as="template" v-for="size in optionGroup.options" :key="size.id" :value="size.id" :disabled="false" v-slot="{ active, checked }">
-              <div :class="[true ? 'cursor-pointer bg-white text-gray-900 shadow-sm' : 'cursor-not-allowed bg-gray-50 text-gray-200', 'group relative flex items-center justify-center border border-gray-300 py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none flex-1 md:max-w-[85px] md:py-6 md:px-0']">
-                <RadioGroupLabel as="span">{{ size.name }}</RadioGroupLabel>
-                <span v-if="true" :class="[checked ? 'border-2 border-gray-500' : 'border-transparent', 'pointer-events-none absolute -inset-px']" aria-hidden="true" />
+              <div :class="[true ? 'cursor-pointer bg-white text-gray-900' : 'cursor-not-allowed bg-gray-50 text-gray-200', 'group relative flex items-center justify-center py-3.25 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none flex-1 md:max-w-[85px] md:py-6 md:px-0']">
+                <RadioGroupLabel class="text-gray-700" as="span">{{ size.name }}</RadioGroupLabel>
+                <span v-if="true" :class="[checked ? 'ring-2 ring-gray-500 border-transparent' : 'border-gray-300', 'shadow-sm border pointer-events-none absolute -inset-px']" aria-hidden="true" />
                 <span v-else aria-hidden="true" class="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200">
                   <svg class="absolute inset-0 h-full w-full stroke-2 text-gray-200" viewBox="0 0 100 100" preserveAspectRatio="none" stroke="currentColor">
                     <line x1="0" y1="100" x2="100" y2="0" vector-effect="non-scaling-stroke" />

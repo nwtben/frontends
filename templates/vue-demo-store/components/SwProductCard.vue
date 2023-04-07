@@ -42,7 +42,7 @@ const { product } = toRefs(props);
     data-testid="product-box"
   >
     <SwAddToWishlist 
-      class="absolute top-2 right-2 rounded-full bg-white opacity-50 p-1"
+      class="absolute top-2 right-2 rounded-full bg-white bg-opacity-50 p-1"
       :product="product"
     />
     <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300">
@@ -56,7 +56,7 @@ const { product } = toRefs(props);
       <div>
         <h3 class="text-base p-0">
           <RouterLink
-            class="line-clamp-2 h-6 font-medium text-base text-start"
+            class="line-clamp-1 h-6 font-medium text-sm md:text-base text-start"
             :to="getProductUrl(product)"
             data-testid="product-box-product-name-link"
           >

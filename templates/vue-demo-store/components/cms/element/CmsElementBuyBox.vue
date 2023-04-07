@@ -63,21 +63,21 @@ const restockTime = computed(() => product.value?.restockTime);
     <SwProductAddToCart class="mt-6" :product="product" />
     <article class="mt-6 flex flex-col gap-4">
       <div class="flex">
-        <TruckIcon class="h-6 w-6 mr-4" />
+        <TruckIcon class="h-6 w-6 mr-3" />
         <div class="flex-1">
           <h6 class="text-gray-900 mb-2">Easy shipping</h6>
           <p class="text-gray-500">You'll receive dispatch confirmation and an arrival date</p>
         </div>
       </div>
       <div class="flex">
-        <ArrowsRightLeftIcon class="h-6 w-6 mr-4" />
+        <ArrowsRightLeftIcon class="h-6 w-6 mr-3" />
         <div class="flex-1">
           <h6 class="text-gray-900 mb-2">Changed your mind?</h6>
           <p class="text-gray-500">We offer free returns within 30 days</p>
         </div>
       </div>
       <div class="flex">
-        <LockClosedIcon class="h-6 w-6 mr-4" />
+        <LockClosedIcon class="h-6 w-6 mr-3" />
         <div class="flex-1">
           <h6 class="text-gray-900 mb-2">Safety</h6>
           <p class="text-gray-500">It carefully packaged with a personal touch</p>

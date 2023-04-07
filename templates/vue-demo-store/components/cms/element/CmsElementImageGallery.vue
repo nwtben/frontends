@@ -41,7 +41,7 @@ const breakpoints = ref({
 <template>
   <div
     :class="{
-      'flex gap-3': true,
+      'flex gap-4': true,
       'flex-col-reverse': galleryPosition === 'underneath',
     }"
   >
@@ -53,7 +53,7 @@ const breakpoints = ref({
       }"
     >
       <div
-        class="overflow-hidden -my-2"
+        class="-my-2"
         ref="imageThumbs"
         :style="imageThumbsStyle"
       >
@@ -74,9 +74,10 @@ const breakpoints = ref({
             :key="image.media.url"
           >
             <div
-              class="w-20 h-20 overflow-hidden cursor-pointer p-1 transition duration-150 ease-in-out"
+              class="w-20 h-20 cursor-pointer transition duration-150 ease-in-out"
               :class="{
-                'border border-gray-500 border-3': i === currentSlideIndex,
+                'ring-2 ring-offset-2 ring-gray-500': i === currentSlideIndex,
+                // 'border border-gray-500 border-3': i === currentSlideIndex,
               }"
             >
               <img
