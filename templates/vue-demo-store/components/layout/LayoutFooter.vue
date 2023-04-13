@@ -15,7 +15,7 @@ const gridColumns = computed<number>(() =>
     <h2 id="footer-heading" class="sr-only">Footer</h2>
     <div class="container mx-auto flex flex-col justify-center">
       <div
-        class="w-full grid grid-cols-2 md:grid-cols-4"
+        class="lg:px-28 w-full grid grid-cols-2 md:grid-cols-4"
       >
         <div
           v-for="navigationElement in navigationElements"
@@ -43,17 +43,17 @@ const gridColumns = computed<number>(() =>
         </div>
       </div>
       <div
-        class="w-full grid grid-cols-1 gap-8 md:gap-0 md:grid-cols-2"
+        class="lg:px-28 w-full grid grid-cols-1 gap-8 md:gap-0 md:grid-cols-2"
       >
         <div>
           <h4 class="mb-4 text-gray-400 uppercase font-semibold text-sm">
             {{$t('social')}}
           </h4>
           <div class="flex space-x-6">
-            <div class="text-gray-400 w-6 h-6 i-custom:facebook" />
-            <div class="text-gray-400 w-6 h-6 i-carbon-logo-instagram" />
-            <div class="text-gray-400 w-6 h-6 i-carbon-logo-twitter" />
-            <div class="text-gray-400 w-6 h-6 i-carbon-logo-youtube" />
+            <div class="cursor-pointer text-gray-400 hover:text-gray-300 w-6 h-6 i-custom:facebook" />
+            <div class="cursor-pointer text-gray-400 hover:text-gray-300 w-6 h-6 i-carbon-logo-instagram" />
+            <div class="cursor-pointer text-gray-400 hover:text-gray-300 w-6 h-6 i-carbon-logo-twitter" />
+            <div class="cursor-pointer text-gray-400 hover:text-gray-300 w-6 h-6 i-carbon-logo-youtube" />
           </div>
         </div>
         <div>

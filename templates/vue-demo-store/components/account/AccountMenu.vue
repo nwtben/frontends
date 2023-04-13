@@ -18,7 +18,7 @@ async function invokeLogout() {
     <div class="my-account-area">
       <UserIcon
         @click="modal.open('AccountLoginForm')"
-        class="w-6 h-6 text-current hover:text-brand-primary"
+        class="w-6 h-6 text-current cursor-pointer"
       />
       <div v-if="isLoggedIn">
         <div
