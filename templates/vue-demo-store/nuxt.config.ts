@@ -87,7 +87,7 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
-    safelist: ['container', 'hidden', 'md:block', 'block', 'md:hidden', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4'],
+    safelist: ['container', 'hidden', 'md:block', 'block', 'md:hidden', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4', 'mt-20', 'md:mt-40', 'mb-20', 'md:mb-53', 'pt-10', 'md:pt-20', 'pb-6', 'md:pb-8', 'pb-10', 'md:pb-20'],
     theme: {
       extend: {
         width: "width",
