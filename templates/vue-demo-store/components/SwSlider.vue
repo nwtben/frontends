@@ -12,23 +12,6 @@ const childrenRaw = computed(
   () => (slots?.default?.()[0].children as VNodeArrayChildren) ?? []
 );
 
-const gap = ref(16);
-
-const resizeHandler = useDebounceFn((e: any) => {
-  if (e.target.innerWidth <= 768) {
-    gap.value = 8;
-  } else {
-    gap.value = 16;
-  }
-}, 500);
-
-onMounted(() => {
-  window.addEventListener('resize', resizeHandler);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', resizeHandler);
-});
 
 const breakpoints = ref({
   768: {
@@ -45,24 +28,34 @@ const prev = () => {
   carouselEl.value.prev();
 }
 
+const currentSlide = ref(0);
 </script>
 <template>
   <div class="relative">
-    <button class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
-    <carousel ref="carouselEl" :snapAlign="'start'" :itemsToShow="2.5" :itemsToScroll="1" :breakpoints="breakpoints" :style="{marginLeft: `-${gap}px`, marginRight: `-${gap}px`}">
-      <slide v-for="(child, index) of childrenRaw" :key="index" :style="{padding: `0 ${gap}px`}">
+    <button v-if="currentSlide > 0" class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10.5 w-10.5 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-6 w-6" /></button>
+    <carousel v-model="currentSlide" ref="carouselEl" :snapAlign="'start'" :itemsToShow="2.5" :itemsToScroll="1" :breakpoints="breakpoints">
+      <slide v-for="(child, index) of childrenRaw" :key="index">
         <component :is="child" />
       </slide>
       <template #addons>
-        <Pagination :style="{paddingLeft: `${gap}px`, paddingRight: `${gap}px`}"/>
+        <Pagination />
       </template>
     </carousel>
-    <button class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
+    <button v-if="carouselEl?.data?.config.itemsToShow + currentSlide < childrenRaw.length" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10.5 w-10.5 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-6 w-6" /></button>
   </div>
 </template>
 <style>
+.carousel {
+  @apply -mx-4;
+}
+.carousel__slide {
+  @apply px-2 sm:px-4;
+}
+.carousel__track {
+  @apply px-2! sm:px-0!;
+}
 .carousel__pagination {
-  @apply flex mt-10 md:mt-13;
+  @apply flex mt-10 md:mt-13 px-4;
 }
 .carousel__pagination-item {
   @apply flex-1;

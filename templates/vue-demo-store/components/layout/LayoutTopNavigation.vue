@@ -9,7 +9,7 @@ import {
 } from '@headlessui/vue';
 import {
   ChevronDownIcon,
-} from '@heroicons/vue/24/outline';
+} from '@heroicons/vue/20/solid';
 
 const { navigationElements } = useNavigation();
 </script>
@@ -34,7 +34,6 @@ const { navigationElements } = useNavigation();
                 <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-medium text-gray-900 text-sm">
                   {{ getTranslatedProperty(childElement, "name") }}
                 </RouterLink>
-                <p class="mt-1 text-gray-600">{{ childElement.description }}</p>
                 <ul
                   class="flex flex-col gap-4 mt-4"
                 >

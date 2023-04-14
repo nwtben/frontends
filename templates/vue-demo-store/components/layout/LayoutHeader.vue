@@ -10,7 +10,7 @@ const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const route = useRoute();
-const { locale } = useI18n();
+const { locale } = useI18n({ useScope: 'global' });
 const { fetchLang, currentLanguage, languages, syncLanguageData } = useLanguage();
 const { sessionContext } = useSessionContext();
 
@@ -69,7 +69,7 @@ watch(
   }">
     <nav aria-label="Global">
       <!-- For Desktop -->
-      <div class="hidden md:block container mx-auto">
+      <div class="hidden lg:block container mx-auto">
         <div class="flex justify-end gap-4">
           <LayoutCurrency />
           <LayoutLanguage />
@@ -93,53 +93,55 @@ watch(
             </div>
           </div>
 
-          <div class="flex-[2_2_0%] flex gap-4 items-center justify-end">
+          <div class="flex-[2_2_0%] flex gap-6 items-center justify-end">
             <LayoutStoreSearch />
-            <AccountMenu />
-            <div class="flex flow-root">
-              <button
-                class="group -m-2 p-2 flex items-center relative"
-                aria-label="wishlist"
-                data-testid="wishlist-button"
-                @click="$router.push('/wishlist')"
-              >
-                <HeartIcon
-                  class="w-6 h-6 text-current hover:text-brand-primary"
-                />
-                <span
-                  v-if="wishlistCount > 0"
-                  class="text-3 font-sm text-white absolute bg-red-500 rounded-full min-w-5 min-h-5 top-0 right-0 leading-5"
+            <div class="flex gap-4">
+              <AccountMenu />
+              <div class="flex flow-root">
+                <button
+                  class="group -m-2 p-2 flex items-center relative"
+                  aria-label="wishlist"
+                  data-testid="wishlist-button"
+                  @click="$router.push('/wishlist')"
                 >
-                  {{ wishlistCount }}
-                </span>
-              </button>
-            </div>
-            <!-- Cart -->
-            <div class="flex flow-root">
-              <button
-                class="group -m-2 p-2 flex items-center relative"
-                aria-label="cart"
-                data-testid="cart-button"
-                @click="isSidebarOpen = true"
-              >
-                <ShoppingCartIcon
-                  class="w-6 h-6 text-current hover:text-brand-primary"
-                />
-                <span
-                  v-if="count > 0"
-                  class="text-3 font-sm text-white absolute bg-blue rounded-full min-w-5 min-h-5 top-0 right-0 leading-5"
+                  <HeartIcon
+                    class="w-6 h-6 text-current"
+                  />
+                  <span
+                    v-if="wishlistCount > 0"
+                    class="text-[10px] font-medium text-white absolute bg-gray-900 rounded-full w-5 h-5 top-0 right-0 leading-5"
+                  >
+                    {{ wishlistCount }}
+                  </span>
+                </button>
+              </div>
+              <!-- Cart -->
+              <div class="flex flow-root">
+                <button
+                  class="group -m-2 p-2 flex items-center relative"
+                  aria-label="cart"
+                  data-testid="cart-button"
+                  @click="isSidebarOpen = true"
                 >
-                  {{ count || "" }}
-                </span>
-                <span class="sr-only">items in cart, view bag</span>
-              </button>
+                  <ShoppingCartIcon
+                    class="w-6 h-6 text-current"
+                  />
+                  <span
+                    v-if="count > 0"
+                    class="text-[10px] font-medium text-white absolute bg-gray-900 rounded-full w-5 h-5 top-0 right-0 leading-5"
+                  >
+                    {{ count || "" }}
+                  </span>
+                  <span class="sr-only">items in cart, view bag</span>
+                </button>
+              </div>
             </div>
           </div>
 
         </div>
       </div>
       <!-- For Mobile -->
-      <div class="block md:hidden container mx-auto">
+      <div class="block lg:hidden container mx-auto">
         <div
           class="flex justify-between items-center py-5 space-x-4"
         >
@@ -174,7 +176,7 @@ watch(
                 />
                 <span
                   v-if="wishlistCount > 0"
-                  class="text-3 font-sm text-white absolute bg-red-500 rounded-full min-w-5 min-h-5 top-0 right-0 leading-5"
+                  class="text-[10px] font-medium text-white absolute bg-gray-900 rounded-full w-5 h-5 top-0 right-0 leading-5"
                 >
                   {{ wishlistCount }}
                 </span>
@@ -193,7 +195,7 @@ watch(
                 />
                 <span
                   v-if="count > 0"
-                  class="text-3 font-sm text-white absolute bg-blue rounded-full min-w-5 min-h-5 top-0 right-0 leading-5"
+                  class="text-[10px] font-medium text-white absolute bg-gray-900 rounded-full w-5 h-5 top-0 right-0 leading-5"
                 >
                   {{ count || "" }}
                 </span>
