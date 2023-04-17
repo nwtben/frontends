@@ -13,10 +13,14 @@ export default defineNuxtConfig({
       ],
     }
   },
-  shopware: {
-    shopwareEndpoint: "https://shopware.nwtsaas.com",
-    shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
-  },
+  runtimeConfig: {
+    public: {
+      shopware: {
+          shopwareEndpoint: "https://shopware.nwtsaas.com",
+          shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
+        },
+      },
+    },
   build: {
     transpile: ['@headlessui/vue']
   },
