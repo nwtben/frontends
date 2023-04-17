@@ -61,10 +61,26 @@ const gridColumns = computed<number>(() =>
             {{$t('payment')}}
           </h4>
           <div class="flex space-x-6">
-            <img src="/svg/klarna.svg" />
-            <img src="/svg/visa.svg" />
-            <img src="/svg/mastercard.svg" />
-            <img src="/svg/swish.svg" />
+            <nuxt-img
+               width="44"
+               height="24" 
+               src="/svg/klarna.svg" 
+            />
+            <nuxt-img
+               width="50"
+               height="24"
+               src="/svg/visa.svg" 
+            />
+            <nuxt-img
+               width="32"
+               height="24"
+               src="/svg/mastercard.svg" 
+            />
+            <nuxt-img
+               width="62.5714"
+               height="24"
+               src="/svg/swish.svg" 
+          />
           </div>
         </div>
       </div>
