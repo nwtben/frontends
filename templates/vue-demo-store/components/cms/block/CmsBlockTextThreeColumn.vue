@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { CmsBlockTextThreeColumn } from "@shopware-pwa/composables-next";
-import {
-  TruckIcon,
-  LockClosedIcon,
-  ArrowsRightLeftIcon
-} from '@heroicons/vue/24/outline';
+import SharedValueProposition from '../../shared/SharedValueProposition.vue';
+
 const props = defineProps<{
   content: CmsBlockTextThreeColumn;
 }>();
@@ -18,24 +15,13 @@ const centerContent = getSlotContent("center");
 
 <template>
   <article class="grid md:grid-cols-3 gap-4">
-    <template v-if="props.content.name?.toLowerCase() !== 'support'">
+    <template v-if="props.content.name?.toLowerCase() === 'value-proposition'">
+      <SharedValueProposition />
+    </template>
+    <template v-else>
       <CmsGenericElement :content="leftContent" class="" />
       <CmsGenericElement :content="centerContent" class="" />
       <CmsGenericElement :content="rightContent" class="" />
-    </template>
-    <template v-else>
-      <div class="flex">
-        <TruckIcon class="h-6 w-6 mr-3" />
-        <CmsGenericElement :content="leftContent" class="flex-1" />
-      </div>
-      <div class="flex">
-        <ArrowsRightLeftIcon class="h-6 w-6 mr-3" />
-        <CmsGenericElement :content="centerContent" class="flex-1" />
-      </div>
-      <div class="flex">
-        <LockClosedIcon class="h-6 w-6 mr-3" />
-        <CmsGenericElement :content="rightContent" class="flex-1" />
-      </div>
     </template>
   </article>
 </template>
