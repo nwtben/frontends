@@ -17,17 +17,9 @@ import {
   // PropertyGroupOption,
 } from "@shopware-pwa/types";
 import SwListingProductPrice from "./SwListingProductPrice.vue";
-import {
-  StarIcon,
-  HeartIcon as HeartSolidIcon
-} from '@heroicons/vue/24/solid';
+import SharedReviews from './shared/SharedReviews.vue';
+import SwAddToWishlist from './SwAddToWishlist.vue';
 
-import {
-  HeartIcon,
-} from '@heroicons/vue/24/outline';
-
-const { pushSuccess, pushError } = useNotifications();
-const router = useRouter();
 const props = withDefaults(
   defineProps<{
     product: Product;
@@ -41,45 +33,9 @@ const props = withDefaults(
     isProductListing: false,
   }
 );
+const router = useRouter();
+
 const { product } = toRefs(props);
-
-const { addToCart } = useAddToCart(product);
-
-const { addToWishlist, removeFromWishlist, isInWishlist } =
-  useProductWishlist(product);
-
-const toggleWishlistProduct = async () => {
-  if (!isInWishlist.value) {
-    try {
-      await addToWishlist();
-      return pushSuccess(
-        `${props.product?.translated?.name} has been added to wishlist.`
-      );
-    } catch (error) {
-      const e = error as ClientApiError;
-      const reason = e?.messages?.[0]?.detail
-        ? `Reason: ${e?.messages?.[0]?.detail}`
-        : "";
-      return pushError(
-        `${props.product?.translated?.name} cannot be added to wishlist.\n${reason}`,
-        {
-          timeout: 5000,
-        }
-      );
-    }
-  }
-  removeFromWishlist();
-};
-
-// const addToCartProxy = async () => {
-//   await addToCart();
-//   pushSuccess(`${props.product?.translated?.name} has been added to cart.`);
-// };
-
-// const fromPrice = getProductFromPrice(props.product);
-const ratingAverage: Ref<number> = computed(() =>
-  props.product.ratingAverage ? Math.round(props.product.ratingAverage) : 0
-);
 
 const goToProductDetail =  () => {
   router.push(getProductUrl(product.value))
@@ -91,28 +47,11 @@ const goToProductDetail =  () => {
     class="sw-product-card group relative flex flex-col justify-between"
     data-testid="product-box"
   >
-    <button
-      aria-label="Add to wishlist"
-      type="button"
-      @click="toggleWishlistProduct"
-      class="absolute top-2 right-2 rounded-full bg-white bg-opacity-50 p-1"
-      data-testid="product-box-toggle-wishlist-button"
-    >
-      <client-only>
-        <HeartSolidIcon
-          v-if="isInWishlist"
-          class="h-6 w-6 text-gray-900"
-        />
-        <HeartIcon
-          v-else
-          class="h-6 w-6"
-        />
-        <template #placeholder>
-          <HeartIcon class="h-6 w-6" />
-        </template>
-      </client-only>
-    </button>
-    <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300 group-hover:opacity-75">
+    <SwAddToWishlist 
+      class="absolute z-10 top-2 right-2 rounded-full bg-white bg-opacity-50 p-1"
+      :product="product"
+    />
+    <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300 hover:opacity-75">
       <img
         @click="goToProductDetail"
         :src="getProductThumbnailUrl(product)"
@@ -129,7 +68,7 @@ const goToProductDetail =  () => {
             @click="goToProductDetail"
           >
             {{ getProductName({ product }) }}
-        </a>
+          </a>
         </h3>
         <SwListingProductPrice
           :product="product"
