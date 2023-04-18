@@ -76,13 +76,13 @@ watch(enter, (value) => {
 <template>
   <div
     ref="searchContainer"
-    class="lg:min-w-[240px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 hover:shadow-md inline-block"
-    :class="[active ? 'shadow-lg' : 'shadow', headerMode === 'transparent' ? 'bg-white bg-opacity-25 text-white' : 'bg-gray-100 text-gray-400']"
+    class="lg:min-w-[240px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 inline-block"
+    :class="[headerMode === 'transparent' ? 'bg-white bg-opacity-25 text-white' : 'bg-gray-100 text-gray-400']"
   >
     <div class="flex items-center">
       <MagnifyingGlassIcon
         :class="[
-          'sw-search-input-icon flex-none h-6 w-6 cursor-pointer',
+          'sw-search-input-icon flex-none h-5 w-5 cursor-pointer',
           headerMode === 'transparent' ? 'text-white' : 'text-gray-700'
         ]"
       />

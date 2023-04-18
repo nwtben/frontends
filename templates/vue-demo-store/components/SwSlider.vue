@@ -43,89 +43,13 @@ const childrenRaw = computed(
   () => (slots?.default?.()[0].children as VNodeArrayChildren) ?? []
 );
 
-const breakpointsGap = computed<ScreenGap[] | null>(() => {
-  let screensize: ScreenGap[] = [];
-  Object.keys(props.breakpoints).forEach(x => {
-    if (props.breakpoints[x].gap) {
-      screensize.push({ 
-        screen: +x,
-        gap: props.breakpoints[x].gap 
-      });
-    }
-  })
-  return screensize.length ? screensize : null;
-});
 
-const settings = computed(() => ({
-  itemsToScroll: props.itemsToScroll,
-  snapAlign: props.snapAlign,
-  itemsToShow: props.itemsToShow,
-  breakpoints: props.breakpoints,
-  mouseDrag: props.mouseDrag,
-  touchDrag: props.touchDrag,
-}));
-
-const carouselStyling = ref({});
-const slideStyling = ref({});
-const navigationStyling = ref({});
-
-const resizeHandler = useDebounceFn((e: any) => {
-  const screenwidth = e.target.innerWidth;
-  handleGap(screenwidth);
-}, 500);
-
-const handleGap = (screenwidth: number) => {
-  const screens = breakpointsGap.value?.map(x => x.screen).sort().reverse() || [];
-  let screen;
-  for (let i = 0; i <= screens.length; i++) {
-    if (screenwidth < screens[i]) continue;
-    if (screenwidth >= screens[i]) {
-      gap.value = breakpointsGap.value?.[i].gap;
-      screen = screens[i];
-      break;
-    }
-  }
-  if (!screen) {
-    gap.value = props.gap;
-  }
-
-  // responsive
-  if (screenwidth < 768) {
-    carouselStyling.value = {
-      marginRight: `-${gap.value}`
-    }
-    slideStyling.value = {
-      paddingRight: `${gap.value}`
-    }
-    navigationStyling.value = {
-      paddingRight: `${gap.value}`
-    }
-  } else {
-    carouselStyling.value = {
-      marginLeft: `calc(-${gap.value}/2)`, 
-      marginRight: `calc(-${gap.value}/2)`
-    }
-    slideStyling.value = {
-      padding: `0 calc(${gap.value}/2)`
-    }
-    navigationStyling.value = {
-      paddingRight: `0 calc(${gap.value}/2)`
-    }
-  }
-}
-
-onMounted(() => {
-  handleGap(window.innerWidth);
-  if (breakpointsGap.value) {
-    window.addEventListener('resize', resizeHandler);
-  }
-});
-
-onUnmounted(() => {
-  if (breakpointsGap.value) {
-    window.removeEventListener('resize', resizeHandler);
-  }
-});
+const breakpoints = ref({
+  768: {
+    itemsToShow: 4,
+    itemsToScroll: 2
+  },
+})
 
 const next = () => {
   carouselEl.value.next();
@@ -135,44 +59,34 @@ const prev = () => {
   carouselEl.value.prev();
 }
 
+const currentSlide = ref(0);
 </script>
 <template>
   <div class="relative">
-    <button v-if="props.navigationArrows"  class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
-    <carousel :modelValue="currentSlideIndex" ref="carouselEl" :settings="settings" :style="carouselStyling">
-      <slide :class="{
-        'carousel__slide__dynamic__height': props.dynamicHeight
-      }" v-for="(child, index) of childrenRaw" :key="index" :style="slideStyling">
+    <button v-if="currentSlide > 0" class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10.5 w-10.5 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-6 w-6" /></button>
+    <carousel v-model="currentSlide" ref="carouselEl" :snapAlign="'start'" :itemsToShow="2.5" :itemsToScroll="1" :breakpoints="breakpoints">
+      <slide v-for="(child, index) of childrenRaw" :key="index">
         <component :is="child" />
       </slide>
       <template #addons>
-        <Pagination 
-          v-if="props.navigationDots" 
-          :class="[
-            props.navigationDots === 'outside' && 'carousel__pagination__outside',
-            props.navigationDots === 'inside' && 'carousel__pagination__inside',
-          ]"
-          :style="navigationStyling"
-        />
+        <Pagination />
       </template>
     </carousel>
-    <button v-if="props.navigationArrows" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
+    <button v-if="carouselEl?.data?.config.itemsToShow + currentSlide < childrenRaw.length" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10.5 w-10.5 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-6 w-6" /></button>
   </div>
 </template>
 <style>
-.carousel__slide--active {
-  height: auto !important;
-}
-.carousel__slide__dynamic__height {
-  height: 0;
+.carousel {
+  @apply -mx-4;
 }
 .carousel__slide {
-  @apply items-start;
+  @apply px-2 sm:px-4;
 }
-
-/* custom pagination outside */
-.carousel__pagination__outside {
-  @apply flex mt-4 md:mt-8;
+.carousel__track {
+  @apply px-2! sm:px-0!;
+}
+.carousel__pagination {
+  @apply flex mt-10 md:mt-13 px-4;
 }
 .carousel__pagination__outside .carousel__pagination-item {
   @apply flex-1;
