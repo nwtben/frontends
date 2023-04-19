@@ -67,7 +67,7 @@ const toggleTabs = (tabNumber: number) => {
       <div class="py-5 flex-auto">
         <div
           :class="[
-            'cms-block-product-description-reviews__description',
+            'cms-element-product-description-reviews__description',
             currentTab !== 1 ? 'hidden' : 'block',
           ]"
         >
@@ -75,7 +75,7 @@ const toggleTabs = (tabNumber: number) => {
         </div>
         <div
           :class="[
-            'cms-block-product-description-reviews__reviews',
+            'cms-element-product-description-reviews__reviews',
             currentTab !== 2 ? 'hidden' : 'block',
           ]"
         >

@@ -119,11 +119,20 @@ export default defineNuxtConfig({
           light: "#5ebbff",
           dark: "#374151",
         },
+        red: {
+          900: '#991B1B'
+        },
+        green: {
+          500: '#10B981'
+        },
         light: {
           primary: '#F1F2F3'
         },
         dark: {
           primary: '#1D1F22'
+        },
+        text: {
+          muted: '#72757E'
         },
         gray: {
           50: '#F9FAFB',
