@@ -167,6 +167,7 @@ export default defineNuxtConfig({
       },
     ],
     langDir: 'locales',
+    skipSettingLocaleOnNavigate: true,
     // lazy: true,
     defaultLocale: 'sv-SE'
   },

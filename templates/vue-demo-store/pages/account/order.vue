@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import SharedAlert from '../../components/shared/SharedAlert.vue';
+import SharedOrders from '../../components/shared/SharedOrders.vue';
+
 definePageMeta({
   layout: "account",
 });
@@ -28,10 +31,14 @@ export default {
 </script>
 
 <template>
-  <div class="container mx-auto my-8">
-    <h1 class="border-b pb-3 text-2xl font-medium text-gray-900 mb-8">
-      Order history
-    </h1>
-    <AccountOrder v-for="order in orders" :key="order.id" :order="order" />
-  </div>
+  <section class="flex flex-col space-y-10 mb-24">
+    <section>
+      <h3 class="mb-4">Orders</h3>
+      <p class="text-base">Your recent orders:</p>
+    </section>
+    <section>
+      <SharedAlert v-if="!orders?.length" text="You currently have no order history." />
+      <SharedOrders v-else :orders="orders || []" />
+    </section>
+  </section>
 </template>
