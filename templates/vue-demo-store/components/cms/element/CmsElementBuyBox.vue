@@ -49,7 +49,7 @@ const restockTime = computed(() => product.value?.restockTime);
       />
       <div class="flex flex-col">
         <SharedReviews :product="product" />
-        <a class="underline font-medium">Read reviews</a>
+        <a class="underline font-medium cursor-pointer">Read reviews</a>
       </div>
     </div>
     <SwVariantConfigurator :product="product" @change="changeVariant" :allowRedirect="true" />

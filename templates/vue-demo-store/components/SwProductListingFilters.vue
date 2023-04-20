@@ -161,40 +161,54 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
 }, {
   immediate: true
 })
-
 </script>
 <template>
   <ClientOnly>
     <div class="mt-4">
-      <p class="text-sm font-medium text-gray-700 mb-6">Filters</p>
-      <div v-if="currentFilters.length" class="mb-8">
+      <p class="text-sm font-medium text-gray-700 mb-6">
+        Filters
+      </p>
+      <div
+        v-if="currentFilters.length"
+        class="mb-8"
+      >
         <div class="gap-2 flex flex-wrap mb-2">
-          <div v-for="filter of currentFilters" class="flex items-center py-2.25 shadow-sm px-5 bg-gray-100">
+          <div
+            v-for="filter of currentFilters"
+            class="flex items-center py-2.25 shadow-sm px-5 bg-gray-100"
+          >
             <span class="text-gray-700 text-base font-medium">
               {{ getTranslatedProperty(filter, 'name') }}
             </span>
-            <XMarkIcon class="ml-3 w-5 h-5 cursor-pointer text-gray-500" @click="onOptionSelectToggle({code: filter.code, value: filter.id})" />
+            <XMarkIcon
+              class="ml-3 w-5 h-5 cursor-pointer text-gray-500"
+              @click="onOptionSelectToggle({code: filter.code, value: filter.id})"
+            />
           </div>
         </div>
 
-        <button class="text-gray-900 py-2 underline font-medium text-base" 
-          @click="invokeCleanFilters">
+        <button
+          class="text-gray-900 py-2 underline font-medium text-base" 
+          @click="invokeCleanFilters"
+        >
           Clear all
         </button>
       </div>
     </div>
-    <div class="flex flex-wrap" v-if="getInitialFilters.length">
+    <div
+      v-if="getInitialFilters.length"
+      class="flex flex-wrap"
+    >
       <div
         v-for="filter in getInitialFilters"
         :key="`${filter?.id || filter?.code}`"
         class="w-full"
-
       >
         <SwProductListingFilter
-          @selectFilterValue="onOptionSelectToggle"
-          :selectedFilters="getCurrentFilters"
+          :selected-filters="getCurrentFilters"
           :filter="filter"
           class="relative"
+          @selectFilterValue="onOptionSelectToggle"
         />
       </div>
     </div>
