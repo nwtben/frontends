@@ -11,12 +11,11 @@ const props = withDefaults(
     max?: number;
   }>(),
   {
+    modelValue: 1,
     min: 1,
   }
 );
-
 const emit = defineEmits(['update:modelValue'])
-
 const decrement = () => {
   if (props.modelValue - 1 < props.min) {
     return;
@@ -30,7 +29,6 @@ const increment = () => {
   }
   emit('update:modelValue', props.modelValue + 1);
 }
-
 const updateValue = (value: number) => {
   const valueInt = +value;
   if (valueInt < props.min) {
@@ -41,11 +39,10 @@ const updateValue = (value: number) => {
     emit('update:modelValue', valueInt);
   }
 }
-
 </script>
 
 <template>
-  <div class="flex flex-row h-[50px] w-[5.625rem] border border-gray-300 relative bg-transparent">
+  <div class="flex flex-row h-[50px] w-[5.625rem] shadow-sm border border-gray-300 relative bg-transparent">
     <button :disabled="props.modelValue === props.min" data-action="decrement" class="pl-1 disabled:opacity-20 h-full outline-none" @click="decrement">
       <MinusIcon class="h-6 w-6" />
     </button>
