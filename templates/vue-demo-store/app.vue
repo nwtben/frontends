@@ -86,6 +86,7 @@ onMounted(() => {
 
 <template>
   <NuxtLayout v-if="sessionContext">
+    <NuxtLoadingIndicator />
     <NuxtPage />
   </NuxtLayout>
 </template>
