@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ListingFilter } from "@shopware-pwa/types";
 import SwRangeSlider from "../SwRangeSlider.vue";
+
 const emits = defineEmits<{
   (e: "select-value", value: { code: string; value: unknown }): void;
 }>();

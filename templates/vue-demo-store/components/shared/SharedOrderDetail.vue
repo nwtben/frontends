@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Order } from '@shopware-pwa/types';
-import { getSmallestThumbnailUrl, getTranslatedProperty } from "@shopware-pwa/helpers-next";
+import { getTranslatedProperty } from "@shopware-pwa/helpers-next";
 import SharedPrice from './SharedPrice.vue';
+import SharedProductOrders from './SharedProductOrders.vue';
 
 const props = defineProps<{
   order: Order;
@@ -22,42 +23,7 @@ onMounted(() => {
 
 <template>
   <div v-if="order">
-    <ul>
-      <li v-for="lineItem of order?.lineItems" class="pb-10 mb-10 border-b border-b-gray-200 flex">
-        <div
-          v-if="lineItem.type == 'product'"
-          class="aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-6"
-        >
-          <img
-            :src="getSmallestThumbnailUrl(lineItem.cover)"
-            :alt="lineItem.label"
-            class="h-full w-full object-cover object-center"
-          />
-        </div>
-        <div>
-          <p class="text-md text-gray-900 font-medium mb-2">
-            {{ lineItem.label }}
-          </p>
-          <div class="gap-2 text-sm mb-4">
-          <span class="text-red-800">
-            $40.00
-          </span>
-          <span class="line-through text-gray-500">
-            $50.00
-          </span>
-          </div>
-          <div class="flex flex-col gap-1 mb-4">
-            <p v-for="option of (lineItem.payload as any)?.options" class="text-sm text-gray-500">
-              {{option.group}}: {{option.option}}
-            </p>
-          </div>
-          <p class="text-sm text-gray-500">
-            Quantity: {{lineItem.quantity}} {{ lineItem.price?.totalPrice }}
-          </p>
-        </div>
-      </li>
-    </ul>
-
+    <SharedProductOrders :lineItems="order?.lineItems || []" />
     <div class="border-b border-b-gray-200 text-gray-900">
     <div class="mb-6 flex justify-between">
       <span>Subtotal</span>

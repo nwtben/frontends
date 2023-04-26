@@ -49,7 +49,7 @@ setInitialListing(props?.content?.data?.listing);
       </div>
       <div class="flex flex-col items-center space-y-4 justify-center mt-6 md:mt-8">
         <p><span class="font-semibold text-base">{{ getElements.length }}</span> of <span class="font-semibold text-base">{{ getTotal }}</span>  articles</p>
-        <button class="text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm">Load more</button>
+        <button v-if="getTotal > getElements.length" class="text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm">Load more</button>
       </div>
     </div>
     <div v-else>
