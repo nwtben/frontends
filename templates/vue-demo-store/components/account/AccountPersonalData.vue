@@ -20,14 +20,14 @@ const isUpdating = ref(false);
 const state = reactive({
   firstName: "",
   lastName: "",
-  email: "",
-  emailConfirmation: "",
-  password: "",
+  // email: "",
+  // emailConfirmation: "",
+  // password: "",
   salutationId: "",
   title: "",
 });
 
-const isEmailChanging = computed(() => state.email !== user.value?.email);
+// const isEmailChanging = computed(() => state.email !== user.value?.email);
 
 const isNameChanging = computed(
   () =>
@@ -37,15 +37,15 @@ const isNameChanging = computed(
 
 const refs = toRefs(state);
 
-const emailConfirmationValidationRule = computed(() =>
-  isEmailChanging.value
-    ? {
-        required,
-        email,
-        sameAsEmail: sameAs(refs.email),
-      }
-    : {}
-);
+// const emailConfirmationValidationRule = computed(() =>
+//   isEmailChanging.value
+//     ? {
+//         required,
+//         email,
+//         sameAsEmail: sameAs(refs.email),
+//       }
+//     : {}
+// );
 
 const rules = computed(() => ({
   firstName: {
@@ -54,17 +54,17 @@ const rules = computed(() => ({
   lastName: {
     required,
   },
-  email: {
-    email,
-    required,
-  },
-  emailConfirmation: emailConfirmationValidationRule.value, // take a dynamic one
-  password: {
-    required: requiredIf(() => {
-      return isEmailChanging.value;
-    }),
-    minLength: minLength(8),
-  },
+  // email: {
+  //   email,
+  //   required,
+  // },
+  // emailConfirmation: emailConfirmationValidationRule.value, // take a dynamic one
+  // password: {
+  //   required: requiredIf(() => {
+  //     return isEmailChanging.value;
+  //   }),
+  //   minLength: minLength(8),
+  // },
 }));
 
 const $v = useVuelidate(rules, state);
@@ -75,10 +75,7 @@ const invokeUpdate = async (): Promise<void> => {
   try {
     updated.value = false;
     $v.value.$touch();
-    if (
-      $v.value.$invalid ||
-      (!isNameChanging.value && !isEmailChanging.value)
-    ) {
+    if ($v.value.$invalid) {
       return;
     }
     isUpdating.value = true;
@@ -93,14 +90,14 @@ const invokeUpdate = async (): Promise<void> => {
       isSuccess.value = true;
     }
 
-    if (isEmailChanging.value) {
-      await updateEmail({
-        email: state.email,
-        emailConfirmation: state.emailConfirmation,
-        password: state.password,
-      });
-      isSuccess.value = true;
-    }
+    // if (isEmailChanging.value) {
+    //   await updateEmail({
+    //     email: state.email,
+    //     emailConfirmation: state.emailConfirmation,
+    //     password: state.password,
+    //   });
+    //   isSuccess.value = true;
+    // }
 
     isUpdating.value = false;
 
@@ -110,173 +107,43 @@ const invokeUpdate = async (): Promise<void> => {
     errorMessages.value = e.messages.map((m) => m.detail);
   }
 };
+
 onMounted(async () => {
   await refreshUser();
   state.firstName = user.value?.firstName || "";
   state.lastName = user.value?.lastName || "";
-  state.email = user.value?.email || "";
   state.salutationId = user.value?.salutationId || "";
   state.title = user.value?.title || "";
+  // state.a = user.value?.phone 
+  // state.email = user.value?.email || "";
 });
 </script>
 <template>
-  <div class="space-y-8">
-    <div class="text-sm text-gray-500">
+  <h6>Personal data</h6>
+  <div class="mt-4">
+    <form class="flex flex-col gap-6" @submit.prevent="invokeUpdate">
       <div>
-        Feel free to edit any of your details below so your account is always up
-        to date
+        <label for="firstName" class="text-sm text-gray-700 font-medium mb-1">
+          First name
+        </label>
+        <input v-model="state.firstName" id="firstName" class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm">
       </div>
-    </div>
-    <form class="mt-8 space-y-6" @submit.prevent="invokeUpdate">
-      <div
-        v-if="isSuccess"
-        class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg"
-        role="alert"
-      >
-        <span class="font-medium">Your information has been updated.</span>
+      <div>
+        <label for="lastName" class="text-sm text-gray-700 font-medium mb-1">
+          Last name
+        </label>
+        <input v-model="state.lastName" id="lastName" class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm">
       </div>
-      <div
-        v-if="errorMessages.length"
-        class="text-red-600 focus:ring-brand-primary border-gray-300 rounded"
-      >
-        {{ errorMessages }}
-      </div>
-      <div class="mt-4 space-y-4 lg:mt-5 md:space-y-5">
-        <div>
-          <label
-            for="firstname"
-            class="block mb-2 text-sm font-medium text-gray-500"
-          >
-            First name
-          </label>
-          <input
-            id="firstname"
-            v-model="state.firstName"
-            name="firstname"
-            type="text"
-            autocomplete="firstname"
-            required
-            class="appearance-none rounded-md shadow-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary focus:z-10 sm:text-sm"
-            placeholder="Enter first name..."
-            @blur="$v.firstName.$touch()"
-          />
-          <span
-            v-if="$v.firstName.$error"
-            class="text-red-600 focus:ring-brand-primary border-gray-300 rounded"
-          >
-            {{ $v.firstName.$errors[0].$message }}
-          </span>
-        </div>
-        <div>
-          <label
-            for="lastname"
-            class="block mb-2 text-sm font-medium text-gray-500"
-          >
-            Last name
-          </label>
-          <input
-            id="lastname"
-            v-model="state.lastName"
-            name="lastname"
-            type="text"
-            autocomplete="lastname"
-            required
-            class="appearance-none rounded-md shadow-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary focus:z-10 sm:text-sm"
-            placeholder="Enter last name..."
-            @blur="$v.lastName.$touch()"
-          />
-          <span
-            v-if="$v.lastName.$error"
-            class="text-red-600 focus:ring-brand-primary border-gray-300 rounded"
-          >
-            {{ $v.lastName.$errors[0].$message }}
-          </span>
-        </div>
-        <div>
-          <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-500"
-          >
-            Your email
-          </label>
-          <input
-            id="email"
-            v-model="state.email"
-            name="email"
-            type="email"
-            autocomplete="email"
-            required
-            class="appearance-none rounded-md shadow-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary focus:z-10 sm:text-sm"
-            placeholder="Enter the email..."
-            @blur="$v.email.$touch()"
-          />
-          <span
-            v-if="$v.email.$error"
-            class="text-red-600 focus:ring-brand-primary border-gray-300 rounded"
-          >
-            {{ $v.email.$errors[0].$message }}
-          </span>
-        </div>
-        <div v-if="isEmailChanging">
-          <label
-            for="email-confirm"
-            class="block mb-2 text-sm font-medium text-gray-500"
-          >
-            Confirm e-mail
-          </label>
-          <input
-            id="email-confirm"
-            v-model="state.emailConfirmation"
-            name="email-confirm"
-            type="email"
-            autocomplete="email-confirm"
-            required
-            class="appearance-none rounded-md shadow-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary focus:z-10 sm:text-sm"
-            placeholder="Enter the email..."
-            @blur="$v.emailConfirmation.$touch()"
-          />
-          <span
-            v-if="$v.emailConfirmation.$error"
-            class="text-red-600 focus:ring-brand-primary border-gray-300 rounded"
-          >
-            {{ $v.emailConfirmation.$errors[0].$message }}
-          </span>
-        </div>
-        <div v-if="isEmailChanging">
-          <label
-            for="password"
-            class="block mb-2 text-sm font-medium text-gray-500"
-          >
-            Your password
-          </label>
-          <input
-            id="password"
-            v-model="state.password"
-            name="password"
-            type="password"
-            autocomplete="password"
-            required
-            class="appearance-none rounded-md shadow-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary focus:z-10 sm:text-sm"
-            placeholder="••••••••"
-            @blur="$v.password.$touch()"
-          />
-          <span
-            v-if="$v.password.$error"
-            class="text-red-600 focus:ring-brand-primary border-gray-300 rounded"
-          >
-            {{ $v.password.$errors[0].$message }}
-          </span>
-        </div>
+      <div>
+        <label for="phone" class="text-sm text-gray-700 font-medium mb-1">
+          Phone number (Optional)
+        </label>
+        <input id="phone" class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm">
       </div>
 
-      <div>
-        <button
-          class="group relative w-full flex justify-center py-2 px-4 mb-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-primary"
-          type="submit"
-        >
-          Save changes
-        </button>
-      </div>
+      <button type="submit" :disabled="isUpdating" class="text-white font-medium py-2 px-5 bg-gray-800 shadow-sm disabled:opacity-50">
+        Update personal data
+      </button>
     </form>
   </div>
 </template>

@@ -14,14 +14,10 @@ const centerContent = getSlotContent("center");
 </script>
 
 <template>
-  <article class="grid md:grid-cols-3 gap-4">
-    <template v-if="props.content.name?.toLowerCase() === 'value-proposition'">
-      <SharedValueProposition />
-    </template>
-    <template v-else>
-      <CmsGenericElement :content="leftContent" class="" />
-      <CmsGenericElement :content="centerContent" class="" />
-      <CmsGenericElement :content="rightContent" class="" />
-    </template>
+  <SharedValueProposition v-if="props.content.name?.toLowerCase() === 'value-proposition'"/>
+  <article v-else class="grid md:grid-cols-3 gap-4">
+    <CmsGenericElement :content="leftContent" class="" />
+    <CmsGenericElement :content="centerContent" class="" />
+    <CmsGenericElement :content="rightContent" class="" />
   </article>
 </template>

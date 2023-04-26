@@ -36,7 +36,11 @@ const controlState = () => {
     showBreadCrumb.value = false;
     headerMode.value = 'transparent';
     window.addEventListener('scroll', handleScroll);
-  } else {
+  } else if (path.value === '/checkout/cart') {
+    showBreadCrumb.value = false;
+    headerMode.value = 'default';
+    window.removeEventListener('scroll', handleScroll);
+  }else {
     showBreadCrumb.value = true;
     headerMode.value = 'default';
     window.removeEventListener('scroll', handleScroll);
