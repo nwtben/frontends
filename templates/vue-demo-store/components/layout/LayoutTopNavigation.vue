@@ -27,11 +27,11 @@ const { navigationElements } = useNavigation();
       </PopoverButton>
 
       <transition v-if="navigationElement.children?.length" enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-        <PopoverPanel class="absolute -left-8 top-full z-10 mt-3 overflow-hidden bg-white shadow-lg ring-1 ring-gray-900/5">
+        <PopoverPanel class="absolute -left-8 top-full z-10 mt-3 overflow-hidden bg-white shadow-lg ring-1 ring-gray-900/5" v-slot="{ close }">
           <div class="flex gap-8 py-12 px-18">
             <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group min-w-[218px] relative flex text-sm leading-6">
               <div class="flex-auto">
-                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" class="block font-medium text-gray-900 text-sm">
+                <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" @click="close" class="block font-medium text-gray-900 text-sm">
                   {{ getTranslatedProperty(childElement, "name") }}
                 </RouterLink>
                 <ul
@@ -47,6 +47,7 @@ const { navigationElements } = useNavigation();
                           'undefined'
                       "
                       :to="'/' + subChildElement?.seoUrls?.[0]?.seoPathInfo"
+                      @click="close"
                     >
                       <div
                         class="flex flex-col flex-grow"
