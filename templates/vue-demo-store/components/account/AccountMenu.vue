@@ -9,9 +9,8 @@ import {
   Dialog,
   DialogPanel,
 } from '@headlessui/vue';
-import { logout } from "@shopware-pwa/api-client";
 
-const { isLoggedIn } = useUser();
+const { isLoggedIn, logout } = useUser();
 const modal = inject<SharedModal>("modal") as SharedModal;
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const router = useRouter();
