@@ -23,9 +23,6 @@ const currentChildNavigationElement = ref<StoreNavigationElement | null>();
 
 const isSideMenuOpened = inject("isSideMenuOpened", ref(false));
 
-const sideMenuElement = ref(null);
-onClickOutside(sideMenuElement, () => close());
-
 const close = () => {
   isSideMenuOpened.value = false;
   currentNavigationElement.value = null;
@@ -40,7 +37,7 @@ const close = () => {
   </button>
   <Dialog as="div" class="lg:hidden" @close="close" :open="isSideMenuOpened">
     <div class="fixed inset-0 z-10" />
-    <DialogPanel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+    <DialogPanel class="fixed inset-y-0 z-50 right-0 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div class="px-6 flex items-center justify-between">
         <div></div>
         <div>
@@ -66,7 +63,7 @@ const close = () => {
         </div>
       </div>
     </DialogPanel>
-    <DialogPanel v-if="currentNavigationElement" class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+    <DialogPanel v-if="currentNavigationElement" class="fixed z-50 inset-y-0 right-0 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div class="px-6 flex items-center justify-between">
         <div><ChevronLeftIcon class="h-6 w-6 text-gray-700" aria-hidden="true" @click="currentNavigationElement = null" /></div>
         <div>
@@ -88,7 +85,7 @@ const close = () => {
         </div>
       </div>
     </DialogPanel>
-    <DialogPanel v-if="currentChildNavigationElement" class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+    <DialogPanel v-if="currentChildNavigationElement" class="fixed z-50 inset-y-0 right-0 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div class="px-6 flex items-center justify-between">
         <div><ChevronLeftIcon class="h-6 w-6 text-gray-700" aria-hidden="true" @click="currentChildNavigationElement = null" /></div>
         <div>
