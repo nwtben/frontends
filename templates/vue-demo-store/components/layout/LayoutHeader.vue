@@ -9,7 +9,6 @@ const { count } = useCart();
 const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
-const route = useRoute();
 const { locale } = useI18n({ useScope: 'global' });
 const { fetchLang, currentLanguage, languages, syncLanguageData } = useLanguage();
 const { sessionContext } = useSessionContext();

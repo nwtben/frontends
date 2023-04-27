@@ -8,7 +8,7 @@ export default {
 import DefaultLayout from './default.vue';
 import {
   ArrowRightOnRectangleIcon
-} from '@heroicons/vue/24/outline'
+} from '@heroicons/vue/24/outline';
 useAuthGuardRedirection();
 
 const { logout } = useUser();
@@ -88,7 +88,7 @@ async function invokeLogout() {
     </div>
   </DefaultLayout>
 </template>
-<style>
+<style scoped>
 .router-link-active {
   @apply bg-gray-100 text-gray-900;
 }
