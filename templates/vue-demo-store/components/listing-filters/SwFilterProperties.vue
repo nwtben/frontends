@@ -22,12 +22,12 @@ const selectedOptionIds = inject<string[]>("selectedOptionIds");
         class="flex items-center py-3 pr-2"
       >
         <SharedCheckbox 
-          :id="`filter-mobile-${filter.code}-${option.id}`"
+          :id="`filter-${filter.code}-${option.id}`"
           :modelValue="selectedOptionIds?.includes(option.id)"
           @update:modelValue="emits('select-value', { code: filter.code, value: option.id })"
           :name="filter.name"
         />
-        <label :for="`filter-mobile-${filter.code}-${option.id}`" class="ml-3 text-sm font-medium text-gray-700">
+        <label :for="`filter-${filter.code}-${option.id}`" class="cursor-pointer ml-3 text-sm font-medium text-gray-700">
           {{ getTranslatedProperty(option, "name") }}
         </label>
         <span class="ml-auto text-sm font-medium text-gray-500">10</span>

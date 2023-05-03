@@ -7,13 +7,13 @@ const { setLanguage, languages, currentLanguage } = useLanguage();
     class="sw-language-switcher"
     data-testid="language-switcher"
   >
-     <select
+    <SwSelect
       id="language"
       name="language"
-      :value="currentLanguage?.id"
-      class="caret-current min-w-[70px] mt-2 mb-4 font-medium bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light text-sm"
+      :value="currentLanguage?.id" 
       @change="(e: any) => setLanguage(e.target.value)"
-      >
+      class="mt-2 mb-4"
+    >
       <option
         v-for="lang of languages"
         :key="lang.translationCode?.code"
@@ -21,6 +21,6 @@ const { setLanguage, languages, currentLanguage } = useLanguage();
       >
         {{ lang.name }}
       </option>
-    </select>
+    </SwSelect>
   </div>
 </template>

@@ -18,6 +18,8 @@ import {
 import {
   Dialog,
   DialogPanel,
+  TransitionRoot,
+  TransitionChild
 } from '@headlessui/vue';
 import {
   XMarkIcon,
@@ -204,15 +206,17 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
         <span class="text-sm text-gray-700 font-medium">Filter</span>
       </button>
       <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} articles</span>
-      <select
-        name="language"
-        v-model="currentSortingOrder"
-        class="flex-1 md:flex-none caret-current font-medium w-[6rem] text-ellipsis text-gray-700 bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light"
-      >
-        <option v-for="sorting of getSortingOrders" :key="sorting.key" :value="sorting.key">
-          {{ sorting.label }}
-        </option>
-      </select>
+      <div class="flex-1 flex justify-end md:flex-none">
+        <SwSelect
+          name="language"
+          v-model="currentSortingOrder"
+          class="text-gray-700"
+        >
+          <option v-for="sorting of getSortingOrders" :key="sorting.key" :value="sorting.key">
+            {{ sorting.label }}
+          </option>
+        </SwSelect>
+      </div>
     </div>
     <div class="block md:hidden mt-4">
       <div v-if="currentFilters.length" class="mb-6">
@@ -231,38 +235,64 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
 
       </div>
     </div>
-    <Dialog as="div" class="lg:hidden" @close="close" :open="filterMenuOpened">
-      <div class="fixed inset-0 z-10" />
-      <DialogPanel class="flex flex-col fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-        <div class="container py-6 flex items-center justify-between">
-          <div>
-            <h4 class="font-medium text-lg">Filter</h4>
-          </div>
-          <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
-            <span class="sr-only">Close menu</span>
-            <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
-        <div class="flex-1 min-h-0 overflow-y-auto" v-if="getInitialFilters.length">
-          <div
-            v-for="filter in getInitialFilters"
-            :key="`${filter?.id || filter?.code}`"
-            class="w-full"
-          >
-            <SwProductListingFilter
-              @selectFilterValue="onOptionSelectToggle"
-              :selectedFilters="getCurrentFilters"
-              :filter="filter"
-              class="relative"
-            />
-          </div>
-        </div>
-        <div class="container py-4">
-          <button class="w-full text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm" @click="handleSearch">
-            Show products
-          </button>
-        </div>
-      </DialogPanel>
-    </Dialog>
+    <TransitionRoot
+      :show="filterMenuOpened"
+      appear
+      as="template"
+    >
+      <Dialog as="div" class="lg:hidden" @close="close">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 z-10 bg-gray-500 bg-opacity-60" />
+        </TransitionChild>
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0 scale-95"
+          enter-to="opacity-100 scale-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100 scale-100"
+          leave-to="opacity-0 scale-95"
+        >
+          <DialogPanel class="flex flex-col fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+            <div class="container py-6 flex items-center justify-between">
+              <div>
+                <h4 class="font-medium text-lg">Filter</h4>
+              </div>
+              <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
+                <span class="sr-only">Close menu</span>
+                <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+            <div class="flex-1 min-h-0 overflow-y-auto" v-if="getInitialFilters.length">
+              <div
+                v-for="filter in getInitialFilters"
+                :key="`${filter?.id || filter?.code}`"
+                class="w-full"
+              >
+                <SwProductListingFilter
+                  @selectFilterValue="onOptionSelectToggle"
+                  :selectedFilters="getCurrentFilters"
+                  :filter="filter"
+                  class="relative"
+                />
+              </div>
+            </div>
+            <div class="container py-4">
+              <button class="w-full text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm" @click="handleSearch">
+                Show products
+              </button>
+            </div>
+          </DialogPanel>
+        </TransitionChild>
+      </Dialog>
+    </TransitionRoot>
   </ClientOnly>
 </template>
