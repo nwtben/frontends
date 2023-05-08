@@ -7,8 +7,10 @@ export default defineNuxtConfig({
     head: {
       link: [
         {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap",
+          rel: "preload",
+          href: "/assets/fonts/inter-v12-latin.css?&display=swap",
+          as: "style",
+          onload: "this.onload=null;this.rel='stylesheet'"
         },
       ],
       script: [
@@ -16,10 +18,14 @@ export default defineNuxtConfig({
       ],
     }
   },
-  shopware: {
-    shopwareEndpoint: "https://shopware.nwtsaas.com",
-    shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
-  },
+  runtimeConfig: {
+    public: {
+      shopware: {
+          shopwareEndpoint: "https://shopware.nwtsaas.com",
+          shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
+        },
+      },
+    },
   build: {
     transpile: ['@headlessui/vue']
   },
