@@ -13,9 +13,14 @@ export default defineNuxtConfig({
           onload: "this.onload=null;this.rel='stylesheet'"
         },
       ],
-      script: [
-        { src: `https://www.googletagmanager.com/gtm.js?id=${process.env.GTM_ID}`, async: true, type: 'text/partytown' },
-      ],
+      /*noscript: {
+        link: [
+          {
+            rel: "stylesheet",
+            href: "/assets/fonts/inter-v12-latin.css?&display=swap",
+          },
+        ],
+      }*/
     }
   },
   runtimeConfig: {
