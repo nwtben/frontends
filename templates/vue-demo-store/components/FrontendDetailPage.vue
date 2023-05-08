@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useProductSearch } from "@shopware-pwa/composables-next";
-import { getCategoryBreadcrumbs } from "@shopware-pwa/helpers-next";
+import { getCategoryBreadcrumbs, getProductName } from "@shopware-pwa/helpers-next";
 
 const props = defineProps<{
   navigationId: string;
@@ -24,6 +24,11 @@ const breadcrumbs = getCategoryBreadcrumbs(
     startIndex: 2,
   }
 );
+
+breadcrumbs.push({
+  name: getProductName({product: productResponse.value?.product}) || ''
+})
+
 useBreadcrumbs(breadcrumbs);
 
 const { product } = useProduct(
@@ -34,12 +39,12 @@ const { product } = useProduct(
 useCmsHead(product, { mainShopTitle: "Shopware Frontends Demo Store" });
 </script>
 <template>
-  <div class="container mx-auto bg-white flex flex-col">
-    <template v-if="!product?.cmsPage">
+  <template v-if="!product?.cmsPage">
+    <div class="container mx-auto bg-white flex flex-col">
       <ProductStatic :product="product" />
-    </template>
-    <template v-else-if="product.cmsPage">
-      <CmsPage :content="product.cmsPage" />
-    </template>
-  </div>
+    </div>
+  </template>
+  <template v-else-if="product.cmsPage">
+    <CmsPage :content="product.cmsPage" />
+  </template>
 </template>

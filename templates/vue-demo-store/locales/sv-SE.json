@@ -1,12 +1,13 @@
 {
-  "search": "sök",
-  "sign_in": "logga in",
+  "search": "search",
+  "search_brands": "Search brands",
+  "sign_in": "sign in",
   "social": "social",
-  "payment": "betalning",
-  "newsletter_success_text": "Vi bryr oss om skyddet av dina uppgifter. Läs vår",
-  "privacy_policy": "Integritetspolicy",
-  "new_collection": "ny kollektion",
-  "show_collection": "Show kollektion",
-  "copyright": "© 2023 Stylad, Alla rättigheter reserverade.",
-  "shop_the_new_signature_collection": "Shoppa den nya<br>Signatursamling"
+  "payment": "payment",
+  "newsletter_success_text": "We care about the protection of your data. Read our",
+  "privacy_policy": "Privacy policy",
+  "new_collection": "new collection",
+  "show_collection": "Show collection",
+  "copyright": "© 2023 Stylad, All rights reserved.",
+  "shop_the_new_signature_collection": "Shop the new<br>Signature Collection"
 }
