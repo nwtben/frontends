@@ -39,7 +39,12 @@ const onHandleChange = async () => {
   const selectedOptionsVariantPath = variantFound?.seoUrls?.[0]?.seoPathInfo;
   if (props.allowRedirect && selectedOptionsVariantPath) {
     try {
-      router.push("/" + selectedOptionsVariantPath);
+      router.replace({
+        path: "/" + selectedOptionsVariantPath,
+        query: {
+          preventScroll: 1
+        }
+      });
     } catch (error) {
       console.error("incorrect URL", selectedOptionsVariantPath);
     }
@@ -48,6 +53,14 @@ const onHandleChange = async () => {
   }
   isLoading.value = false;
 };
+
+const getSelectPropertiesName = (name: string) => {
+  const activeValue = selectedVariant.value[name];
+  const variant = getOptionGroups.value.find((item) => item.name === name);
+  const options = variant?.options ?? [];
+  const selectedOption = options.find((option) => option.id === activeValue);
+  return selectedOption?.name ?? '';
+}
 </script>
 
 <template>
@@ -66,8 +79,8 @@ const onHandleChange = async () => {
     >
       <div class="mb-6">
         <div class="flex justify-between mb-4">
-          <h2 class="text-base font-medium ">{{ optionGroup.name }}: {{ selectedVariant[optionGroup.name]?.name }}</h2>
-          <a v-if="optionGroup.name === 'Size'" class="underline font-medium underline-offset-4">Size guide</a>
+          <h2 class="text-base font-medium ">{{ optionGroup.name }}: {{ getSelectPropertiesName(optionGroup.name) }}</h2>
+          <a v-if="optionGroup.name === 'Size'" class="underline font-medium underline-offset-4 cursor-pointer">Size guide</a>
         </div>
         <RadioGroup v-if="optionGroup.displayType === 'color'" v-model="selectedVariant[optionGroup.name]">
           <RadioGroupLabel class="sr-only"> Choose a color </RadioGroupLabel>

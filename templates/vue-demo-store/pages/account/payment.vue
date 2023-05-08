@@ -5,10 +5,16 @@ export default {
 </script>
 
 <script setup lang="ts">
+import {
+  RadioGroup,
+  RadioGroupLabel,
+  RadioGroupOption,
+} from '@headlessui/vue';
+
 definePageMeta({
   layout: "account",
 });
-
+const cardValue = ref('card_payment');
 const emits = defineEmits<{
   (e: "success"): void;
 }>();
@@ -57,56 +63,69 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container mx-auto my-8">
-    <fieldset class="mt-6">
-      <legend class="contents text-2xl font-medium text-gray-900">
-        <h1 class="border-b pb-3">Payment method</h1>
-      </legend>
-      <p class="text-sm text-gray-500 mt-3">
-        Select your default payment method:
+  <div class="col-span-2 mb-24">
+    <div class="mb-10">
+      <h3 class="mb-4">
+        Payment methods
+      </h3>
+      <p class="text-gray-900">
+        View all available payment methods and select a default payment method.
       </p>
-      <form class="mt-4 space-y-6" @submit.prevent="invokeSave">
-        <div v-if="isLoading" class="w-60 h-24">
-          <div
-            class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5"
-          >
-            <div class="w-4 bg-gray-300 h-4 rounded-full" />
-            <div class="flex flex-col space-y-3">
-              <div class="w-36 bg-gray-300 h-6 rounded-md" />
-              <div class="w-24 bg-gray-300 h-6 rounded-md" />
-            </div>
+    </div>
+    <RadioGroup
+      v-model="cardValue"
+      class="border border-gray-200 mb-6"
+    >
+      <RadioGroupOption
+        v-slot="{ checked }"
+        value="card_payment"
+      >
+        <div
+          :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+          class="relative flex cursor-pointer rounded-lg p-4"
+        >
+          <span :class="[checked ? 'bg-gray-800 border-transparent' : 'bg-white border-gray-300', 'h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center']" aria-hidden="true">
+            <span class="rounded-full bg-white w-1.5 h-1.5" />
+          </span>
+          <div>
+            <RadioGroupLabel class="block text-sm font-medium text-gray-900">
+              Card payment
+            </RadioGroupLabel>
+            <p class="text-gray-700 text-sm">
+              Apply Pay
+            </p>
+            <p class="text-gray-700 text-sm">
+              Mastercard
+            </p>
+            <p class="text-gray-700 text-sm">
+              •••• Ending in 1545
+            </p>
           </div>
         </div>
-        <div v-else class="mt-4 space-y-4">
-          <div
-            v-for="paymentMethod in paymentMethods"
-            :key="paymentMethod.id"
-            class="flex items-center"
-          >
-            <input
-              :id="paymentMethod.id"
-              v-model="formData.paymentMethod"
-              :value="paymentMethod.id"
-              :checked="selectedPaymentMethod?.id === paymentMethod.id"
-              name="payment-method"
-              type="radio"
-              class="focus:ring-brand-light h-4 w-4 text-brand-primary border-gray-300"
-            />
-            <label
-              :for="paymentMethod.id"
-              class="ml-3 block text-sm font-medium text-gray-900"
-            >
-              {{ paymentMethod.name }}
-            </label>
+      </RadioGroupOption>
+      <div class="w-full border-b border-b-gray-200" />
+      <RadioGroupOption
+        v-slot="{ checked }"
+        value="Swish"
+      >
+        <div
+          :class="[checked ? 'bg-gray-50 text-white ' : 'bg-white ']"
+          class="relative flex cursor-pointer px-4 py-5"
+        >
+          <span
+            :class="[checked ? 'shadow-radio' : '']"
+            class="border border-gray-300 w-4 h-4 mr-3 mt-1 rounded-full"
+          />
+          <div>
+            <RadioGroupLabel class="text-sm font-medium text-gray-900">
+              Swish
+            </RadioGroupLabel>
           </div>
-          <button
-            class="group relative justify-center py-2 px-4 my-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-light"
-            type="submit"
-          >
-            Save
-          </button>
         </div>
-      </form>
-    </fieldset>
+      </RadioGroupOption>
+    </RadioGroup>
+    <button class="text-white font-medium py-2 px-5 bg-gray-800 shadow-sm disabled:opacity-50">
+      Change
+    </button>
   </div>
 </template>

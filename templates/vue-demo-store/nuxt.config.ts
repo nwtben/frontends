@@ -11,6 +11,9 @@ export default defineNuxtConfig({
           href: "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap",
         },
       ],
+      script: [
+        { src: `https://www.googletagmanager.com/gtm.js?id=${process.env.GTM_ID}`, async: true, type: 'text/partytown' },
+      ],
     }
   },
   shopware: {
@@ -52,6 +55,7 @@ export default defineNuxtConfig({
     }
   },
   partytown: {
+    forward: ['dataLayer.push'],
   },
   // components: true,
   components: {
@@ -87,7 +91,7 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
-    safelist: ['container', 'hidden', 'md:block', 'block', 'md:hidden', 'sm:container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4', 'mt-20', 'md:mt-40', 'mb-20', 'md:mb-53', 'pt-10', 'md:pt-20', 'pb-6', 'md:pb-8', 'pb-10', 'md:pb-20'],
+    safelist: ['container', 'hidden', 'md:block', 'block', 'md:hidden', 'sm:container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4', 'mt-20', 'md:mt-40', 'mb-20', 'md:mb-53', 'pt-10', 'md:pt-20', 'pb-6', 'md:pb-8', 'pb-10', 'md:pb-20', 'md:mt-12'],
     theme: {
       extend: {
         width: "width",
@@ -167,6 +171,7 @@ export default defineNuxtConfig({
       },
     ],
     langDir: 'locales',
+    skipSettingLocaleOnNavigate: true,
     // lazy: true,
     defaultLocale: 'sv-SE'
   },

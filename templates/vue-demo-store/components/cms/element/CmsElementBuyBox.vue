@@ -40,7 +40,7 @@ const deliveryTime = computed(() => product.value?.deliveryTime);
 const restockTime = computed(() => product.value?.restockTime);
 </script>
 <template>
-  <div class="max-w-[488px] ml-auto">
+  <div class="md:max-w-[488px] md:ml-auto">
     <h3 class="font-semibold">{{ getProductName({ product }) }}</h3>
     <div class="flex justify-between mt-2 mb-6">
       <SharedProductPrice
@@ -49,7 +49,7 @@ const restockTime = computed(() => product.value?.restockTime);
       />
       <div class="flex flex-col">
         <SharedReviews :product="product" />
-        <a class="underline font-medium">Read reviews</a>
+        <a class="underline font-medium cursor-pointer">Read reviews</a>
       </div>
     </div>
     <SwVariantConfigurator :product="product" @change="changeVariant" :allowRedirect="true" />

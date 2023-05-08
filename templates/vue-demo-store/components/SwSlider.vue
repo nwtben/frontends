@@ -109,7 +109,7 @@ const handleGap = (screenwidth: number) => {
       padding: `0 calc(${gap.value}/2)`
     }
     navigationStyling.value = {
-      paddingRight: `0 calc(${gap.value}/2)`
+      padding: `0 calc(${gap.value} / 2)`,
     }
   }
 }
