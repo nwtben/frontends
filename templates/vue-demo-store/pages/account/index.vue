@@ -30,7 +30,11 @@ const {
   userDefaultBillingAddress,
   userDefaultShippingAddress,
 } = useUser();
-const { isNewsletterSubscriber, newsletterSubscribe } = useNewsletter();
+const {
+  isNewsletterSubscriber,
+  newsletterUnsubscribe,
+  newsletterSubscribe,
+} = useNewsletter();
 const { pushSuccess, pushError } = useNotifications();
 const { apiInstance } = useShopwareContext();
 const orders = ref<Order[]>();
@@ -62,10 +66,7 @@ const updateNewsletterStatus = async (value: any) => {
       });
       pushSuccess("Newsletter subscribed");
     } else {
-      await newsletterSubscribe({
-        email: user.value?.email || "",
-        option: "unsubscribe",
-      });
+      await newsletterUnsubscribe(user.value?.email || "");
       pushSuccess("Newsletter unsubscribe");
     }
   } catch (error) {
@@ -76,7 +77,6 @@ const updateNewsletterStatus = async (value: any) => {
 };
 
 onBeforeMount(async () => {
-  newsletter.value = await isNewsletterSubscriber();
   if (user?.value?.salutationId) {
     await loadSalutation(user.value.salutationId);
   }
