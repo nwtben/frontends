@@ -14,6 +14,7 @@
     "@headlessui/vue": "^1.7.12",
     "@heroicons/vue": "^2.0.16",
     "@nuxt/types": "^2.16.0",
+    "@nuxtjs/robots": "^3.0.0",
     "@shopware-pwa/api-client": "canary",
     "@shopware-pwa/cms-base": "canary",
     "@shopware-pwa/composables-next": "^0.0.0-canary-20230414121154",
