@@ -14,7 +14,7 @@ const leftContent = getSlotContent("left");
   <div
     class="flex flex-col gap-6 md:gap-0 md:flex-row justify-center"
   >
-    <div class="-mx-4 md:mx-0 md:w-1/2">
+    <div class="w-full md:w-1/2">
       <CmsGenericElement :content="leftContent" />
     </div>
     <div class="w-full md:w-1/2 md:pl-4">

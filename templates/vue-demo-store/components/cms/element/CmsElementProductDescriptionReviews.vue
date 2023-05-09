@@ -48,7 +48,7 @@ const tabs = ref([
   { name: 'Delivery and returns', href: '#dar' },
 ]);
 
-const currentTabHash = ref<string>('#description');
+const currentTabHash = ref<string>('#reviews');
 
 const route = useRoute();
 
@@ -73,7 +73,7 @@ watch(
 
 <template>
   <div
-    class="cms-element-product-description-reviews flex flex-wrap mt-8 mb-10 sm:my-20 -mx-4 sm:mx-0"
+    class="cms-element-product-description-reviews flex flex-wrap mt-8 mb-10 md:my-20 -mx-4 md:mx-0"
     v-if="product"
   >
     <!-- For mobile -->
@@ -123,7 +123,7 @@ watch(
       <div class="tab-content tab-space">
         <div
           :class="[
-            'cms-element-product-description-reviews__description max-w-[640px]',
+            'cms-element-product-description-reviews__description',
             currentTabHash !== tabs[0].href ? 'hidden' : 'block',
           ]"
         >

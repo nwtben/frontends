@@ -40,7 +40,7 @@ const deliveryTime = computed(() => product.value?.deliveryTime);
 const restockTime = computed(() => product.value?.restockTime);
 </script>
 <template>
-  <div class="md:max-w-[488px] md:ml-auto">
+  <div class="max-w-[488px] ml-auto">
     <h3 class="font-semibold">{{ getProductName({ product }) }}</h3>
     <div class="flex justify-between mt-2 mb-6">
       <SharedProductPrice
