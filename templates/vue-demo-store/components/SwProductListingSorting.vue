@@ -200,8 +200,8 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
 </script>
 <template>
   <ClientOnly>
-    <div class="flex gap-6 text-sm justify-between md:justify-end mt-4 mb-4 md:mb-6 w-full">
-      <button class="flex-1 md:flex-none flex block md:hidden" @click="filterMenuOpened = true">
+    <div class="flex gap-6 text-sm justify-between lg:justify-end mt-4 mb-4 lg:mb-6 w-full">
+      <button class="flex-1 md:flex-none flex block lg:hidden" @click="filterMenuOpened = true">
         <FunnelIcon class="w-5 h-5 text-gray-500 mr-2"/>
         <span class="text-sm text-gray-700 font-medium">Filter</span>
       </button>

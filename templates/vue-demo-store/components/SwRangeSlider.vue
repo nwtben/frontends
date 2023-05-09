@@ -11,6 +11,7 @@ const props = withDefaults(
 );
 const minValue = ref(props.min);
 const maxValue = ref(props.max);
+const { currentCurrency } = useCurrency();
 
 const emit = defineEmits(['change']);
 const handleInputRange = (event: any, type: 'start' | 'end') => {
@@ -34,11 +35,16 @@ const getValue = (x: number) => {
 </script>
 
 <template>
-  <div class="flex items-center w-full mt-4">
-    <div class="rounded-md shadow-chip border border-gray-300 h-8 w-12 flex justify-center items-center text-gray-900 text-sm">
-      {{ parseFloat(`${minValue}`).toFixed(2) }}
+  <div class="flex flex-col items-center w-full mt-4">
+    <div class="mb-6 w-full flex justify-between">
+      <div class="px-2 shadow-chip border border-gray-300 h-8 flex justify-center items-center text-gray-900 text-sm">
+        {{ parseFloat(`${minValue}`).toFixed(2) }} {{currentCurrency?.symbol ?? ''}}
+      </div>
+      <div class="px-2 shadow-chip border border-gray-300 h-8 flex justify-center items-center text-gray-900 text-sm">
+        {{ parseFloat(`${maxValue}`).toFixed(2) }} {{currentCurrency?.symbol ?? ''}}
+      </div>
     </div>
-    <div class="px-4 flex-1 mb-1">
+    <div class="w-full mb-1">
       <div class="relative">
         <div class="absolute w-full">
           <div
@@ -84,9 +90,6 @@ const getValue = (x: number) => {
           @change="() => handleChangeRange('end')"
         >
       </div>
-    </div>
-    <div class="rounded-md shadow-chip border border-gray-300 h-8 w-12 flex justify-center items-center text-gray-900 text-sm">
-      {{ parseFloat(`${maxValue}`).toFixed(2) }}
     </div>
   </div>
 </template>

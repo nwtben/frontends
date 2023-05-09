@@ -114,7 +114,7 @@ h6 {
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -123,6 +123,7 @@ h6 {
 /* width */
 ::-webkit-scrollbar {
   width: 4px;
+  height: 4px;
 }
 
 /* Track */
