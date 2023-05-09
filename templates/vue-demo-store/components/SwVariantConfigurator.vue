@@ -39,7 +39,12 @@ const onHandleChange = async () => {
   const selectedOptionsVariantPath = variantFound?.seoUrls?.[0]?.seoPathInfo;
   if (props.allowRedirect && selectedOptionsVariantPath) {
     try {
-      router.push("/" + selectedOptionsVariantPath);
+      router.replace({
+        path: "/" + selectedOptionsVariantPath,
+        query: {
+          preventScroll: 1
+        }
+      });
     } catch (error) {
       console.error("incorrect URL", selectedOptionsVariantPath);
     }

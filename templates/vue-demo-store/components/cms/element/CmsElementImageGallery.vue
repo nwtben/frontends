@@ -47,7 +47,7 @@ const breakpoints = ref({
   >
     <div
       :class="{
-        'hidden lg:flex basis-20 relative flex-col items-center':
+        'hidden md:flex basis-20 relative flex-col items-center':
           galleryPosition === 'left',
         'flex relative w-full': galleryPosition === 'underneath',
       }"
