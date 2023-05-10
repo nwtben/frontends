@@ -54,11 +54,29 @@ provide("isSideMenuOpened", isSideMenuOpened);
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const showBreadCrumb = useState<boolean>('showBreadCrumb');
 
+const scrollPos = ref(0);
+
 const handleScroll = () => {
-  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-    headerMode.value = 'default';
-  } else {
-    headerMode.value = 'transparent';
+  if (path.value === '/') {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      headerMode.value = 'default';
+    } else {
+      headerMode.value = 'transparent';
+    }
+  }
+
+  let windowY = window.scrollY;
+  if (Math.abs(windowY - scrollPos.value) > 100) {
+    if (windowY < scrollPos.value) {
+      // Scrolling UP
+      document.body.classList.add('scrolling-up');
+      document.body.classList.remove('scrolling-down');
+    } else {
+      // Scrolling DOWN
+      document.body.classList.add('scrolling-down');
+      document.body.classList.remove('scrolling-up');
+    }
+    scrollPos.value = windowY;
   }
 }
 
@@ -66,9 +84,7 @@ const controlState = () => {
   if (path.value === '/') {
     showBreadCrumb.value = false;
     headerMode.value = 'transparent';
-    window.addEventListener('scroll', handleScroll);
   } else {
-    window.removeEventListener('scroll', handleScroll);
     showBreadCrumb.value = true;
     headerMode.value = 'default';
   }
@@ -80,6 +96,11 @@ watch(path, () => {
 
 onMounted(() => {
   controlState();
+  window.addEventListener('scroll', handleScroll);
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
 })
 
 </script>
