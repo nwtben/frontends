@@ -145,7 +145,8 @@ export default defineNuxtConfig({
           primary: '#F1F2F3'
         },
         dark: {
-          primary: '#1D1F22'
+          primary: '#1D1F22',
+          variant: '#43464E'
         },
         text: {
           muted: '#72757E'

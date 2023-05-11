@@ -5,16 +5,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import {
-  RadioGroup,
-  RadioGroupLabel,
-  RadioGroupOption,
-} from '@headlessui/vue';
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 
 definePageMeta({
   layout: "account",
 });
-const cardValue = ref('card_payment');
+
 const emits = defineEmits<{
   (e: "success"): void;
 }>();
@@ -30,7 +26,7 @@ const { pushSuccess } = useNotifications();
 
 useBreadcrumbs([
   {
-    name: "Account Overview",
+    name: "My Account",
     path: "/account",
   },
   {
@@ -47,17 +43,21 @@ const formData = reactive({
 
 const invokeSave = async (): Promise<void> => {
   try {
+    isLoading.value = true;
     await setPaymentMethod({ id: formData.paymentMethod });
     await setDefaultPaymentMethod(formData.paymentMethod);
     emits("success");
     pushSuccess("Set default payment method successfully");
   } catch (error) {
     console.error("error set default payment method", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
 onMounted(async () => {
   await getPaymentMethods();
+  formData.paymentMethod = selectedPaymentMethod?.value?.id ?? "";
   isLoading.value = false;
 });
 </script>
@@ -66,66 +66,68 @@ onMounted(async () => {
   <div class="col-span-2 mb-24">
     <div class="mb-10">
       <h3 class="mb-4">
-        Payment methods
+        {{ $t("payment_methods") }}
       </h3>
       <p class="text-gray-900">
-        View all available payment methods and select a default payment method.
+        {{ $t("view_all_available_payment_methods") }}
       </p>
     </div>
-    <RadioGroup
-      v-model="cardValue"
-      class="border border-gray-200 mb-6"
-    >
-      <RadioGroupOption
-        v-slot="{ checked }"
-        value="card_payment"
-      >
-        <div
-          :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
-          class="relative flex cursor-pointer rounded-lg p-4"
-        >
-          <span :class="[checked ? 'bg-gray-800 border-transparent' : 'bg-white border-gray-300', 'h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center']" aria-hidden="true">
-            <span class="rounded-full bg-white w-1.5 h-1.5" />
-          </span>
-          <div>
-            <RadioGroupLabel class="block text-sm font-medium text-gray-900">
-              Card payment
-            </RadioGroupLabel>
-            <p class="text-gray-700 text-sm">
-              Apply Pay
-            </p>
-            <p class="text-gray-700 text-sm">
-              Mastercard
-            </p>
-            <p class="text-gray-700 text-sm">
-              •••• Ending in 1545
-            </p>
-          </div>
+    <div v-if="isLoading" class="w-60 h-24">
+      <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
+        <div class="w-4 bg-gray-300 h-4 rounded-full" />
+        <div class="flex flex-col space-y-3">
+          <div class="w-36 bg-gray-300 h-6 rounded-md" />
+          <div class="w-24 bg-gray-300 h-6 rounded-md" />
         </div>
-      </RadioGroupOption>
-      <div class="w-full border-b border-b-gray-200" />
-      <RadioGroupOption
-        v-slot="{ checked }"
-        value="Swish"
+      </div>
+    </div>
+    <form v-else @submit.prevent="invokeSave">
+      <RadioGroup
+        v-model="formData.paymentMethod"
+        class="border border-gray-200 mb-6"
       >
-        <div
-          :class="[checked ? 'bg-gray-50 text-white ' : 'bg-white ']"
-          class="relative flex cursor-pointer px-4 py-5"
+        <RadioGroupOption
+          v-for="paymentMethod in paymentMethods"
+          :key="paymentMethod.id"
+          :value="paymentMethod.id"
+          v-slot="{ checked }"
         >
-          <span
-            :class="[checked ? 'shadow-radio' : '']"
-            class="border border-gray-300 w-4 h-4 mr-3 mt-1 rounded-full"
-          />
-          <div>
-            <RadioGroupLabel class="text-sm font-medium text-gray-900">
-              Swish
-            </RadioGroupLabel>
+          <div
+            :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+            class="relative flex cursor-pointer rounded-lg p-4"
+          >
+            <div>
+              <span
+                :class="[
+                checked
+                  ? 'bg-gray-800 border-transparent'
+                  : 'bg-white border-gray-300',
+                ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+              ]"
+                aria-hidden="true"
+              >
+              <span class="rounded-full bg-white w-1.5 h-1.5" />
+            </span>
+            </div>
+            <div>
+              <RadioGroupLabel class="block cursor-pointer">
+                <h6 class="block text-sm font-medium text-gray-900">{{ paymentMethod.translated?.name }}</h6>
+                <p class="text-gray-700 text-sm">
+                  {{ paymentMethod.translated?.description }}
+                </p>
+              </RadioGroupLabel>
+            </div>
           </div>
-        </div>
-      </RadioGroupOption>
-    </RadioGroup>
-    <button class="text-white font-medium py-2 px-5 bg-gray-800 shadow-sm disabled:opacity-50">
-      Change
-    </button>
+
+          <div class="w-full border-b border-b-gray-200" />
+        </RadioGroupOption>
+      </RadioGroup>
+      <button
+        class="text-white font-medium py-2 px-5 bg-gray-800 shadow-sm disabled:opacity-50"
+        type="submit"
+      >
+        {{ $t("change") }}
+      </button>
+    </form>
   </div>
 </template>

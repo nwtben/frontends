@@ -30,8 +30,9 @@ const information = [
 </script>
 <template>
   <div :class="{
-    'flex flex-col md:flex-row gap-4': true,
-    'flex-col': props.isColumn
+    'flex gap-4': true,
+    'flex-col': props.isColumn,
+    'flex-col md:flex-row': !props.isColumn,
   }">
     <div v-for="item of information" class="flex flex-1" :key="item.title">
       <component :is="item.icon" class="h-6 w-6 mr-3" />
