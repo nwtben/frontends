@@ -35,12 +35,12 @@ watch(
 <template>
   <header :class="{
     'z-50 transition': true,
-    'text-white bg-transparent fixed w-full': headerMode === 'transparent',
-    'sticky top-0 relative bg-white border-b-2 border-gray-100 text-gray-700': headerMode === 'default',
+    'text-white bg-transparent fixed w-full header-transparent': headerMode === 'transparent',
+    'sticky top-0 md:-top-8 relative bg-white border-b-2 border-gray-100 text-gray-700 header-default': headerMode === 'default',
   }">
     <nav aria-label="Global">
       <!-- For Desktop -->
-      <div class="hidden lg:block container mx-auto">
+      <div class="header-desktop hidden lg:block container mx-auto">
         <div class="flex justify-end gap-4">
           <LayoutCurrency />
           <LayoutLanguage />
@@ -112,7 +112,7 @@ watch(
         </div>
       </div>
       <!-- For Mobile -->
-      <div class="block lg:hidden container mx-auto">
+      <div class="header-mobile block lg:hidden container mx-auto">
         <div
           class="flex justify-between items-center py-5 space-x-4"
         >
