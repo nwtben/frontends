@@ -1,38 +1,29 @@
 <script setup lang="ts">
 import { useVuelidate } from "@vuelidate/core";
-import {
-  required,
-  minLength,
-  email,
-  sameAs,
-  requiredIf,
-} from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import { ClientApiError } from "@shopware-pwa/types";
 
-const { user, refreshUser, updatePersonalInfo, updateEmail } = useUser();
+const { user, refreshUser, updatePersonalInfo } = useUser();
+const { pushSuccess, pushError } = useNotifications();
 
 const errorMessages = ref<string[]>([]);
 
 const isSuccess = ref(false);
 const updated = ref(false);
 const isUpdating = ref(false);
+const isLoading = ref(true);
+
 
 const state = reactive({
-  firstName: "",
-  lastName: "",
-  // email: "",
-  // emailConfirmation: "",
-  // password: "",
   salutationId: "",
   title: "",
+  fullName: "",
 });
 
 // const isEmailChanging = computed(() => state.email !== user.value?.email);
 
 const isNameChanging = computed(
-  () =>
-    state.firstName !== user.value?.firstName ||
-    state.lastName !== user.value?.lastName
+  () => state.fullName !== user.value?.firstName + " " + user.value?.lastName
 );
 
 const refs = toRefs(state);
@@ -48,10 +39,7 @@ const refs = toRefs(state);
 // );
 
 const rules = computed(() => ({
-  firstName: {
-    required,
-  },
-  lastName: {
+  fullName: {
     required,
   },
   // email: {
@@ -81,15 +69,24 @@ const invokeUpdate = async (): Promise<void> => {
     isUpdating.value = true;
 
     if (isNameChanging.value) {
-      await updatePersonalInfo({
-        firstName: state.firstName,
-        lastName: state.lastName,
-        salutationId: state.salutationId,
-        title: state.title,
-      });
-      isSuccess.value = true;
-    }
+      const [fistName, ...lastName] = state.fullName.split(" ");
+      try {
+        if (lastName?.length) {
+          await updatePersonalInfo({
+            firstName: fistName,
+            lastName: lastName.join(" "),
+            salutationId: state.salutationId,
+            title: state.title,
+          });
+        }
+        pushSuccess('Updated successfully!')
+      } catch (e) {
+        pushError('Something went wrong!')
+      } finally {
+        isSuccess.value = true;
+      }
 
+    }
     // if (isEmailChanging.value) {
     //   await updateEmail({
     //     email: state.email,
@@ -100,7 +97,6 @@ const invokeUpdate = async (): Promise<void> => {
     // }
 
     isUpdating.value = false;
-
     refreshUser();
   } catch (err) {
     const e = err as ClientApiError;
@@ -110,40 +106,43 @@ const invokeUpdate = async (): Promise<void> => {
 
 onMounted(async () => {
   await refreshUser();
-  state.firstName = user.value?.firstName || "";
-  state.lastName = user.value?.lastName || "";
+  isLoading.value = false;
   state.salutationId = user.value?.salutationId || "";
   state.title = user.value?.title || "";
-  // state.a = user.value?.phone 
-  // state.email = user.value?.email || "";
+  state.fullName = user.value?.firstName + " " + user.value?.lastName;
 });
 </script>
 <template>
-  <h6>Personal data</h6>
+  <h6>{{ $t("personal_data") }}</h6>
   <div class="mt-4">
-    <form class="flex flex-col gap-6" @submit.prevent="invokeUpdate">
-      <div>
-        <label for="firstName" class="text-sm text-gray-700 font-medium mb-1">
-          First name
-        </label>
-        <input v-model="state.firstName" id="firstName" class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm">
+    <div v-if="isLoading" class="w-full h-full">
+      <div class="flex animate-pulse flex-col items-top h-full space-y-5">
+        <div class="w-35 bg-gray-300 h-8 rounded-md" />
+        <div class="w-20 bg-gray-300 h-6 rounded-md" />
+        <div class="w-full bg-gray-300 h-10 rounded-md" />
       </div>
-      <div>
-        <label for="lastName" class="text-sm text-gray-700 font-medium mb-1">
-          Last name
-        </label>
-        <input v-model="state.lastName" id="lastName" class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm">
-      </div>
-      <div>
-        <label for="phone" class="text-sm text-gray-700 font-medium mb-1">
-          Phone number (Optional)
-        </label>
-        <input id="phone" class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm">
-      </div>
+    </div>
 
-      <button type="submit" :disabled="isUpdating" class="text-white font-medium py-2 px-5 bg-gray-800 shadow-sm disabled:opacity-50">
-        Update personal data
-      </button>
+    <form v-else class="flex flex-col gap-6" @submit.prevent="invokeUpdate">
+      <div>
+        <label for="fullName" class="text-sm text-gray-700 font-medium mb-1">
+          {{ $t("full_name") }}
+        </label>
+        <input
+          v-model="state.fullName"
+          id="fullName"
+          class="border border-gray-300 py-2 px-3 text-base md:text-sm text-gray-900 w-full shadow-sm"
+        />
+      </div>
+      <div>
+        <button
+          type="submit"
+          :disabled="isUpdating"
+          class="text-white font-medium py-2 px-5 bg-gray-800 shadow-sm disabled:opacity-50"
+        >
+          {{ $t("update_personal_data") }}
+        </button>
+      </div>
     </form>
   </div>
 </template>

@@ -2,18 +2,32 @@
 import {
   Listbox,
   ListboxButton,
-  ListboxOptions,
   ListboxOption,
+  ListboxOptions,
 } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
+
+const props = defineProps<{
+  options: Record<string, any>[];
+  selectedOption: string;
+}>();
+const emit = defineEmits(["change"]);
+const onChange = (event: any) => {
+  emit("change", event);
+};
+
+const selected = computed(() => {
+  return props.options.find((o) => o.id === props.selectedOption);
+});
 </script>
 
 <template>
-  <Listbox>
+  <Listbox @update:model-value="onChange">
     <div class="relative mt-1">
       <ListboxButton
         class="relative border border-gray-300 py-2 px-3 h-9 text-sm text-dark-primary w-full shadow-input"
       >
+        {{ selected?.name }}
         <p class="text-left" />
         <span
           class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -31,9 +45,9 @@ import { ChevronDownIcon } from "@heroicons/vue/20/solid";
           class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base ring-1 ring-gray-300 focus:outline-none sm:text-sm"
         >
           <ListboxOption
-            v-for="option in []"
+            v-for="option in options"
             v-slot="{ active, selected }"
-            :key="(option as any).name"
+            :key="(option as any).id"
             :value="option"
             as="template"
           >
