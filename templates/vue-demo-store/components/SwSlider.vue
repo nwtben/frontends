@@ -39,7 +39,7 @@ const props = withDefaults(
 const carouselEl = ref<any>(null);
 const gap = ref();
 const slots = useSlots();
-const childrenRaw = computed(
+const childrenRaw = computed<any[]>(
   () => (slots?.default?.()[0].children as VNodeArrayChildren) ?? []
 );
 

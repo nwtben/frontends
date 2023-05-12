@@ -47,7 +47,7 @@ const cmsMap = () => {
     <Disclosure
       v-slot="{ open }"
       as="div"
-      class="border-t border-t-gray-200 px-4 md:px-0"
+      class="border-t border-t-gray-200 px-4 lg:px-0"
     >
       <DisclosureButton
         class="flex items-center justify-between font-medium py-4 w-full"

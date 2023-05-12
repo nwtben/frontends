@@ -15,12 +15,12 @@ const mobileBehavior = computed(() => props.content.mobileBehavior);
 </script>
 
 <template>
-  <div class="cms-section-sidebar flex flex-col md:flex-row md:space-x-8">
+  <div class="cms-section-sidebar flex flex-col lg:flex-row lg:space-x-8">
     <aside
       :class="{
         'w-70': true,
         block: mobileBehavior !== 'hidden',
-        'hidden md:block': mobileBehavior === 'hidden',
+        'hidden lg:block': mobileBehavior === 'hidden',
       }"
     >
       <CmsGenericBlock

@@ -12,13 +12,13 @@ onMounted(async () => {
     class="sw-currency-switcher"
     data-testid="currency-switcher"
   >
-    <select
+    <SwSelect
       id="currency"
-      :value="currentCurrency?.id"
       name="currency"
-      class="caret-current min-w-[60px] mt-2 mb-4 font-medium bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light text-sm"
+      :value="currentCurrency?.id"
       @change="(e: any) => setCurrency(e.target.value)"
-      >
+      class="mt-2 mb-4"
+    >
       <option
         v-for="currency of availableCurrencies"
         :key="currency.id"
@@ -26,6 +26,6 @@ onMounted(async () => {
       >
         {{ currency.symbol }} {{ currency.isoCode }}
       </option>
-    </select>
+    </SwSelect>
   </div>
 </template>
