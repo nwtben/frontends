@@ -67,7 +67,7 @@ const getSelectPropertiesName = (name: string) => {
   <div class="flex flex-col">
     <div
       v-if="isLoading"
-      class="absolute inset-0 flex items-center justify-center z-10 bg-white/75"
+      class="fixed inset-0 flex items-center justify-center z-10 bg-white/75"
     >
       <div
         class="h-15 w-15 i-carbon-progress-bar-round animate-spin c-gray-500"
