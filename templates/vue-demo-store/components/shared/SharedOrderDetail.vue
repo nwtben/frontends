@@ -15,14 +15,25 @@ const {
   shippingMethod,
   order,
 } = useOrderDetails(props.order.id);
+const isLoading = ref(true);
 
-onMounted(() => {
-  loadOrderDetails();
+onMounted(async () => {
+  await loadOrderDetails();
+  isLoading.value = false;
 });
 </script>
 
 <template>
-  <div v-if="order">
+  <div v-if="isLoading" class="w-full h-full">
+    <div class="flex animate-pulse flex-col items-top h-full space-y-5">
+      <div class="w-35 bg-gray-300 h-8 rounded-md" />
+      <div class="w-20 bg-gray-300 h-6 rounded-md" />
+      <div class="w-full bg-gray-300 h-10 rounded-md" />
+      <div class="w-30 bg-gray-300 h-6 rounded-md" />
+      <div class="w-full bg-gray-300 h-10 rounded-md" />
+    </div>
+  </div>
+  <div v-else>
     <SharedProductOrders :lineItems="order?.lineItems || []" />
     <div class="border-b border-b-gray-200 text-gray-900">
     <div class="mb-6 flex justify-between">

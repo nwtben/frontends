@@ -32,8 +32,9 @@ const { orders } = defineProps<{
             <div>
               <div :class="{
                 'text-xs w-[82px] font-medium py-1 leading-5': true,
-                'text-gray-900 bg-amber-300': order.stateMachineState.technicalName === 'in_progress',
-                'text-white bg-emerald-600': order.stateMachineState.technicalName === 'complete',
+                'text-white bg-blue-600': order.stateMachineState.technicalName === 'in_progress',
+                'text-white bg-red-600': order.stateMachineState.technicalName === 'cancel',
+                'text-white bg-green-600': order.stateMachineState.technicalName === 'complete',
                 'text-gray-900 bg-gray-200': order.stateMachineState.technicalName === 'open'
               }">
                 {{ getTranslatedProperty(order.stateMachineState, 'name') }}

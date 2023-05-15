@@ -31,7 +31,7 @@ const {
 
 useBreadcrumbs([
   {
-    name: "Account Overview",
+    name: "My Account",
     path: "/account",
   },
   {

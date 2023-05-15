@@ -76,7 +76,7 @@ watch(enter, (value) => {
 <template>
   <div
     ref="searchContainer"
-    class="lg:min-w-[240px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 inline-block"
+    class="sw-search-input lg:min-w-[240px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 inline-block"
     :class="[headerMode === 'transparent' ? 'bg-white bg-opacity-25 text-white' : 'bg-gray-100 text-gray-400']"
   >
     <div class="flex items-center">
@@ -141,3 +141,18 @@ watch(enter, (value) => {
     </div>
   </div>
 </template>
+<style>
+.scrolling-down .header-default .header-mobile .sw-search-input {
+  height: 0 !important;
+  overflow: hidden;
+  padding: 0;
+  opacity: 0;
+  margin: 0;
+}
+.header-mobile .sw-search-input {
+  height: 42px;
+  opacity: 1;
+  display: flex;
+  transition: height 0.3s;
+}
+</style>

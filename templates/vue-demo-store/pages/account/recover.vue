@@ -5,7 +5,7 @@ export default {
 
 useBreadcrumbs([
   {
-    name: "Account Overview",
+    name: "My Account",
     path: "/account",
   },
   {

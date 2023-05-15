@@ -9,5 +9,17 @@
   "new_collection": "new collection",
   "show_collection": "Show collection",
   "copyright": "© 2023 Stylad, All rights reserved.",
-  "shop_the_new_signature_collection": "Shop the new<br>Signature Collection"
+  "shop_the_new_signature_collection": "Shop the new<br>Signature Collection",
+  "my_profile": "My profile",
+  "check_your_personal_data": "Check your personal data.",
+  "login_data": "Login data",
+  "change_email_address": "Change e-mail address",
+  "change_password": "Change password",
+  "personal_data": "Personal data",
+  "full_name": "Full name",
+  "phone_number_optional": "Phone number (Optional)",
+  "update_personal_data": "Update personal data",
+  "payment_methods": "Payment methods",
+  "view_all_available_payment_methods": "View all available payment methods and select a default payment method.",
+  "change": "Change"
 }

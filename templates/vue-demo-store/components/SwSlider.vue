@@ -56,7 +56,7 @@ const breakpointsGap = computed<ScreenGap[] | null>(() => {
   return screensize.length ? screensize : null;
 });
 
-const settings = computed(() => ({
+const settings = computed<any>(() => ({
   itemsToScroll: props.itemsToScroll,
   snapAlign: props.snapAlign,
   itemsToShow: props.itemsToShow,
@@ -140,7 +140,7 @@ const currentSlide = ref(0);
 <template>
   <div class="relative">
     <button v-if="props.navigationArrows"  class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
-    <carousel :modelValue="currentSlideIndex" ref="carouselEl" :settings="settings" :style="carouselStyling">
+    <carousel :modelValue="currentSlideIndex" ref="carouselEl" v-bind="settings" :style="carouselStyling">
       <slide :class="{
         'carousel__slide__dynamic__height': props.dynamicHeight
       }" v-for="(child, index) of childrenRaw" :key="index" :style="slideStyling">

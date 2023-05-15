@@ -6,7 +6,7 @@ const { breadcrumbs } = useBreadcrumbs();
     class="container flex my-4 md:my-6"
     aria-label="Breadcrumb"
   >
-    <ol class="inline-flex items-center space-x-2">
+    <ol class="flex-wrap inline-flex items-center space-x-2">
       <li class="inline-flex items-center">
         <nuxt-link
           to="/"
