@@ -12,12 +12,18 @@ import { ClientApiError, ShopwareError } from "@shopware-pwa/types";
 import {
   CheckCircleIcon,
 } from '@heroicons/vue/20/solid';
+import {
+  PencilSquareIcon
+} from '@heroicons/vue/24/outline';
 
 definePageMeta({
   layout: "checkout",
 });
 
 const isSameBillingAndShipping = ref();
+const isDifferentBillingAndShipping = ref();
+const submitBtn = ref();
+const isAgree = ref();
 const { push } = useRouter();
 const { currency } = useSessionContext();
 const { getCountries } = useCountries();
@@ -43,6 +49,7 @@ const {
 } = useSessionContext();
 const { cart, cartItems, subtotal, totalPrice, shippingTotal } = useCart();
 const { customerAddresses, loadCustomerAddresses } = useAddress();
+
 const modal = inject<SharedModal>("modal") as SharedModal;
 const isLoading = reactive<{ [key: string]: boolean }>({});
 
@@ -131,6 +138,7 @@ const state = reactive<any>({
     phoneNumber: ""
   },
   customShipping: false,
+  agree: false,
 });
 
 const rules = computed(() => ({
@@ -148,6 +156,9 @@ const rules = computed(() => ({
   email: {
     required,
     email,
+  },
+  agree: {
+    checked: (value: any) => value === true
   },
   // password: {
   //   required: requiredIf(() => {
@@ -223,13 +234,23 @@ const placeOrder = async () => {
 };
 
 const invokeSubmit = async () => {
-  $v.value.$touch();
-  registerErrors.value = [];
-  const valid = await $v.value.$validate();
-  isLoading.all = true;
-  if (valid) {
+  if (!isUserSession.value) {
+    $v.value.$touch();
+    registerErrors.value = [];
+    const valid = await $v.value.$validate();
+    if (valid) {
+      isLoading.all = true;
+      try {
+        await registerUser();
+        await placeOrder();
+      } finally {
+        isLoading.all = false;
+      }
+    }
+  } else {
+    if (!isAgree.value) return;
+    isLoading.all = true;
     try {
-      await registerUser();
       await placeOrder();
     } finally {
       isLoading.all = false;
@@ -286,6 +307,14 @@ watch(isSameBillingAndShipping, (value) => {
   }
 })
 
+const handleSubmit = () => {
+  if (!isUserSession) {
+    submitBtn.value.click()
+  } else {
+    invokeSubmit();
+  }
+}
+
 </script>
 
 <template>
@@ -299,14 +328,16 @@ watch(isSameBillingAndShipping, (value) => {
     >
       <div class="flex flex-col md:flex-row gap-16">
         <div class="flex-1">
+          <!-- New User -->
           <form 
+            v-if="!isUserSession"
             class="flex flex-col gap-10"
             id="checkout-billing-address"
             name="checkout-billing-address"
             method="post"
             @submit.prevent="invokeSubmit"
           >
-            <div v-if="!isUserSession">
+            <div>
               <button
                 type="button"
                 class="flex items-center justify-center px-5 py-2 text-base font-medium text-white shadow-sm bg-gray-800"
@@ -314,7 +345,7 @@ watch(isSameBillingAndShipping, (value) => {
                 Log in to your account
               </button>
             </div>
-            <span v-if="!isUserSession" class="text-base text-dark-variant">or fill the details below.</span>
+            <span class="text-base text-dark-variant">or fill the details below.</span>
             <div>
               <h6 class="text-lg font-medium text-dark-primary mb-4">Contact information</h6>
               <div class="flex flex-col gap-6">
@@ -594,7 +625,7 @@ watch(isSameBillingAndShipping, (value) => {
               <div class="border-b border-gray-200"></div>
             </template>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Delivery method</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping method</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <li
                   v-for="singleShippingMethod in shippingMethods"
@@ -629,7 +660,7 @@ watch(isSameBillingAndShipping, (value) => {
             </div>
             <div class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Payment</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Payment method</h6>
               <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
                 <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
                   <div class="w-4 bg-gray-300 h-4 rounded-full" />
@@ -683,25 +714,261 @@ watch(isSameBillingAndShipping, (value) => {
               </form>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div class="w-full block md:hidden">
-              <h5 class="text-lg font-medium text-dark-primary mb-4">Order summary</h5>
-              <SharedOrdersSummary :showCartItems="true"/>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Terms and conditions</h6>
+              <SharedCheckbox v-model="state.agree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
-            <button
-              class="flex items-center justify-center px-5 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
-              type="submit"
-              :disabled="isLoading.all"
-            >
-              Confirm order
-            </button>
-            <div class="md:max-w-[344px]">
-              <SharedValueProposition :isColumn="true" />
-            </div>
+            <button ref="submitBtn" type="submit" class="hidden">submit</button>
           </form>
+          <!-- Existed User -->
+          <div 
+            v-else 
+            class="flex flex-col gap-10"
+          >
+            <div class="flex gap-2 items-center">
+              <span class="text-base text-dark-variant">You are logged in as {{user?.firstName}} {{user?.lastName}}. Not you? </span>
+              <button
+                type="button"
+                class="flex items-center justify-center px-5 py-2 text-base font-medium text-white shadow-sm bg-gray-800"
+                @click="invokeLogout"
+              >
+                Log out
+              </button>
+            </div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping address</h6>
+              <div class="flex flex-col gap-4">
+                <div>
+                  <RadioGroup
+                    v-model="selectedShippingAddress"
+                    class="border border-gray-200"
+                  >
+                    <RadioGroupOption
+                      class="cursor-pointer"
+                      v-for="customerAddress in customerAddresses"
+                      :key="customerAddress.id"
+                      :value="customerAddress.id"
+                      v-slot="{ checked }"
+                    >
+                      <div
+                        :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                        class="relative flex cursor-pointer rounded-lg p-4"
+                      >
+                        <div>
+                          <span
+                            :class="[
+                            checked
+                              ? 'bg-gray-800 border-transparent'
+                              : 'bg-white border-gray-300',
+                            ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                          ]"
+                            aria-hidden="true"
+                          >
+                          <span class="rounded-full bg-white w-1.5 h-1.5" />
+                        </span>
+                        </div>
+                        <div>
+                          <RadioGroupLabel class="block cursor-pointer">
+                            <h6 class="block text-sm font-medium text-gray-900">{{ `${customerAddress.firstName} ${customerAddress.lastName}` }}</h6>
+                            <p class="text-gray-700 text-sm">
+                              <span class="block">{{ customerAddress.street }}</span>
+                              <span class="block">{{ customerAddress.zipcode }}</span>
+                              <span class="block">{{ customerAddress.city }}</span>
+                            </p>
+                          </RadioGroupLabel>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e) => e.stopPropagation()"/>
+                        </div>
+                      </div>
+  
+                      <div class="w-full border-b border-b-gray-200" />
+                    </RadioGroupOption>
+                  </RadioGroup>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                  >
+                    Add new shipping address
+                  </button>
+                </div>
+                <div>
+                  <SharedCheckbox 
+                    :content="'Different billing address'"
+                    v-model="isDifferentBillingAndShipping"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div v-if="isDifferentBillingAndShipping">
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Billing address</h6>
+              <div class="flex flex-col gap-4">
+                <div>
+                  <RadioGroup
+                    v-model="selectedBillingAddress"
+                    class="border border-gray-200"
+                  >
+                    <RadioGroupOption
+                      v-for="customerAddress in customerAddresses"
+                      :key="customerAddress.id"
+                      :value="customerAddress.id"
+                      v-slot="{ checked }"
+                    >
+                      <div
+                        :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                        class="relative flex cursor-pointer rounded-lg p-4"
+                      >
+                        <div>
+                          <span
+                            :class="[
+                            checked
+                              ? 'bg-gray-800 border-transparent'
+                              : 'bg-white border-gray-300',
+                            ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                          ]"
+                            aria-hidden="true"
+                          >
+                          <span class="rounded-full bg-white w-1.5 h-1.5" />
+                        </span>
+                        </div>
+                        <div>
+                          <RadioGroupLabel class="block cursor-pointer">
+                            <h6 class="block text-sm font-medium text-gray-900">{{ `${customerAddress.firstName} ${customerAddress.lastName}` }}</h6>
+                            <p class="text-gray-700 text-sm">
+                              <span class="block">{{ customerAddress.street }}</span>
+                              <span class="block">{{ customerAddress.zipcode }}</span>
+                              <span class="block">{{ customerAddress.city }}</span>
+                            </p>
+                          </RadioGroupLabel>
+                        </div>
+                      </div>
+  
+                      <div class="w-full border-b border-b-gray-200" />
+                    </RadioGroupOption>
+                  </RadioGroup>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                  >
+                    Add new billing address
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div v-if="isDifferentBillingAndShipping" class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping method</h6>
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <li
+                  v-for="singleShippingMethod in shippingMethods"
+                  :key="singleShippingMethod.id"
+                  class="shadow-sm relative"
+                  :class="selectedShippingMethod === singleShippingMethod.id ? 'border-2 border-gray-500' : 'border border-gray-300'"
+                >
+                  <input
+                    :id="singleShippingMethod.id"
+                    v-model="selectedShippingMethod"
+                    :value="singleShippingMethod.id"
+                    name="shipping-method"
+                    type="radio"
+                    class="focus:ring-brand-primary h-4 w-4 border-gray-300 hidden"
+                    :data-testid="`checkout-shipping-method-${singleShippingMethod.id}`"
+                  />
+                  <label
+                    :for="singleShippingMethod.id"
+                    :class="{ 'animate-pulse': isLoading[singleShippingMethod.id] }"
+                    class="p-4 block text-sm font-medium text-gray-900 cursor-pointer"
+                  >
+                    <p>{{ (singleShippingMethod as any).translated.name }}</p>
+                    <p class="text-sm text-gray-500">
+                      {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
+                    </p>
+                    <br/>
+                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                  </label>
+                  <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
+                </li>
+              </ul>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Payment method</h6>
+              <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
+                <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
+                  <div class="w-4 bg-gray-300 h-4 rounded-full" />
+                  <div class="flex flex-col space-y-3">
+                    <div class="w-36 bg-gray-300 h-6 rounded-md" />
+                    <div class="w-24 bg-gray-300 h-6 rounded-md" />
+                  </div>
+                </div>
+              </div>
+              <form v-else>
+                <RadioGroup
+                  v-model="selectedPaymentMethod"
+                  class="border border-gray-200"
+                >
+                  <RadioGroupOption
+                    v-for="paymentMethod in paymentMethods"
+                    :key="paymentMethod.id"
+                    :value="paymentMethod.id"
+                    v-slot="{ checked }"
+                  >
+                    <div
+                      :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                      class="relative flex cursor-pointer rounded-lg p-4"
+                    >
+                      <div>
+                        <span
+                          :class="[
+                          checked
+                            ? 'bg-gray-800 border-transparent'
+                            : 'bg-white border-gray-300',
+                          ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                        ]"
+                          aria-hidden="true"
+                        >
+                        <span class="rounded-full bg-white w-1.5 h-1.5" />
+                      </span>
+                      </div>
+                      <div>
+                        <RadioGroupLabel class="block cursor-pointer">
+                          <h6 class="block text-sm font-medium text-gray-900">{{ paymentMethod.translated?.name }}</h6>
+                          <p class="text-gray-700 text-sm">
+                            {{ paymentMethod.translated?.description }}
+                          </p>
+                        </RadioGroupLabel>
+                      </div>
+                    </div>
+
+                    <div class="w-full border-b border-b-gray-200" />
+                  </RadioGroupOption>
+                </RadioGroup>
+              </form>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">Terms and conditions</h6>
+              <SharedCheckbox v-model="isAgree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+            </div>
+          </div>
         </div>
-        <div class="w-full hidden md:block md:w-1/2 md:max-w-[574px]">
+        <div class="w-full md:w-1/2 md:max-w-[574px]">
           <h5 class="text-lg font-medium text-dark-primary mb-4">Order summary</h5>
-          <SharedOrdersSummary :showCartItems="true"/>
+          <SharedOrdersSummary :showCartItems="true">
+            <template #action>
+              <button
+                class="mt-6 w-full flex items-center justify-center px-5 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
+                :disabled="isLoading.all"
+                @click="handleSubmit"
+              >
+                Confirm order
+              </button>
+            </template>
+          </SharedOrdersSummary>
+          <SharedValueProposition class="mt-6" :isColumn="true" />
         </div>
       </div>
     </div>

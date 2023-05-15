@@ -3,7 +3,6 @@ import { RouterLink } from "vue-router";
 
 const props = defineProps<{
   showTitle?: boolean;
-  showCheckoutBtn?: boolean;
   showCartItems?: boolean;
 }>();
 
@@ -77,13 +76,14 @@ const handleSubmitPromotionCode = () => {
         <SharedPrice :value="totalPrice" data-testid="cart-subtotal" />
       </div>
     </div>
-    <RouterLink
+    <slot name="action"></slot>
+    <!-- <RouterLink
       v-if="props.showCheckoutBtn"
       class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
       to="/checkout"
       data-testid="cart-checkout-link"
     >
       Checkout
-    </RouterLink>
+    </RouterLink> -->
   </div>
 </template>

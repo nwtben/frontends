@@ -105,7 +105,17 @@ export default {
     <div class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20" v-if="hasItems">
       <SharedProductOrders :enableActions="true" class="flex-1" :lineItems="cartItems || []" />
       <aside class="w-full md:w-1/2 md:max-w-[469px]">
-        <SharedOrdersSummary :show-title="true" :show-checkout-btn="true" />
+        <SharedOrdersSummary :showTitle="true">
+          <template #action>
+            <RouterLink
+              class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
+              to="/checkout"
+              data-testid="cart-checkout-link"
+            >
+              Checkout
+            </RouterLink>
+          </template>
+        </SharedOrdersSummary>
         <div class="mt-6">
           <SharedValueProposition :isColumn="true" />
         </div>
