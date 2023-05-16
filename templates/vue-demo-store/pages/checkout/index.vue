@@ -776,7 +776,7 @@ const handleSubmit = () => {
                               <span class="block">{{ customerAddress.city }}</span>
                             </p>
                           </RadioGroupLabel>
-                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e) => e.stopPropagation()"/>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => e.stopPropagation()"/>
                         </div>
                       </div>
   
