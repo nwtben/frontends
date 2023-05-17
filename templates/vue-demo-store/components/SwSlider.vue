@@ -72,6 +72,7 @@ const navigationStyling = ref({});
 const resizeHandler = useDebounceFn((e: any) => {
   const screenwidth = e.target.innerWidth;
   handleGap(screenwidth);
+  carouselEl.value?.restartCarousel();
 }, 500);
 
 const handleGap = (screenwidth: number) => {
@@ -116,6 +117,7 @@ const handleGap = (screenwidth: number) => {
 
 onMounted(() => {
   handleGap(window.innerWidth);
+  carouselEl.value?.restartCarousel();
   if (breakpointsGap.value) {
     window.addEventListener('resize', resizeHandler);
   }
@@ -136,11 +138,23 @@ const prev = () => {
 }
 
 const currentSlide = ref(0);
+
+const handleEnd = (e: any) => {
+  currentSlide.value = e.currentSlideIndex;
+}
+
+const showPrev = computed(() => {
+  return props.navigationArrows && currentSlide.value > carouselEl.value?.data.minSlide.value;
+});
+
+const showNext = computed(() => {
+  return props.navigationArrows && currentSlide.value < carouselEl.value?.data.maxSlide.value;
+});
 </script>
 <template>
   <div class="relative">
-    <button v-if="props.navigationArrows"  class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
-    <carousel :modelValue="currentSlideIndex" ref="carouselEl" v-bind="settings" :style="carouselStyling">
+    <button v-if="showPrev"  class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
+    <carousel @slide-end="handleEnd" :modelValue="currentSlideIndex" ref="carouselEl" v-bind="settings" :style="carouselStyling">
       <slide :class="{
         'carousel__slide__dynamic__height': props.dynamicHeight
       }" v-for="(child, index) of childrenRaw" :key="index" :style="slideStyling">
@@ -157,7 +171,7 @@ const currentSlide = ref(0);
         />
       </template>
     </carousel>
-    <button v-if="props.navigationArrows" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
+    <button v-if="showNext" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
   </div>
 </template>
 <style>
