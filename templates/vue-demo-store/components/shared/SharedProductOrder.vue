@@ -49,10 +49,10 @@ const removeCartItem = async () => {
 
 </script>
 <template>
-  <li class="relative pb-6 mb-6 md:pb-10 md:mb-10 border-b border-b-gray-200 flex">
+  <li class="relative pb-6 md:pb-10 border-b border-b-gray-200 flex">
     <div
       v-if="lineItem.type == 'product'"
-      class="aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
+      class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
     >
       <img
         :src="getSmallestThumbnailUrl(lineItem.cover)"
@@ -84,6 +84,6 @@ const removeCartItem = async () => {
         <SwQuantitySelector class="!h-[38px] !w-[108px]" v-model="quantity" />
       </div>
     </div>
-    <TrashIcon v-if="enableActions" class="cursor-pointer text-gray-700 absolute top-0 right-0 h-6 w-6" @click="removeCartItem" />
+    <TrashIcon v-if="enableActions" class="shrink-0 cursor-pointer text-gray-700 ml-auto h-6 w-6" @click="removeCartItem" />
   </li>
 </template>

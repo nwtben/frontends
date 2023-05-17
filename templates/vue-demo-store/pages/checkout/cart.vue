@@ -44,6 +44,8 @@ const defaultConfig = ref<any>({
 });
 
 const { apiInstance } = useShopwareContext();
+const isAddDiscountCode = ref<boolean>();
+const discountCode = ref<string>();
 
 const getOtherProducts = async (
   criteria?: Partial<ShopwareSearchParams>,
@@ -57,7 +59,13 @@ const getOtherProducts = async (
   }
 }
 
-const { cartItems, subtotal, totalPrice, shippingTotal } = useCart();
+const { cartItems, cart, subtotal, totalPrice, shippingTotal, addPromotionCode } = useCart();
+
+const handleSubmitPromotionCode = () => {
+  if (discountCode.value) {
+    addPromotionCode(discountCode.value);
+  }
+}
 
 const hasItems = computed(() => cartItems.value.length > 0);
 
@@ -67,6 +75,22 @@ onMounted(async () => {
     query: 'M'
   });
 });
+
+const promotionErrors = computed(() => {
+  const errors = cart.value?.errors;
+  const promotionErrTemp: any[] = [];
+  if (!discountCode.value || !isAddDiscountCode.value) return [];
+  if (errors) {
+    const getErrors = Object.keys(errors).filter(x => x.startsWith('promotion'));
+    getErrors.forEach(x => {
+      if ((errors[x] as any)?.promotionCode === discountCode.value) {
+        promotionErrTemp.push(errors[x]);
+      }
+    })
+  }
+  return promotionErrTemp;
+})
+
 </script>
 
 <script lang="ts">
@@ -81,39 +105,17 @@ export default {
     <div class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20" v-if="hasItems">
       <SharedProductOrders :enableActions="true" class="flex-1" :lineItems="cartItems || []" />
       <aside class="w-full md:w-1/2 md:max-w-[469px]">
-        <div class="bg-gray-50 py-6 px-4 md:p-8">
-          <h5 class="text-xl font-medium text-dark-primary mb-8.5">Order summary</h5>
-          <div class="flex flex-col gap-6">
-            <SharedCheckbox content="Add discount code" />
-            <div class="border border-b-gray-200"></div>
-            <div class="flex justify-between text-base">
-              <p>Subtotal</p>
-              <SharedPrice
-                :value="subtotal"
-                data-testid="cart-subtotal"
-              />
-            </div>
-            <div class="flex justify-between text-base">
-              <p>Shipping estimate</p>
-              <SharedPrice
-                :value="shippingTotal"
-                data-testid="cart-subtotal"
-              />
-            </div>
-            <div class="border border-b-gray-200"></div>
-            <div class="flex mb-8 justify-between text-lg text-dark-primary font-medium">
-              <p>Order total</p>
-              <SharedPrice :value="totalPrice" data-testid="cart-subtotal" />
-            </div>
-          </div>
-          <RouterLink
-            class="flex items-center justify-center px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
-            to="/checkout"
-            data-testid="cart-checkout-link"
-          >
-            Checkout
-          </RouterLink>
-        </div>
+        <SharedOrdersSummary :showTitle="true">
+          <template #action>
+            <RouterLink
+              class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
+              to="/checkout"
+              data-testid="cart-checkout-link"
+            >
+              Checkout
+            </RouterLink>
+          </template>
+        </SharedOrdersSummary>
         <div class="mt-6">
           <SharedValueProposition :isColumn="true" />
         </div>
