@@ -66,7 +66,7 @@ const invokeLogout = () => {
             <div>
               <h4 class="font-medium text-lg">Hello, Jonas Lindeborg</h4>
             </div>
-            <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
+            <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 outline-none" @click="close">
               <span class="sr-only">Close menu</span>
               <XMarkIcon class="h-6 w-6" aria-hidden="true" />
             </button>
