@@ -205,7 +205,7 @@ const showNext = computed(() => {
 
 /* custom pagination inside */
 .carousel__pagination__inside {
-  @apply absolute bottom-2 left-1/2 translate -translate-x-1/2
+  @apply absolute bottom-2 left-1/2 translate -translate-x-1/2 sm:hidden;
 }
 .carousel__pagination__inside .carousel__pagination-button {
   padding: 2px;
