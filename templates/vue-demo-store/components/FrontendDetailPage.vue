@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useProductSearch } from "@shopware-pwa/composables-next";
-import { getCategoryBreadcrumbs, getProductName } from "@shopware-pwa/helpers-next";
+import { getProductName } from "@shopware-pwa/helpers-next";
+import { Category } from "@shopware-pwa/types";
 
 const props = defineProps<{
   navigationId: string;
@@ -18,6 +19,32 @@ const { data: productResponse } = await useAsyncData(
   }
 );
 
+const getCategoryBreadcrumbs = (
+  category: Category | null | undefined,
+  options?: {
+    /**
+     * Start at specific index if your navigation
+     * contains root names which should not be visible.
+     */
+    startIndex?: number;
+  }
+) => {
+  const breadcrumbs =
+    category?.translated?.breadcrumb || category?.breadcrumb || [];
+  const startIndex = options?.startIndex || 0;
+  if (breadcrumbs.length <= startIndex) return [];
+  return breadcrumbs.slice(startIndex).map((element, index) => {
+    if (category?.seoUrls?.[0]?.seoPathInfo) {
+      return {
+        name: element,
+        path: '/' + category?.seoUrls?.[0]?.seoPathInfo.split('/').slice(0, index + 1).join('/') + '/'
+      };
+    }
+    return {
+      name: element,
+    };
+  });
+}
 const breadcrumbs = getCategoryBreadcrumbs(
   productResponse.value?.product.seoCategory,
   {
