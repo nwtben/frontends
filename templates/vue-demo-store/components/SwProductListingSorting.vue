@@ -250,23 +250,23 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 z-10 bg-gray-500 bg-opacity-60" />
+          <div class="fixed inset-0 z-50 bg-gray-500 bg-opacity-60" />
         </TransitionChild>
         <TransitionChild
           as="template"
           enter="duration-300 ease-out"
-          enter-from="opacity-0 scale-95"
-          enter-to="opacity-100 scale-100"
+          enter-from="opacity-0 -translate-x-full"
+          enter-to="opacity-100 translate-x-0"
           leave="duration-200 ease-in"
           leave-from="opacity-100 scale-100"
           leave-to="opacity-0 scale-95"
         >
-          <DialogPanel class="flex flex-col fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <DialogPanel class="flex flex-col fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div class="container py-6 flex items-center justify-between">
               <div>
                 <h4 class="font-medium text-lg">Filter</h4>
               </div>
-              <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="close">
+              <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 outline-none" @click="close">
                 <span class="sr-only">Close menu</span>
                 <XMarkIcon class="h-6 w-6" aria-hidden="true" />
               </button>
