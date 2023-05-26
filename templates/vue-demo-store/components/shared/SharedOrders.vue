@@ -35,7 +35,7 @@ const { orders } = defineProps<{
                 'text-white bg-blue-600': order.stateMachineState.technicalName === 'in_progress',
                 'text-white bg-red-600': order.stateMachineState.technicalName === 'cancel',
                 'text-white bg-green-600': order.stateMachineState.technicalName === 'complete',
-                'text-gray-900 bg-gray-200': order.stateMachineState.technicalName === 'open'
+                'text-white bg-light-blue-600': order.stateMachineState.technicalName === 'open'
               }">
                 {{ getTranslatedProperty(order.stateMachineState, 'name') }}
               </div>

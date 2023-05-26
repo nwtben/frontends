@@ -25,7 +25,7 @@ const selected = computed(() => {
   <Listbox @update:model-value="onChange">
     <div class="relative mt-1">
       <ListboxButton
-        class="relative border border-gray-300 py-2 px-3 h-9 text-sm text-dark-primary w-full shadow-input"
+        class="relative border border-gray-300 py-2 px-3 h-9 text-sm text-dark-primary w-full shadow-input text-left"
       >
         {{ selected?.name }}
         <p class="text-left" />

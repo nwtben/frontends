@@ -68,28 +68,28 @@ const secondNavigate = (value: Category) => {
     <Dialog as="div" class="lg:hidden" @close="close">
       <TransitionChild
         as="template"
-        enter="duration-300 ease-out"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="duration-200 ease-in"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
+        enter="duration-500 ease-in-out"
+        enterFrom="translate-x-full"
+        enterTo="translate-x-0"
+        leave="duration-500 ease-out"
+        leaveFrom="translate-x-0"
+        leaveTo="translate-x-full"
       >
         <div class="fixed inset-0 z-10 bg-gray-500 bg-opacity-60" />
       </TransitionChild>
       <TransitionChild
         as="template"
-        enter="duration-300 ease-out"
-        enter-from="opacity-0 scale-95"
-        enter-to="opacity-100 scale-100"
-        leave="duration-200 ease-in"
-        leave-from="opacity-100 scale-100"
-        leave-to="opacity-0 scale-95"
+        enter="duration-500 ease-in-out"
+        enterFrom="translate-x-full"
+        enterTo="translate-x-0"
+        leave="duration-500 ease-out"
+        leaveFrom="translate-x-0"
+        leaveTo="translate-x-full"
       >
         <DialogPanel class="fixed inset-y-0 z-50 right-0 w-full overflow-y-auto bg-white py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div class="px-4 flex items-center justify-between">
             <div>
-              <ChevronLeftIcon 
+              <ChevronLeftIcon
                 v-if="currentNavigationElement || currentChildNavigationElement"
                 class="cursor-pointer h-6 w-6 text-gray-700"
                 aria-hidden="true"
@@ -108,9 +108,9 @@ const secondNavigate = (value: Category) => {
             <div class="divide-y divide-gray-500/10">
               <div class="">
                 <template v-if="!currentNavigationElement && !currentChildNavigationElement">
-                  <RouterLink 
-                    v-for="navigationElement in navigationElements" 
-                    :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)" 
+                  <RouterLink
+                    v-for="navigationElement in navigationElements"
+                    :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)"
                     :key="navigationElement.id"
                     class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block py-3 text-base leading-7 text-gray-700 hover:bg-gray-50"
                     @click="firstNavigate(navigationElement)"
@@ -120,9 +120,9 @@ const secondNavigate = (value: Category) => {
                   </RouterLink>
                 </template>
                 <template v-else-if="currentNavigationElement && !currentChildNavigationElement">
-                  <RouterLink 
-                    v-for="navigationElement in currentNavigationElement.children" 
-                    :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)" 
+                  <RouterLink
+                    v-for="navigationElement in currentNavigationElement.children"
+                    :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)"
                     :key="navigationElement.id"
                     class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block rounded-lg py-3 text-base leading-7 hover:bg-gray-50"
                     @click="secondNavigate(navigationElement)"
@@ -133,7 +133,7 @@ const secondNavigate = (value: Category) => {
                 </template>
                 <template v-else-if="currentChildNavigationElement">
                   <RouterLink
-                    v-for="navigationElement in currentChildNavigationElement.children" 
+                    v-for="navigationElement in currentChildNavigationElement.children"
                     :key="navigationElement.id"
                     @click="close"
                     :to="getCategoryUrl(navigationElement)"
