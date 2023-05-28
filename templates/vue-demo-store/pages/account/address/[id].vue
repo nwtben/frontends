@@ -246,7 +246,7 @@ const invokeChange = async (): Promise<void> => {
         </div>
         <div>
           <button
-            class="text-white font-medium py-2 px-5 bg-brand-primary"
+            class="text-white font-medium py-2.5 px-5 bg-brand-primary"
             type="submit"
           >
             {{ isCreation ? "Add address" : "Update address" }}

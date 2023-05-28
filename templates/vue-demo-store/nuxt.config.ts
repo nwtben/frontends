@@ -164,6 +164,9 @@ export default defineNuxtConfig({
           900: '#111827',
         },
       },
+      boxShadow: {
+        input: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+      },
     },
   },
   router: {

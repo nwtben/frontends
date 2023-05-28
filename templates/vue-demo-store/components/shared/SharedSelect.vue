@@ -59,11 +59,10 @@ const selected = computed(() => {
             >
               <span
                 :class="[
-                  selected ? 'font-medium' : 'font-normal',
+                  selected ? 'font-semibold' : 'font-normal',
                   'block truncate',
                 ]"
-                >{{ (option as any).name }}</span
-              >
+              >{{ (option as any).name }}</span>
             </li>
           </ListboxOption>
         </ListboxOptions>
