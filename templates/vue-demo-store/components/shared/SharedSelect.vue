@@ -25,7 +25,7 @@ const selected = computed(() => {
   <Listbox @update:model-value="onChange">
     <div class="relative mt-1">
       <ListboxButton
-        class="relative border border-gray-300 py-2 px-3 h-9 text-sm text-dark-primary w-full shadow-input"
+        class="relative border border-gray-300 py-2 px-3 h-9 text-sm text-dark-primary w-full shadow-input text-left"
       >
         {{ selected?.name }}
         <p class="text-left" />
@@ -59,11 +59,10 @@ const selected = computed(() => {
             >
               <span
                 :class="[
-                  selected ? 'font-medium' : 'font-normal',
+                  selected ? 'font-semibold' : 'font-normal',
                   'block truncate',
                 ]"
-                >{{ (option as any).name }}</span
-              >
+              >{{ (option as any).name }}</span>
             </li>
           </ListboxOption>
         </ListboxOptions>

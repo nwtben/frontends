@@ -82,7 +82,7 @@ async function invokeLogout() {
           </button>
         </div>
       </aside>
-      <main class="flex-1 w-full max-w-[800px]">
+      <main class="flex-1 w-full md:pl-26">
         <slot />
       </main>
     </div>

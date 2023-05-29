@@ -25,18 +25,25 @@ const { user } = useUser();
 export default {
   name: "ProfilePage",
 };
+const toggleTabs = (tabNumber: number) => {
+ currentTab.value = tabNumber;
+};
+
+const currentTab = ref<number>(1);
 </script>
 
 <template>
   <section class="flex flex-col space-y-10 mb-24">
     <section>
       <h3 class="mb-4">{{$t('my_profile')}}</h3>
-      <p class="text-base">{{$t('check_your_personal_data')}}</p>
+      <p class="text-base" v-if="currentTab === 1">{{$t('check_your_personal_data')}}</p>
+      <p class="text-base" v-if="currentTab === 2">{{$t('change_password')}}</p>
     </section>
     <section>
-      <AccountPersonalData />
+      <AccountPersonalData v-if="currentTab === 1"/>
+      <AccountChangePassword v-else />
     </section>
-    <section>
+    <section v-if="currentTab === 1">
       <h4 class="text-lg font-medium mb-4">
           {{$t('login_data') }}
       </h4>
@@ -49,11 +56,19 @@ export default {
         </p>
         <ChevronDownIcon class="w-5 h-5" />
       </div>
-      <div class="flex items-center mt-6">
+      <div class="flex items-center mt-6 cursor-pointer" @click="() => toggleTabs(2)">
         <p class="mr-1 text-sm text-gray-700 font-medium">
             {{$t('change_password') }}
         </p>
         <ChevronDownIcon class="w-5 h-5" />
+      </div>
+    </section>
+    <section v-else>
+      <div class="flex items-center mt-1 cursor-pointer" @click="() => toggleTabs(1)">
+        <p class="mr-1 text-sm text-gray-700 font-medium">
+          {{ $t('check_your_personal_data') }}
+        </p>
+        <ChevronDownIcon class="w-5 h-5"/>
       </div>
     </section>
   </section>
