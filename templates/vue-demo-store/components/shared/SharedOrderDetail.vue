@@ -38,7 +38,7 @@ onMounted(async () => {
   </div>
   <div v-else>
     <SharedProductOrders :line-items="order?.lineItems || []" />
-    <div class="border-b border-b-gray-200 text-gray-900">
+    <div class="mt-6 border-b border-b-gray-200 text-gray-900">
       <div class="mb-6 flex justify-between">
         <span>Subtotal</span>
         <SharedPrice :value="order?.price?.totalPrice" />

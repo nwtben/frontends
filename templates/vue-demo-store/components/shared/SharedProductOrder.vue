@@ -49,7 +49,7 @@ const removeCartItem = async () => {
 
 </script>
 <template>
-  <li class="relative pb-6 md:pb-10 border-b border-b-gray-200 flex">
+  <li class="relative pb-6 border-b border-b-gray-200 flex">
     <div
       v-if="lineItem.type == 'product'"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
