@@ -101,7 +101,7 @@ export default {
 
 <template>
   <div class="container">
-    <h2 class="mt-16 mb-12 font-extrabold text-3xl md:font-normal md:text-4xl">Shopping Cart</h2>
+    <h2 class="mt-16 mb-12 text-3xl font-normal md:text-4xl">Shopping Cart</h2>
     <div class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20" v-if="hasItems">
       <SharedProductOrders :enableActions="true" class="flex-1" :lineItems="cartItems || []" />
       <aside class="w-full md:w-1/2 md:max-w-[469px]">

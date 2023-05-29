@@ -49,7 +49,7 @@ const removeCartItem = async () => {
 
 </script>
 <template>
-  <li class="relative pb-6 border-b border-b-gray-200 flex">
+  <li class="relative py-6 border-b border-b-gray-200 last:border-0 flex">
     <div
       v-if="lineItem.type == 'product'"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
@@ -65,12 +65,10 @@ const removeCartItem = async () => {
         {{ lineItem.label }}
       </p>
       <div class="gap-2 text-sm mb-4">
-      <span class="text-red-800">
-        $40.00
-      </span>
-      <span class="line-through text-gray-500">
-        $50.00
-      </span>
+      <SharedPrice
+        :value="lineItem.price?.unitPrice"
+        data-testid="cart-subtotal"
+      />
       </div>
       <div class="flex flex-col gap-1 mb-4">
         <p v-for="option of (lineItem.payload as any)?.options" class="text-sm text-gray-500">

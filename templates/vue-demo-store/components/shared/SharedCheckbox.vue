@@ -14,7 +14,7 @@
   const defaultId = ref(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10));
 </script>
 <template>
-  <div class="flex space-x-2 items-center">
+  <div class="flex items-center">
     <input
       :id="props.id || defaultId"
       type="checkbox"
@@ -22,6 +22,6 @@
       :checked="props.modelValue"
       @change="updateValue"
     />
-    <label :for="props.id || defaultId" v-if="props.content" class="cursor-pointer font-medium text-sm text-gray-700" v-html="props.content"></label>
+    <label :for="props.id || defaultId" v-if="props.content" class="pl-2 pr-4 cursor-pointer font-medium text-sm text-gray-700" v-html="props.content"></label>
   </div>
 </template>
