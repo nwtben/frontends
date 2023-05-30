@@ -17,6 +17,7 @@ useBreadcrumbs([
     path: "/account/profile",
   },
 ]);
+
 const { user } = useUser();
 
 </script>
