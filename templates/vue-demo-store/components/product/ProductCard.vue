@@ -101,7 +101,7 @@ const ratingAverage: Ref<number> = computed(() =>
     </button>
     <div class="mt-4 flex flex-col justify-between flex-1">
       <div>
-        <h3 class="text-base font-bold text-gray-700">
+        <h3 class="text-base font-bold">
           <RouterLink
             class="line-clamp-2 h-12"
             :to="getProductUrl(product)"

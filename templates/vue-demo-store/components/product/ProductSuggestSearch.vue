@@ -15,7 +15,7 @@ const { unitPrice, displayFrom } =
   <div
     class="p-3 h-14 text-sm flex items-center gap-3 hover:bg-gray-100 cursor-pointer transition duration-300 bg-white"
   >
-    <div class="rounded-md border-1 border-gray-200 overflow-hidden flex-none">
+    <div class="rounded-md border-1 border-gray-300 overflow-hidden flex-none">
       <img
         data-testid="layout-search-suggest-image"
         :src="getSmallestThumbnailUrl(product.cover.media)"

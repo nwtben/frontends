@@ -1,10 +1,38 @@
 import transformerDirective from "@unocss/transformer-directives";
 import { NuxtConfig } from '@nuxt/types';
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
+
 export default defineNuxtConfig({
-  shopware: {
-    shopwareEndpoint: "https://shopware.nwtsaas.com",
-    shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
+  app: {
+    head: {
+      link: [
+        {
+          rel: "preload",
+          href: "/assets/fonts/inter-v12-latin.css?&display=swap",
+          as: "style",
+          onload: "this.onload=null;this.rel='stylesheet'"
+        },
+      ],
+      /*noscript: {
+        link: [
+          {
+            rel: "stylesheet",
+            href: "/assets/fonts/inter-v12-latin.css?&display=swap",
+          },
+        ],
+      }*/
+    }
+  },
+  runtimeConfig: {
+    public: {
+      shopware: {
+          shopwareEndpoint: "https://shopware.nwtsaas.com",
+          shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
+        },
+      },
+    },
+  build: {
+    transpile: ['@headlessui/vue']
   },
   alias: {
     /**
@@ -19,18 +47,27 @@ export default defineNuxtConfig({
     strict: true,
   },
   modules: [
+    "@nuxtjs/partytown",
     '@nuxtjs/i18n',
     "@vueuse/nuxt",
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image-edge",
-    `@twicpics/components/nuxt3`,
+    "@nuxtjs/robots"
   ],
-  "twicpics": {
-        domain: `https://turnkey-shopware.twic.pics`,
-        anticipation: 0.5,
-        step: 50
+  image: {
+    provider: "vercel",
+    vercel: {
+      modifiers: {
+        format: 'WebP',
+        effect: 'sharpen:100',
+        quality: 'auto:best',
+      }
+    }
+  },
+  partytown: {
+    forward: ['dataLayer.push'],
   },
   // components: true,
   components: {
@@ -66,13 +103,30 @@ export default defineNuxtConfig({
     attributify: true, // enabled `@unocss/preset-attributify`,
     preflight: true,
     transformers: [transformerDirective()],
+    safelist: ['container', 'underline', 'underline-offset-2', 'hidden', 'md:block', 'block', 'md:hidden', 'sm:container', 'max-w-2xl', 'mx-auto', 'gap-4', 'md:gap-8', 'mt-6', 'mt-10', 'md:mt-10', 'mb-10', 'md:mb-25', 'md:mb-20', 'md:mt-20', 'mb-6', 'md:mb-8', 'mb-11', 'md:mb-24', 'mb-2', 'mb-8', 'mt-8', 'md:mb-4', 'mt-20', 'md:mt-40', 'mb-20', 'md:mb-53', 'pt-10', 'md:pt-20', 'pb-6', 'md:pb-8', 'pb-10', 'md:pb-20', 'md:mt-12', 'my-10', 'md:my-20'],
     theme: {
       extend: {
         width: "width",
         height: "height",
       },
       container: {
-        padding: '1rem',
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1rem',
+          md: '2rem',
+          lg: '2rem',
+          xl: '1rem',
+          '2xl': '1rem'
+        },
+        center: true,
+        maxWidth: {
+          DEFAULT: 'unset',
+          sm: 'unset',
+          md: 'unset',
+          lg: 'unset',
+          xl: '1248px',
+          '2xl': '1536px'
+        },
       },
       colors: {
         current: 'currentColor',
@@ -81,13 +135,37 @@ export default defineNuxtConfig({
           light: "#5ebbff",
           dark: "#374151",
         },
-        gray: {
-          200: '#D1D5DB',
-          300: '#9CA3AF',
-          400: '#6B7280',
-          500: '#F3F4F6',
-          600: '#4B5563'
+        red: {
+          900: '#991B1B'
         },
+        green: {
+          500: '#10B981'
+        },
+        light: {
+          primary: '#F1F2F3'
+        },
+        dark: {
+          primary: '#1D1F22',
+          variant: '#43464E'
+        },
+        text: {
+          muted: '#72757E'
+        },
+        gray: {
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
+        },
+      },
+      boxShadow: {
+        input: '0px 1px 2px rgba(0, 0, 0, 0.05)',
       },
     },
   },
@@ -109,7 +187,8 @@ export default defineNuxtConfig({
       },
     ],
     langDir: 'locales',
-    lazy: true,
+    skipSettingLocaleOnNavigate: true,
+    // lazy: true,
     defaultLocale: 'sv-SE'
   },
 });

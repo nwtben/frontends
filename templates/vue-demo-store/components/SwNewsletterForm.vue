@@ -68,9 +68,9 @@ const invokeSubmit = async () => {
 </script>
 <template>
   <div class="bg-brand-dark">
-    <form class="flex flex-col md:flex-row gap-10 container mx-auto text-white w-full relative py-10" @submit.prevent="invokeSubmit">
-      <div class="flex-[2_2_0%]">
-        <h3 class="p-0 mb-3">
+    <form class="flex flex-col md:flex-row container mx-auto text-white w-full relative py-12 md:py-18 md:items-center" @submit.prevent="invokeSubmit">
+      <div class="w-full md:w-7/12">
+        <h2 class="p-0 mb-3 text-2xl md:text-3xl">
           {{
             getFormTitle
               ? getFormTitle
@@ -78,11 +78,11 @@ const invokeSubmit = async () => {
               ? "Subscribe to newsletter"
               : "Unsubscribe to newsletter"
           }}
-        </h3>
-        <p>Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui Lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat.</p>
+        </h2>
+        <p class="text-gray-300 text-lg">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui Lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat.</p>
       </div>
       <template v-if="!formSent">
-        <div class="flex-1">
+        <div class="w-full pl-0 pt-8 md:pt-0 md:w-5/12 md:pl-22">
           <div class="flex flex-col md:flex-row gap-3">
             <div class="flex-1">
               <input
@@ -97,7 +97,7 @@ const invokeSubmit = async () => {
                 ]"
                 v-model="state.email"
                 @blur="$v.email.$touch()"
-                class="appearance-none relative block w-full px-3 py-2 border placeholder:text-gray-600 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                class="appearance-none relative block w-full px-3 py-2 border placeholder:text-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
               />
               <span
@@ -109,7 +109,7 @@ const invokeSubmit = async () => {
             </div>
             <div class="flex-1 md:flex-initial">
               <button
-                class="w-full group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium bg-white hover:bg-gray hover:text-white text-brand-primary focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-75"
+                class="w-full group relative flex justify-center py-2 px-4 border border-white text-sm font-medium bg-white hover:bg-gray-100 hover:border-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-75"
                 type="submit"
                 :disabled="loading"
               >
@@ -117,7 +117,9 @@ const invokeSubmit = async () => {
               </button>
             </div>
           </div>
-          <p class="mt-3 text-sm text-gray-200">We care about the protection of your data. Read our <a class="text-white border-b">Privacy Policy</a>. </p>
+          <p class="mt-3 text-sm text-gray-300">
+            {{$t('newsletter_success_text')}} <a class="text-white border-b">{{ $t('privacy_policy') }}</a>
+          </p>
         </div>
       </template>
       <template v-else>
