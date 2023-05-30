@@ -11,6 +11,10 @@ const props = withDefaults(
 );
 const minValue = ref(props.min);
 const maxValue = ref(props.max);
+const minHiddenText = ref<any>();
+const maxHiddenText = ref<any>();
+const minError = ref<any>();
+const maxError = ref<any>();
 const { currentCurrency } = useCurrency();
 
 const emit = defineEmits(['change']);
@@ -32,16 +36,48 @@ const duration = props.max - props.min;
 const getValue = (x: number) => {
   return ((x - props.min) / duration) * 100;
 }
+
+const handleInputMin = (e: any) => {
+  minHiddenText.value.innerHTML = e.target.value;
+  if (+e.target.value <= maxValue.value) {
+    minValue.value = +e.target.value;
+    minError.value = false;
+  } else {
+    minError.value = true;
+  }
+}
+
+const handleInputMax = (e: any) => {
+  maxHiddenText.value.innerHTML = e.target.value;
+  if (+e.target.value >= minValue.value) {
+    maxValue.value = +e.target.value;
+    maxError.value = false;
+  } else {
+    maxError.value = true;
+  }
+}
 </script>
 
 <template>
   <div class="flex flex-col items-center w-full mt-4">
     <div class="mb-6 w-full flex justify-between">
-      <div class="px-2 shadow-chip border border-gray-300 h-8 flex justify-center items-center text-gray-900 text-sm">
-        {{ parseFloat(`${minValue}`).toFixed(2) }} {{currentCurrency?.symbol ?? ''}}
+      <div class="px-2 shadow-chip border h-8 flex justify-center items-center text-sm" :class="[
+        minError ? 'border-red text-red' : 'border-gray-300 text-gray-900'
+      ]">
+        <span class="relative">
+          <span ref="minHiddenText" class="opacity-0">{{ minValue }}</span>
+          <input type="number" class="outline-none absolute top-0 left-0 w-full h-full bg-transparent" :value="minValue" @input="handleInputMin" />
+        </span>
+        <span>{{currentCurrency?.symbol ?? ''}}</span>
       </div>
-      <div class="px-2 shadow-chip border border-gray-300 h-8 flex justify-center items-center text-gray-900 text-sm">
-        {{ parseFloat(`${maxValue}`).toFixed(2) }} {{currentCurrency?.symbol ?? ''}}
+      <div class="px-2 shadow-chip border h-8 flex justify-center items-center text-sm" :class="[
+        maxError ? 'border-red text-red' : 'border-gray-300 text-gray-900'
+      ]">
+        <span class="relative">
+          <span ref="maxHiddenText" class="opacity-0">{{ maxValue }}</span>
+          <input type="number" class="outline-none absolute top-0 left-0 w-full h-full bg-transparent" :value="maxValue" @input="handleInputMax" />
+        </span>
+        <span>{{currentCurrency?.symbol ?? ''}}</span>
       </div>
     </div>
     <div class="w-full mb-1">
@@ -94,7 +130,7 @@ const getValue = (x: number) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 input[type=range] {
   @apply absolute appearance-none pointer-events-none w-full border-none bg-transparent z-10 -top-2.5;
 }

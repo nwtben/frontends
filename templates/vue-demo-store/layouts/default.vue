@@ -22,6 +22,17 @@ const { data: footerData } = useAsyncData("mainFooterNavigation", () => {
 });
 provide("swNavigation-footer-navigation", footerData);
 
+// Canonical
+const route = useRoute()
+useHead(() => ({
+  link: [
+    {
+      rel: 'canonical',
+      href: window.location.origin + route.path,
+    },
+  ],
+}))
+
 </script>
 <template>
   <div>

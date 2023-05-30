@@ -13,12 +13,15 @@ const { orders } = defineProps<{
 
 <template>
   <div class="flex flex-col gap-4">
-    <div v-for="order of orders">
+    <div
+      v-for="order of orders"
+      class="shadow-sm"
+    >
       <Disclosure
         v-slot="{ open }"
       >
         <DisclosureButton
-          class="px-4 py-6 shadow-sm text-gray-900 flex gap-8 items-center w-full border border-gray-200"
+          class="px-4 py-6 text-gray-900 flex gap-8 items-center w-full border border-gray-200"
         >
           <div class="flex flex-col md:flex-row items-start md:items-center md:gap-8">
             <div>
@@ -35,19 +38,22 @@ const { orders } = defineProps<{
                 'text-white bg-blue-600': order.stateMachineState.technicalName === 'in_progress',
                 'text-white bg-red-600': order.stateMachineState.technicalName === 'cancel',
                 'text-white bg-green-600': order.stateMachineState.technicalName === 'complete',
-                'text-gray-900 bg-gray-200': order.stateMachineState.technicalName === 'open'
+                'text-white bg-light-blue-600': order.stateMachineState.technicalName === 'open'
               }">
                 {{ getTranslatedProperty(order.stateMachineState, 'name') }}
               </div>
             </div>
           </div>
           <div class="flex flex-col md:flex-row items-end md:items-center justify-between flex-1 self-stretch">
-            <SharedPrice class="text-sm font-medium" :value="order.amountTotal" />
+            <SharedPrice
+              class="text-sm font-medium"
+              :value="order.amountTotal"
+            />
             <div class="flex items-center bg-gray-100 py-2.25 px-4">
               <span class="text-sm font-medium text-gray-700 mr-2">View details</span>
               <ChevronDownIcon
                 :class="open ? 'rotate-180 transform' : ''"
-                class="h-4 w-4 md:h-5 md:w-5 text-slate-900"
+                class="h-4 w-4 text-slate-900"
               />
             </div>
           </div>
