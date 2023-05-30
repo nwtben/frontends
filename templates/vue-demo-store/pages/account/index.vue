@@ -18,7 +18,6 @@ import {
 definePageMeta({
   layout: "account",
 });
-
 const newsletter = ref(false);
 const router = useRouter();
 // const { getCountries } = useCountries();

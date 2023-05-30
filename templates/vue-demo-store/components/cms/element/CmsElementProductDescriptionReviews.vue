@@ -15,32 +15,6 @@ import {
 } from "@shopware-pwa/helpers-next";
 import SwProductReviews from "../../SwProductReviews.vue";
 
-const DUMMY_REVIEWS: any = [
-  {
-    id: 1,
-    createdAt: new Date().toISOString(),
-    content: `I was looking for a bright light for the kitchen but wanted some item more modern than a strip light. this one is perfect, very bright and looks great. I can't comment on interlation as I had an electrition instal it. Would recommend...`,
-    points: 4,
-    customer: {
-      id: 1,
-      firstName: 'Jane D.',
-      lastName: 'Smith'
-    }
-  },
-  {
-    id: 2,
-    createdAt: new Date().toISOString(),
-    content: `I was looking for a bright light for the kitchen but wanted some item more modern than a strip light. this one is perfect, very bright and looks great. I can't comment on interlation as I had an electrition instal it. Would recommend...`,
-    points: 4,
-    customer: {
-      id: 2,
-      firstName: 'Jane D.',
-      lastName: 'Smith'
-    }
-  }
-]
-
-
 const tabs = ref([
   { name: 'Description', href: '#description' },
   { name: 'Specification', href: '#specification' },
@@ -61,7 +35,7 @@ const description = computed(() =>
   getTranslatedProperty(product.value, "description")
 );
 
-const reviews = computed(() => DUMMY_REVIEWS || props.content.data.reviews?.elements);
+const reviews = computed(() => props.content.data.reviews?.elements);
 
 watch(
   () => route.hash,

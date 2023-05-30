@@ -65,14 +65,14 @@ const getSelectPropertiesName = (name: string) => {
 
 <template>
   <div class="flex flex-col">
-    <div
-      v-if="isLoading"
-      class="fixed inset-0 flex items-center justify-center z-10 bg-white/75"
-    >
-      <div
-        class="h-15 w-15 i-carbon-progress-bar-round animate-spin c-gray-500"
-      />
-    </div>
+<!--    <div-->
+<!--      v-if="isLoading"-->
+<!--      class="fixed inset-0 flex items-center justify-center z-10 bg-white/75"-->
+<!--    >-->
+<!--      <div-->
+<!--        class="h-15 w-15 i-carbon-progress-bar-round animate-spin c-gray-500"-->
+<!--      />-->
+<!--    </div>-->
     <div
       v-for="optionGroup in getOptionGroups"
       :key="optionGroup.id"
