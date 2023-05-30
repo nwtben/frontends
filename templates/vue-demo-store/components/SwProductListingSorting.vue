@@ -258,8 +258,8 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
           enter-from="opacity-0 -translate-x-full"
           enter-to="opacity-100 translate-x-0"
           leave="duration-200 ease-in"
-          leave-from="opacity-100 scale-100"
-          leave-to="opacity-0 scale-95"
+          leave-from="opacity-100 translate-x-0"
+          leave-to="opacity-0 -translate-x-full"
         >
           <DialogPanel class="flex flex-col fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div class="container py-6 flex items-center justify-between">
