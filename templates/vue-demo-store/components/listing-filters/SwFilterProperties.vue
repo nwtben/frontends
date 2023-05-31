@@ -27,7 +27,7 @@ const selectedOptionIds = inject<string[]>("selectedOptionIds");
           @update:modelValue="emits('select-value', { code: filter.code, value: option.id })"
           :name="filter.name"
         />
-        <label :for="`filter-${filter.code}-${option.id}`" class="cursor-pointer px-3 text-sm font-medium text-gray-700">
+        <label :for="`filter-${filter.code}-${option.id}`" class="flex-1 cursor-pointer px-3 text-sm font-medium text-gray-700">
           {{ getTranslatedProperty(option, "name") }}
         </label>
         <span class="ml-auto text-sm font-medium text-gray-500">10</span>

@@ -34,7 +34,7 @@ const filter = computed(() => props.filter);
             <span aria-hidden="true" :class="['h-6 w-6 rounded-full border border-black border-opacity-25']" :style="{ backgroundColor: `${option.colorHexCode}` }" />
           </div>
         </label>
-        <label :for="`filter-${filter.code}-${option.id}`" class="cursor-pointer px-3 text-gray-700 text-sm font-medium"> {{ getTranslatedProperty(option, 'name') }} </label>
+        <label :for="`filter-${filter.code}-${option.id}`" class="flex-1 cursor-pointer px-3 text-gray-700 text-sm font-medium"> {{ getTranslatedProperty(option, 'name') }} </label>
         <span class="ml-auto text-sm font-medium text-gray-500">10</span>
       </div>
     </div>

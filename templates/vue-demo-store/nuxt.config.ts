@@ -5,6 +5,12 @@ import { NuxtConfig } from '@nuxt/types';
 export default defineNuxtConfig({
   app: {
     head: {
+      meta: [
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1.0"
+        }
+      ],
       link: [
         {
           rel: "preload",
@@ -26,11 +32,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       shopware: {
-          shopwareEndpoint: "https://shopware.nwtsaas.com",
-          shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
-        },
+        shopwareEndpoint: "https://shopware.nwtsaas.com",
+        shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
       },
+      shopwareStoreDomain: process.env.FRONT_DOMAIN
     },
+  },
   build: {
     transpile: ['@headlessui/vue']
   },

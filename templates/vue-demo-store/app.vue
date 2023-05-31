@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { getSessionContext } from "@shopware-pwa/api-client";
+import { SessionContext } from "@shopware-pwa/types";
+const { apiInstance } = useShopwareContext();
+const { data: sessionContextData } = await useAsyncData(
+  "sessionContext",
+  async () => {
+    return await getSessionContext(apiInstance);
+  }
+);
 /**
  * Init breadcrumbs context
  */
 useBreadcrumbs();
+const route = useRoute();
 
 useHead({
   title: "Shopware Demo store",
@@ -13,13 +23,14 @@ useHead({
 });
 
 const { sessionContext, refreshSessionContext } = useSessionContext();
+useSessionContext(sessionContextData.value as SessionContext);
+
 onBeforeMount(async () => {
-  await refreshSessionContext();
+  // await refreshSessionContext();
   getWishlistProducts();
 });
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
-const route = useRoute();
 const path = computed(() => route.path || '');
 
 useNotifications();
@@ -51,7 +62,7 @@ provide("modal", { modalContent, modalProps, ...modalHandler });
 const isSideMenuOpened = ref(false);
 provide("isSideMenuOpened", isSideMenuOpened);
 
-const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
+const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'transparent');
 const showBreadCrumb = useState<boolean>('showBreadCrumb');
 
 const scrollPos = ref(0);
@@ -106,9 +117,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <NuxtLayout v-if="sessionContext">
+  <NuxtLayout>
     <NuxtLoadingIndicator />
-    <NuxtPage />
+    <NuxtPage v-if="sessionContext"/>
   </NuxtLayout>
 </template>
 

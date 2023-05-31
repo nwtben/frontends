@@ -101,11 +101,12 @@ const onOptionSelectToggle = async ({
   }
 
   await search(searchCriteriaForRequest.value);
-  // await router.push({
-  //   query: {
-  //     ...filtersToQuery(searchCriteriaForRequest.value),
-  //   },
-  // });
+  await router.push({
+    query: {
+      ...filtersToQuery(searchCriteriaForRequest.value),
+      preventScroll: 1
+    },
+  });
 };
 
 const clearFilters = async () => {
@@ -117,6 +118,7 @@ const clearFilters = async () => {
   await router.push({
     query: {
       ...filtersToQuery(searchCriteriaForRequest.value),
+      preventScroll: 1
     },
   });
 };

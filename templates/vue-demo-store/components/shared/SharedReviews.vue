@@ -9,6 +9,7 @@ import {
 const props = defineProps<{
   product: Product;
   hideCount?: boolean;
+  numberOfReviews?: number;
 }>();
 
 const rating = computed<number>(() =>
@@ -29,6 +30,6 @@ const rating = computed<number>(() =>
         class="w-4 h-4 text-gray-300"
       />
     </div>
-    <span v-if="!hideCount" class="pl-1.5 text-sm">(8)</span>
+    <span v-if="!hideCount" class="pl-1.5 text-sm">({{numberOfReviews}})</span>
   </div>
 </template>
