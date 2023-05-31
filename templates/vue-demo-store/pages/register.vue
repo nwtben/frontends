@@ -128,7 +128,7 @@ useBreadcrumbs([
               :key="salutation.id"
               :value="salutation.id"
             >
-              {{ salutation.displayName }}
+              {{ (salutation.translated as any)?.displayName }}
             </option>
           </select>
           <span
