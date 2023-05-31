@@ -68,7 +68,7 @@ const handleInputMax = (e: any) => {
           <span ref="minHiddenText" class="opacity-0">{{ minValue }}</span>
           <input type="number" class="outline-none absolute top-0 left-0 w-full h-full bg-transparent" :value="minValue" @input="handleInputMin" />
         </span>
-        <span>{{currentCurrency?.symbol ?? ''}}</span>
+        <span class="pl-1">{{currentCurrency?.symbol ?? ''}}</span>
       </div>
       <div class="px-2 shadow-chip border h-8 flex justify-center items-center text-sm" :class="[
         maxError ? 'border-red text-red' : 'border-gray-300 text-gray-900'
@@ -77,7 +77,7 @@ const handleInputMax = (e: any) => {
           <span ref="maxHiddenText" class="opacity-0">{{ maxValue }}</span>
           <input type="number" class="outline-none absolute top-0 left-0 w-full h-full bg-transparent" :value="maxValue" @input="handleInputMax" />
         </span>
-        <span>{{currentCurrency?.symbol ?? ''}}</span>
+        <span class="pl-1">{{currentCurrency?.symbol ?? ''}}</span>
       </div>
     </div>
     <div class="w-full mb-1">
