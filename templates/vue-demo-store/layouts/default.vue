@@ -23,15 +23,16 @@ const { data: footerData } = useAsyncData("mainFooterNavigation", () => {
 provide("swNavigation-footer-navigation", footerData);
 
 // Canonical
-const route = useRoute()
-useHead(() => ({
+const route = useRoute();
+const runtimeConfig = useRuntimeConfig();
+useHead({
   link: [
     {
       rel: 'canonical',
-      href: window.location.origin + route.path,
+      href: runtimeConfig.public.shopwareStoreDomain + route.path,
     },
   ],
-}))
+});
 
 </script>
 <template>
@@ -39,7 +40,7 @@ useHead(() => ({
     <SharedModal />
     <LayoutHeader />
     <LayoutNotifications />
-    <div class="min-h-[50vh] mx-auto">
+    <div class="min-h-[100vh] mx-auto">
       <LayoutBreadcrumbs v-if="showBreadCrumb" />
       <slot />
     </div>
