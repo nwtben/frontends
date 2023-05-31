@@ -21,5 +21,6 @@
   "update_personal_data": "Update personal data",
   "payment_methods": "Payment methods",
   "view_all_available_payment_methods": "View all available payment methods and select a default payment method.",
-  "change": "Change"
+  "change": "Change",
+  "products": "produkter"
 }

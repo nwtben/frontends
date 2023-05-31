@@ -205,7 +205,7 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
         <FunnelIcon class="w-5 h-5 text-gray-500 mr-2"/>
         <span class="text-sm text-gray-700 font-medium">Filter</span>
       </button>
-      <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} articles</span>
+      <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} {{ $t('products') }}</span>
       <div class="flex-1 flex justify-end md:flex-none">
         <SwSelect
           name="language"
