@@ -48,7 +48,7 @@ const restockTime = computed(() => product.value?.restockTime);
         class="text-gray-500 text-lg"
       />
       <div class="flex flex-col">
-        <SharedReviews :product="product" />
+        <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews"/>
         <a class="underline font-medium cursor-pointer">Read reviews</a>
       </div>
     </div>
