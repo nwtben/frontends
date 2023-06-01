@@ -12,7 +12,7 @@ const { breadcrumbs } = useBreadcrumbs();
           to="/"
           class="text-gray-500 inline-flex items-center text-xs md:text-sm font-medium"
         >
-          Home
+          {{ $t('home') }}
         </nuxt-link>
         <span class="font-medium ml-2 w-5 h-5 text-center text-sm text-gray-300">/</span>
       </li>
