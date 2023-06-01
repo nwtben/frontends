@@ -79,7 +79,7 @@ const getSelectPropertiesName = (name: string) => {
       <div class="mb-6">
         <div class="flex justify-between mb-4">
           <h2 class="text-base font-medium ">{{ optionGroup.name }}: {{ getSelectPropertiesName(optionGroup.name) }}</h2>
-          <a v-if="optionGroup.id === '75f353b589d04bf48e8a9ab1f5422b0e'" class="underline font-medium underline-offset-4 cursor-pointer">Size guide</a>
+          <!-- <a v-if="optionGroup.id === '75f353b589d04bf48e8a9ab1f5422b0e'" class="underline font-medium underline-offset-4 cursor-pointer">Size guide</a> -->
         </div>
         <RadioGroup v-if="optionGroup.displayType === 'color'" v-model="selectedVariant[optionGroup.name]">
           <RadioGroupLabel class="sr-only"> Choose a color </RadioGroupLabel>
