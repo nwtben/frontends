@@ -17,7 +17,7 @@
     "@nuxtjs/robots": "^3.0.0",
     "@shopware-pwa/api-client": "canary",
     "@shopware-pwa/cms-base": "canary",
-    "@shopware-pwa/composables-next": "^0.0.0-canary-20230414121154",
+    "@shopware-pwa/composables-next": "canary",
     "@shopware-pwa/helpers-next": "canary",
     "@shopware-pwa/nuxt3-module": "canary",
     "@shopware-pwa/types": "canary",
