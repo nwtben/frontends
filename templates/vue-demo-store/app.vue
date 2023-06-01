@@ -1,13 +1,4 @@
 <script setup lang="ts">
-import { getSessionContext } from "@shopware-pwa/api-client";
-import { SessionContext } from "@shopware-pwa/types";
-const { apiInstance } = useShopwareContext();
-const { data: sessionContextData } = await useAsyncData(
-  "sessionContext",
-  async () => {
-    return await getSessionContext(apiInstance);
-  }
-);
 /**
  * Init breadcrumbs context
  */
@@ -23,11 +14,13 @@ useHead({
 });
 
 const { sessionContext, refreshSessionContext } = useSessionContext();
-useSessionContext(sessionContextData.value as SessionContext);
+await useAsyncData(
+  "sessionContext",
+  async () => {
+    return await refreshSessionContext();
+  }
+);
 
-onBeforeMount(async () => {
-  await refreshSessionContext();
-});
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
 
