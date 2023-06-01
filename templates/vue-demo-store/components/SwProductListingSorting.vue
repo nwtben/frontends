@@ -32,6 +32,7 @@ defineProps<{
 
 const route = useRoute();
 const router = useRouter();
+const loading = ref<boolean>();
 
 const filterMenuOpened = inject("filterMenuOpened", ref(false));
 
@@ -113,6 +114,12 @@ const onOptionSelectToggle = async ({
     } else {
       sidebarSelectedFilters[code]?.add(value);
     }
+  }
+  try {
+    loading.value = true;
+    await search(searchCriteriaForRequest.value);
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -286,8 +293,8 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
               </div>
             </div>
             <div class="container py-4">
-              <button class="w-full text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm" @click="handleSearch">
-                Show products
+              <button class="w-full text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm disabled:opacity-50" :disabled="loading" @click="handleSearch">
+                {{ $t('show_products', [getTotal]) }}
               </button>
             </div>
           </DialogPanel>
