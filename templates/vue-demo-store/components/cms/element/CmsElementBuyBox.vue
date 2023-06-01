@@ -41,46 +41,71 @@ const restockTime = computed(() => product.value?.restockTime);
 </script>
 <template>
   <div class="md:max-w-[488px] md:ml-auto">
-    <h3 class="font-semibold">{{ getProductName({ product }) }}</h3>
+    <h3 class="font-semibold">
+      {{ getProductName({ product }) }}
+    </h3>
     <div class="flex justify-between mt-2 mb-6">
       <SharedProductPrice
         :product="product"
         class="text-gray-500 text-lg"
       />
       <div class="flex flex-col">
-        <SharedReviews :product="product" />
-        <a class="underline font-medium cursor-pointer">Read reviews</a>
+        <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews"/>
+        <a class="underline font-medium cursor-pointer">{{ $t('read_reviews') }}</a>
       </div>
     </div>
-    <SwVariantConfigurator :product="product" @change="changeVariant" :allowRedirect="true" />
+    <SwVariantConfigurator
+      :product="product"
+      :allow-redirect="true"
+      @change="changeVariant"
+    />
     <div class="flex gap-3">
-      <CheckIcon class="text-green-500 h-6 w-6"/> 
+      <CheckIcon class="text-green-500 h-6 w-6" />
       <div>
-        <p class="text-lg font-medium mb-2">{{product.stock}} in stock</p>
-        <p class="text-base text-gray-500">1 day delivery (Order before 3.30 pm)</p>
+        <p class="text-lg font-medium mb-2">
+          {{ product.stock }} in stock
+        </p>
+        <p class="text-base text-gray-500">
+          1 day delivery (Order before 3.30 pm)
+        </p>
       </div>
     </div>
-    <SwProductAddToCart class="mt-6" :product="product" />
+    <SwProductAddToCart
+      class="mt-6"
+      :product="product"
+    />
     <article class="mt-6 flex flex-col gap-4">
       <div class="flex">
         <TruckIcon class="h-6 w-6 mr-3" />
         <div class="flex-1">
-          <h6 class="text-gray-900 mb-2">Easy shipping</h6>
-          <p class="text-gray-500">You'll receive dispatch confirmation and an arrival date</p>
+          <h6 class="text-gray-900 mb-2">
+            {{ $t('easy_shipping') }}
+          </h6>
+          <p class="text-gray-500">
+            You'll receive dispatch confirmation and an arrival date
+          </p>
         </div>
       </div>
       <div class="flex">
         <ArrowsRightLeftIcon class="h-6 w-6 mr-3" />
         <div class="flex-1">
-          <h6 class="text-gray-900 mb-2">Changed your mind?</h6>
-          <p class="text-gray-500">We offer free returns within 30 days</p>
+          <h6 class="text-gray-900 mb-2">
+            Changed your mind?
+          </h6>
+          <p class="text-gray-500">
+            We offer free returns within 30 days
+          </p>
         </div>
       </div>
       <div class="flex">
         <LockClosedIcon class="h-6 w-6 mr-3" />
         <div class="flex-1">
-          <h6 class="text-gray-900 mb-2">Safety</h6>
-          <p class="text-gray-500">It carefully packaged with a personal touch</p>
+          <h6 class="text-gray-900 mb-2">
+            {{ $t('safety') }}
+          </h6>
+          <p class="text-gray-500">
+            It carefully packaged with a personal touch
+          </p>
         </div>
       </div>
     </article>

@@ -26,12 +26,10 @@ const { sessionContext, refreshSessionContext } = useSessionContext();
 useSessionContext(sessionContextData.value as SessionContext);
 
 onBeforeMount(async () => {
-  // await refreshSessionContext();
-  getWishlistProducts();
+  await refreshSessionContext();
 });
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
-const path = computed(() => route.path || '');
 
 useNotifications();
 useAddress();
@@ -40,6 +38,8 @@ onMounted(() => {
   refreshCart();
   getWishlistProducts();
 });
+
+const path = computed(() => route.path || '');
 
 const isSidebarOpen = ref(false);
 provide("isSidebarOpen", isSidebarOpen);
