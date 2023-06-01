@@ -78,23 +78,25 @@ const setDefaultBillingAddress = async (id: string) => {
 <template>
   <section class="flex flex-col space-y-10 mb-24">
     <section>
-      <h3 class="mb-4">Addresses</h3>
+      <h3 class="mb-4">
+        {{ $t('address') }}
+      </h3>
       <p class="text-base">
-        View your current default addresses or add new ones.
+        {{ $t('view_your_current_default_address') }}
       </p>
     </section>
     <section>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
         <div class="flex flex-col">
-          <h6>Billing address</h6>
+          <h6>{{ $t('billing_address') }}</h6>
           <SharedCard class="flex-1">
             <template #content>
               <p class="text-base md:text-sm">
                 {{ userDefaultBillingAddress?.firstName }}
-                {{ userDefaultBillingAddress?.lastName }}<br />
-                {{ userDefaultBillingAddress?.street }}<br />
+                {{ userDefaultBillingAddress?.lastName }}<br>
+                {{ userDefaultBillingAddress?.street }}<br>
                 {{ userDefaultBillingAddress?.zipcode }}
-                {{ userDefaultBillingAddress?.city }},<br />
+                {{ userDefaultBillingAddress?.city }},<br>
                 {{
                   getTranslatedProperty(
                     userDefaultBillingAddress?.country,
@@ -106,24 +108,27 @@ const setDefaultBillingAddress = async (id: string) => {
           </SharedCard>
         </div>
         <div class="flex flex-col">
-          <h6>Shipping address</h6>
+          <h6>{{ $t('shipping_address') }}</h6>
           <SharedCard class="flex-1">
             <template #content>
               <p
-                class="text-base md:text-sm"
                 v-if="
                   userDefaultShippingAddress?.id ===
-                  userDefaultBillingAddress?.id
+                    userDefaultBillingAddress?.id
                 "
+                class="text-base md:text-sm"
               >
-                Same as billing address.
+                {{ $t('same_as_billing_address') }}
               </p>
-              <p class="text-base md:text-sm" v-else>
+              <p
+                v-else
+                class="text-base md:text-sm"
+              >
                 {{ userDefaultShippingAddress?.firstName }}
-                {{ userDefaultShippingAddress?.lastName }}<br />
-                {{ userDefaultShippingAddress?.street }}<br />
+                {{ userDefaultShippingAddress?.lastName }}<br>
+                {{ userDefaultShippingAddress?.street }}<br>
                 {{ userDefaultShippingAddress?.zipcode }}
-                {{ userDefaultShippingAddress?.city }},<br />
+                {{ userDefaultShippingAddress?.city }},<br>
                 {{
                   getTranslatedProperty(
                     userDefaultShippingAddress?.country,
@@ -139,24 +144,27 @@ const setDefaultBillingAddress = async (id: string) => {
         class="text-base font-medium text-white bg-gray-800 shadow-sm py-2 px-5"
         @click="router.push('/account/address/new')"
       >
-        Add address
+        {{ $t('add_address') }}
       </button>
     </section>
     <section>
       <h6 class="text-xl font-bold md:text-2xl md:font-normal">
-        All addresses
+        {{ $t('all_addresses') }}
       </h6>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div v-for="customerAddress of customerAddresses" class="flex flex-col">
+        <div
+          v-for="customerAddress of customerAddresses"
+          class="flex flex-col"
+        >
           <SharedCard class="flex-1">
             <template #content>
               <div class="flex flex-col h-full">
                 <p class="text-base md:text-sm">
                   {{ customerAddress?.firstName }} {{ customerAddress?.lastName
-                  }}<br />
-                  {{ customerAddress?.street }}<br />
+                  }}<br>
+                  {{ customerAddress?.street }}<br>
                   {{ customerAddress?.zipcode }}
-                  {{ customerAddress?.city }},<br />
+                  {{ customerAddress?.city }},<br>
                   {{ getTranslatedProperty(customerAddress?.country, "name") }}
                 </p>
                 <div class="flex-1 flex flex-col mt-4 gap-3 justify-end">
@@ -165,7 +173,7 @@ const setDefaultBillingAddress = async (id: string) => {
                       class="inline hover:bg-gray-50 border border-gray-300 px-3 py-2 text-gray-700 text-xs font-medium"
                       @click="setDefaultShippingAddress(customerAddress.id)"
                     >
-                      Make this shipping address
+                      {{ $t('make_shipping_address') }}
                     </button>
                   </div>
                   <div v-if="defaultBillingAddressId !== customerAddress.id">
@@ -173,7 +181,7 @@ const setDefaultBillingAddress = async (id: string) => {
                       class="inline hover:bg-gray-50 border border-gray-300 px-3 py-2 text-gray-700 text-xs font-medium"
                       @click="setDefaultBillingAddress(customerAddress.id)"
                     >
-                      Make this billing address
+                      {{ $t('make_billing_address') }}
                     </button>
                   </div>
                   <div class="flex gap-3">
@@ -181,13 +189,13 @@ const setDefaultBillingAddress = async (id: string) => {
                       class="text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
                       @click="router.push(`/account/address/${customerAddress.id}`)"
                     >
-                      Edit
+                      {{ $t('edit') }}
                     </button>
                     <button
                       class="text-sm font-medium text-gray-700 bg-gray-100 shadow-sm py-2 px-4"
                       @click="() => removeAddress(customerAddress.id)"
                     >
-                      Delete
+                      {{ $t('delete') }}
                     </button>
                   </div>
                 </div>

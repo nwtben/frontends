@@ -101,31 +101,48 @@ export default {
 
 <template>
   <div class="container">
-    <h2 class="mt-16 mb-12 font-extrabold text-3xl md:font-normal md:text-4xl">Shopping Cart</h2>
-    <div class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20" v-if="hasItems">
-      <SharedProductOrders :enableActions="true" class="flex-1" :lineItems="cartItems || []" />
+    <h2 class="mt-16 mb-12 font-extrabold text-3xl md:font-normal md:text-4xl">
+      {{ $t('shopping_cart') }}
+    </h2>
+    <div
+      v-if="hasItems"
+      class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20"
+    >
+      <SharedProductOrders
+        :enable-actions="true"
+        class="flex-1"
+        :line-items="cartItems || []"
+      />
       <aside class="w-full md:w-1/2 md:max-w-[469px]">
-        <SharedOrdersSummary :showTitle="true">
+        <SharedOrdersSummary :show-title="true">
           <template #action>
             <RouterLink
               class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
               to="/checkout"
               data-testid="cart-checkout-link"
             >
-              Checkout
+              {{ $t('checkout') }}
             </RouterLink>
           </template>
         </SharedOrdersSummary>
         <div class="mt-6">
-          <SharedValueProposition :isColumn="true" />
+          <SharedValueProposition :is-column="true" />
         </div>
       </aside>
     </div>
-    <h3 v-else class="m-10 text-center text-2xl font-medium text-gray-900">
-      Your cart is empty!
+    <h3
+      v-else
+      class="m-10 text-center text-2xl font-medium text-gray-900"
+    >
+      {{ $t('your_cart_empty') }}
     </h3>
-    <div class="mb-27.5 md:mb-47" v-if="defaultConfig.data?.products?.length">
-      <h4 class="text-lg md:text-2xl text-center mb-6 md:mb-8">Other products you might like</h4>
+    <div
+      v-if="defaultConfig.data?.products?.length"
+      class="mb-27.5 md:mb-47"
+    >
+      <h4 class="text-lg md:text-2xl text-center mb-6 md:mb-8">
+        {{ $t('other_products') }}
+      </h4>
       <CmsElementProductSlider :content="defaultConfig" />
     </div>
   </div>
