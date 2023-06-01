@@ -36,10 +36,17 @@ export default {
 <template>
   <section class="flex flex-col space-y-10 mb-24">
     <section>
-      <h3 class="mb-4">Orders</h3>
-      <p class="text-base">Your recent orders:</p>
+      <h3 class="mb-4">
+        {{ $t('orders') }}
+      </h3>
+      <p class="text-base">
+        {{ $t('your_recent_orders') }}:
+      </p>
     </section>
-    <div v-if="isLoading" class="w-full h-full">
+    <div
+      v-if="isLoading"
+      class="w-full h-full"
+    >
       <div class="flex animate-pulse flex-col items-top h-full space-y-5">
         <div class="w-full flex flex-row space-x-6">
           <div class="w-1/6 bg-gray-300 h-15 rounded-md" />
@@ -54,7 +61,10 @@ export default {
         v-if="!orders?.length"
         text="You currently have no order history."
       />
-      <SharedOrders v-else :orders="orders || []" />
+      <SharedOrders
+        v-else
+        :orders="orders || []"
+      />
     </section>
   </section>
 </template>

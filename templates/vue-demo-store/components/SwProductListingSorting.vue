@@ -210,9 +210,9 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
     <div class="flex gap-6 text-sm justify-between lg:justify-end mt-4 mb-4 lg:mb-6 w-full">
       <button class="flex-1 md:flex-none flex block lg:hidden" @click="filterMenuOpened = true">
         <FunnelIcon class="w-5 h-5 text-gray-500 mr-2"/>
-        <span class="text-sm text-gray-700 font-medium">Filter</span>
+        <span class="text-sm text-gray-700 font-medium">{{ $t('filter') }}</span>
       </button>
-      <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} {{ $t('products') }}</span>
+      <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} {{ $t('articles') }}</span>
       <div class="flex-1 flex justify-end md:flex-none">
         <SwSelect
           name="language"
@@ -234,9 +234,9 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
             </span>
             <XMarkIcon class="ml-3 w-5 h-5 cursor-pointer text-gray-500" @click="onOptionSelectToggle({code: filter.code, value: filter.id})" />
           </div>
-          <button class="text-gray-900 py-2 underline font-medium text-base" 
+          <button class="text-gray-900 py-2 underline font-medium text-base"
             @click="invokeCleanFilters">
-            Clear all
+            {{ $t('clear_all') }}
           </button>
         </div>
 
@@ -271,10 +271,10 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
           <DialogPanel class="flex flex-col fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div class="container py-6 flex items-center justify-between">
               <div>
-                <h4 class="font-medium text-lg">Filter</h4>
+                <h4 class="font-medium text-lg">{{ $t('filter') }}</h4>
               </div>
               <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 outline-none" @click="close">
-                <span class="sr-only">Close menu</span>
+                <span class="sr-only">{{ $t('close_menu') }}</span>
                 <XMarkIcon class="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
