@@ -18,6 +18,16 @@ export default defineNuxtConfig({
           as: "style",
           onload: "this.onload=null;this.rel='stylesheet'"
         },
+        {
+          rel: "preload",
+          as: "image",
+          href: "https://shopware.nwtsaas.com/media/6c/6f/0d/1682437203/hero-mobile-511745144.jpg",
+        },
+        {
+          rel: "preload",
+          as: "image",
+          href: "https://shopware.nwtsaas.com/media/e1/35/d3/1682437171/hero-desktop-511745398.jpg",
+        },
       ],
       /*noscript: {
         link: [
