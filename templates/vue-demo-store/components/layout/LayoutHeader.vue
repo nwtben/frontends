@@ -10,8 +10,12 @@ const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const { locale } = useI18n({ useScope: 'global' });
-const { fetchLang, currentLanguage, languages, syncLanguageData } = useLanguage();
+const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
 const { sessionContext } = useSessionContext();
+
+onBeforeMount(async () => {
+  await fetchLang();
+});
 
 watch(currentLanguage, () => {
   locale.value = currentLanguage.value?.locale?.code || '';
@@ -20,9 +24,6 @@ watch(currentLanguage, () => {
 watch(
   () => sessionContext.value?.salesChannel?.languageId,
   async (newLanguageId) => {
-    if (!languages.value.length) {
-      await fetchLang();
-    }
     if (newLanguageId) {
       await syncLanguageData(newLanguageId!);
     }
