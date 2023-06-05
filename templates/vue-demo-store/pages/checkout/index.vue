@@ -20,7 +20,7 @@ definePageMeta({
   layout: "checkout",
 });
 
-const isSameBillingAndShipping = ref();
+const isSameBillingAndShipping = ref(true);
 const isDifferentBillingAndShipping = ref();
 const submitBtn = ref();
 const isAgree = ref();
@@ -113,13 +113,13 @@ const isUserSession = computed(() => isLoggedIn.value || isGuestSession.value);
 const state = reactive<any>({
   salutationId: "",
   firstName: "",
-  fullName: "",
   lastName: "",
   email: "",
   guest: true,
+  password: "",
   shippingAddress: {
+    salutationId: "",
     firstName: "",
-    fullName: "",
     lastName: "",
     street: "",
     zipcode: "",
@@ -128,8 +128,8 @@ const state = reactive<any>({
     phoneNumber: ""
   },
   billingAddress: {
+    salutationId: "",
     firstName: "",
-    fullName: "",
     lastName: "",
     street: "",
     zipcode: "",
@@ -142,9 +142,9 @@ const state = reactive<any>({
 });
 
 const rules = computed(() => ({
-  salutationId: {
-    required,
-  },
+  // salutationId: {
+  //   required,
+  // },
   firstName: {
     required,
     minLength: minLength(3),
@@ -160,16 +160,16 @@ const rules = computed(() => ({
   agree: {
     checked: (value: any) => value === true
   },
-  // password: {
-  //   required: requiredIf(() => {
-  //     return !state.guest;
-  //   }),
-  //   minLength: minLength(8),
-  // },
+  password: {
+    required: requiredIf(() => {
+      return !state.guest;
+    }),
+    minLength: minLength(8),
+  },
   billingAddress: {
-    salutationId: {
-      required,
-    },
+    // salutationId: {
+    //   required,
+    // },
     street: {
       required,
       minLength: minLength(3),
@@ -185,9 +185,9 @@ const rules = computed(() => ({
     },
   },
   shippingAddress: {
-    salutationId: {
-      required,
-    },
+    // salutationId: {
+    //   required,
+    // },
     street: {
       required,
       minLength: minLength(3),
@@ -272,22 +272,21 @@ async function invokeLogout() {
   await push("/");
 }
 
-watch(() => state.shippingAddress.fullName, (fullName) => {
-  const [firstName, ...lastNameArr] = fullName.trim().split(' ');
-  state.shippingAddress.firstName = firstName;
-  state.shippingAddress.lastName = lastNameArr.join(' ');
+watch(getSalutations, (salutations) => {
+  if (!salutations?.length) return;
+  const id = salutations?.[salutations.length -1]?.id;
+  if (id) {
+    state.salutationId = id;
+    state.billingAddress.salutationId = id;
+    state.shippingAddress.salutationId = id;
+  }
 });
 
-watch(() => state.billingAddress.fullName, (fullName) => {
-  const [firstName, ...lastNameArr] = fullName.trim().split(' ');
-  state.billingAddress.firstName = firstName;
-  state.billingAddress.lastName = lastNameArr.join(' ');
-});
-
-watch(() => state.fullName, (fullName) => {
-  const [firstName, ...lastNameArr] = fullName.trim().split(' ');
-  state.firstName = firstName;
-  state.lastName = lastNameArr.join(' ');
+watch(() => state.shippingAddress, (value) => {
+  if (!isSameBillingAndShipping.value) return;
+  state.billingAddress = {...value};
+}, {
+  deep: true
 });
 
 watch(isSameBillingAndShipping, (value) => {
@@ -296,7 +295,6 @@ watch(isSameBillingAndShipping, (value) => {
   } else {
     state.billingAddress = {
       firstName: "",
-      fullName: "",
       lastName: "",
       street: "",
       zipcode: "",
@@ -305,7 +303,7 @@ watch(isSameBillingAndShipping, (value) => {
       phoneNumber: ""
     }
   }
-})
+});
 
 const handleSubmit = () => {
   if (!isUserSession) {
@@ -313,6 +311,14 @@ const handleSubmit = () => {
   } else {
     invokeSubmit();
   }
+}
+
+const login = () => {
+  modal.open('AccountLoginForm')
+}
+
+const handleChangeGuest = (e: any) => {
+  state.guest = !e.target.checked;
 }
 
 </script>
@@ -341,103 +347,103 @@ const handleSubmit = () => {
               <button
                 type="button"
                 class="flex items-center justify-center px-5 py-2 text-base font-medium text-white shadow-sm bg-gray-800"
-              >
-                Log in to your account
+                @click="login"
+                >
+                {{ $t('log_in_to_your_account') }}
               </button>
             </div>
-            <span class="text-base text-dark-variant">or fill the details below.</span>
+            <span class="text-base text-dark-variant">{{ $t('or_fill_the_details_below') }}</span>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Contact information</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('personal_information') }}</h6>
               <div class="flex flex-col gap-6">
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="email-address">Email address</label>
-                  <input
-                    v-model="state.email"
-                    id="email-address"
-                    name="email"
-                    type="email"
-                    autocomplete="email"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                  <div class="flex flex-col md:flex-row gap-6 mb-4">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="firstName">{{ $t('first_name') }}</label>
+                      <input
+                        v-model="state.firstName"
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        autocomplete="firstName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="lastName">{{  $t('last_name') }}</label>
+                      <input
+                        v-model="state.lastName"
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        autocomplete="lastName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+                  <SharedCheckbox 
+                    :content="$t('create_customer_account')"
+                    :value="!state.guest"
+                    @change="handleChangeGuest"
                   />
                 </div>
-                <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="salutation">Salutation</label>
-                  <select
-                    id="salutation"
-                    v-model="state.salutationId"
-                    required
-                    name="salutation"
-                    autocomplete="salutation"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                    data-testid="checkout-pi-country-input"
-                    @blur="$v.salutationId.$touch()"
-                  > 
-                    <option disabled selected value="">
-                      Choose salutation...
-                    </option>
-                    <option
-                      v-for="salutation in getSalutations"
-                      :key="salutation.id"
-                      :value="salutation.id"
-                    >
-                      {{ (salutation.translated as any)?.displayName }}
-                    </option>
-                  </select>
-                </div>
-                <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="fullname">Full name</label>
-                  <input
-                    v-model="state.fullName"
-                    id="fullname"
-                    name="fullname"
-                    type="text"
-                    autocomplete="fullname"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                  />
+                <div class="flex flex-col md:flex-row gap-6">
+                  <div class="flex-1">
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="email-address">{{ $t('email_address') }}</label>
+                    <input
+                      v-model="state.email"
+                      id="email-address"
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
+                  <div class="flex-1">
+                    <label v-if="!state.guest" class="capitalize text-sm font-medium text-gray-700 mb-1" for="password">{{ $t('password') }}</label>
+                    <input
+                      v-if="!state.guest"
+                      v-model="state.password"
+                      id="password"
+                      name="password"
+                      type="password"
+                      autocomplete="password"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
             <div class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping information</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_information') }}</h6>
               <div class="flex flex-col gap-6">
-                <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="shipping-salutation">Salutation</label>
-                  <select
-                    id="shipping-salutation"
-                    v-model="state.shippingAddress.salutationId"
-                    required
-                    name="shipping-salutation"
-                    autocomplete="shipping-salutation"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                    data-testid="checkout-pi-country-input"
-                    @blur="$v.shippingAddress.salutationId.$touch()"
-                  > 
-                    <option disabled selected value="">
-                      Choose salutation...
-                    </option>
-                    <option
-                      v-for="salutation in getSalutations"
-                      :key="salutation.id"
-                      :value="salutation.id"
-                    >
-                      {{ (salutation.translated as any)?.displayName }}
-                    </option>
-                  </select>
+                <div class="flex flex-col md:flex-row gap-6">
+                  <div class="flex-1">
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="shipping-firstName">{{ $t('first_name' )}}</label>
+                    <input
+                      v-model="state.shippingAddress.firstName"
+                      id="shipping-firstName"
+                      name="shipping-firstName"
+                      type="text"
+                      autocomplete="shipping-firstName"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
+                  <div class="flex-1">
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="shipping-lastName">{{ $t('last_name') }}</label>
+                    <input
+                      v-model="state.shippingAddress.lastName"
+                      id="shipping-lastName"
+                      name="shipping-lastName"
+                      type="text"
+                      autocomplete="shipping-lastName"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="shipping-fullname">Full name</label>
-                  <input
-                    v-model="state.shippingAddress.fullName"
-                    id="shipping-fullname"
-                    name="shipping-fullname"
-                    type="text"
-                    autocomplete="shipping-fullname"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                  />
-                </div>
-                <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="address">Address</label>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('address') }}</label>
                   <input
                     v-model="state.shippingAddress.street"
                     id="address"
@@ -449,7 +455,7 @@ const handleSubmit = () => {
                 </div>
                 <div class="flex gap-4">
                   <div class="w-1/3">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">Zip-code</label>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
                     <input
                       v-model="state.shippingAddress.zipcode"
                       id="zipcode"
@@ -460,7 +466,7 @@ const handleSubmit = () => {
                     />
                   </div>
                   <div class="w-1/3">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">City</label>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
                     <input
                       v-model="state.shippingAddress.city"
                       id="city"
@@ -471,17 +477,17 @@ const handleSubmit = () => {
                     />
                   </div>
                   <div class="w-1/3">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">Country</label>
-                    <select
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
+                    <SwSelect
+                      :compact="false"
                       id="country"
                       v-model="state.shippingAddress.countryId"
                       required
                       name="country"
                       autocomplete="country-name"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                       data-testid="checkout-pi-country-input"
                       @blur="$v.shippingAddress.countryId.$touch()"
-                    > 
+                    >
                       <option disabled selected value="">
                         Choose country...
                       </option>
@@ -492,11 +498,11 @@ const handleSubmit = () => {
                       >
                         {{ country.translated.name }}
                       </option>
-                    </select>
+                    </SwSelect>
                   </div>
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="phone">Phone number (Optional)</label>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
                   <input
                     v-model="state.shippingAddress.phoneNumber"
                     id="phone"
@@ -506,7 +512,7 @@ const handleSubmit = () => {
                   />
                 </div>
                 <SharedCheckbox 
-                  :content="'Use same for billing  information'"
+                  :content="$t('use_same_for_billing_information')"
                   v-model="isSameBillingAndShipping"
                 />
               </div>
@@ -516,43 +522,32 @@ const handleSubmit = () => {
               <div>
                 <h6 class="text-lg font-medium text-dark-primary mb-4">Billing information</h6>
                 <div class="flex flex-col gap-6">
-                  <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="billing-salutation">Salutation</label>
-                    <select
-                      id="billing-salutation"
-                      v-model="state.billingAddress.salutationId"
-                      required
-                      name="billing-salutation"
-                      autocomplete="billing-salutation"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                      data-testid="checkout-pi-country-input"
-                      @blur="$v.billingAddress.salutationId.$touch()"
-                    > 
-                      <option disabled selected value="">
-                        Choose salutation...
-                      </option>
-                      <option
-                        v-for="salutation in getSalutations"
-                        :key="salutation.id"
-                        :value="salutation.id"
-                      >
-                        {{ (salutation.translated as any)?.displayName }}
-                      </option>
-                    </select>
+                  <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-firstName">{{ $t('first_name') }}</label>
+                      <input
+                        v-model="state.billingAddress.firstName"
+                        id="billing-firstName"
+                        name="billing-firstName"
+                        type="text"
+                        autocomplete="billing-firstName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-lastName">{{ $t('last_name') }}</label>
+                      <input
+                        v-model="state.billingAddress.lastName"
+                        id="billing-lastName"
+                        name="billing-lastName"
+                        type="text"
+                        autocomplete="billing-lastName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
                   </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="billing-fullname">Full name</label>
-                    <input
-                      v-model="state.billingAddress.fullName"
-                      id="billing-fullname"
-                      name="billing-fullname"
-                      type="text"
-                      autocomplete="billing-fullname"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="address">Address</label>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('address') }}</label>
                     <input
                       v-model="state.billingAddress.street"
                       id="address"
@@ -564,7 +559,7 @@ const handleSubmit = () => {
                   </div>
                   <div class="flex gap-4">
                     <div class="w-1/3">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">Zip-code</label>
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
                       <input
                         v-model="state.billingAddress.zipcode"
                         id="zipcode"
@@ -575,7 +570,7 @@ const handleSubmit = () => {
                       />
                     </div>
                     <div class="w-1/3">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">City</label>
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
                       <input
                         v-model="state.billingAddress.city"
                         id="city"
@@ -586,14 +581,14 @@ const handleSubmit = () => {
                       />
                     </div>
                     <div class="w-1/3">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">Country</label>
-                      <select
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
+                      <SwSelect
+                        :compact="false"
                         id="country"
                         v-model="state.billingAddress.countryId"
                         required
                         name="country"
                         autocomplete="country-name"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                         data-testid="checkout-pi-country-input"
                         @blur="$v.billingAddress.countryId.$touch()"
                       > 
@@ -607,11 +602,11 @@ const handleSubmit = () => {
                         >
                           {{ country.translated.name }}
                         </option>
-                      </select>
+                      </SwSelect>
                     </div>
                   </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="phone">Phone number (Optional)</label>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
                     <input
                       v-model="state.shippingAddress.phoneNumber"
                       id="phone"
@@ -625,7 +620,7 @@ const handleSubmit = () => {
               <div class="border-b border-gray-200"></div>
             </template>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping method</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{  $t('shipping_method') }}</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <li
                   v-for="singleShippingMethod in shippingMethods"
@@ -660,7 +655,7 @@ const handleSubmit = () => {
             </div>
             <div class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Payment method</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('payment_method') }}</h6>
               <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
                 <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
                   <div class="w-4 bg-gray-300 h-4 rounded-full" />
@@ -715,7 +710,7 @@ const handleSubmit = () => {
             </div>
             <div class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Terms and conditions</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
               <SharedCheckbox v-model="state.agree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
             <button ref="submitBtn" type="submit" class="hidden">submit</button>
@@ -726,17 +721,17 @@ const handleSubmit = () => {
             class="flex flex-col gap-10"
           >
             <div class="flex gap-2 items-center">
-              <span class="text-base text-dark-variant">You are logged in as {{user?.firstName}} {{user?.lastName}}. Not you? </span>
+              <span class="text-base text-dark-variant">{{$t('you_are_logged_in_as', [user?.firstName, user?.lastName]) }}</span>
               <button
                 type="button"
                 class="flex items-center justify-center px-5 py-2 text-base font-medium text-white shadow-sm bg-gray-800"
                 @click="invokeLogout"
               >
-                Log out
+                {{ $t('log_out') }}
               </button>
             </div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping address</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_address') }}</h6>
               <div class="flex flex-col gap-4">
                 <div>
                   <RadioGroup
@@ -789,12 +784,12 @@ const handleSubmit = () => {
                     type="button"
                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
                   >
-                    Add new shipping address
+                    {{ $t('add_new_shipping_address') }}
                   </button>
                 </div>
                 <div>
                   <SharedCheckbox 
-                    :content="'Different billing address'"
+                    :content="$t('different_billing_address')"
                     v-model="isDifferentBillingAndShipping"
                   />
                 </div>
@@ -802,7 +797,7 @@ const handleSubmit = () => {
             </div>
             <div class="border-b border-gray-200"></div>
             <div v-if="isDifferentBillingAndShipping">
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Billing address</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
               <div class="flex flex-col gap-4">
                 <div>
                   <RadioGroup
@@ -853,14 +848,14 @@ const handleSubmit = () => {
                     type="button"
                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
                   >
-                    Add new billing address
+                    {{$t('add_new_billing_address')}}
                   </button>
                 </div>
               </div>
             </div>
             <div v-if="isDifferentBillingAndShipping" class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Shipping method</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_method') }}</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <li
                   v-for="singleShippingMethod in shippingMethods"
@@ -895,7 +890,7 @@ const handleSubmit = () => {
             </div>
             <div class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Payment method</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('payment_method') }}</h6>
               <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
                 <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
                   <div class="w-4 bg-gray-300 h-4 rounded-full" />
@@ -950,13 +945,13 @@ const handleSubmit = () => {
             </div>
             <div class="border-b border-gray-200"></div>
             <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">Terms and conditions</h6>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
               <SharedCheckbox v-model="isAgree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
           </div>
         </div>
         <div class="w-full md:w-1/2 md:max-w-[574px]">
-          <h5 class="text-lg font-medium text-dark-primary mb-4">Order summary</h5>
+          <h5 class="text-lg font-medium text-dark-primary mb-4">{{ $t('order_summary') }}</h5>
           <SharedOrdersSummary :showCartItems="true">
             <template #action>
               <button
@@ -964,7 +959,7 @@ const handleSubmit = () => {
                 :disabled="isLoading.all"
                 @click="handleSubmit"
               >
-                Confirm order
+                {{ $t('confirm_order') }}
               </button>
             </template>
           </SharedOrdersSummary>

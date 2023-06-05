@@ -18,7 +18,7 @@
     <input
       :id="props.id || defaultId"
       type="checkbox"
-      class="cursor-pointer appearance-none h-4 w-4 border border-gray-300 text-gray-900 shrink-0"
+      class="bg-white cursor-pointer appearance-none h-4 w-4 border border-gray-300 text-gray-900 shrink-0"
       :checked="props.modelValue"
       @change="updateValue"
     />

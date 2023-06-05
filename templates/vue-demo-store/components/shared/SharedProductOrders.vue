@@ -11,7 +11,7 @@ const props = defineProps<{
 <template>
   <ul
     :class="{
-      'flex flex-col gap-6 md:gap-10': true,
+      'flex flex-col': true,
       '!gap-0': props.isMiniCart
     }"
   >

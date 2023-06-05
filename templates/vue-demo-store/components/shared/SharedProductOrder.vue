@@ -49,7 +49,7 @@ const removeCartItem = async () => {
 
 </script>
 <template>
-  <li class="relative py-6 border-b border-b-gray-200 last:border-0 flex">
+  <li class="relative py-6 border-b border-b-gray-200 last:border-0 last:pb-0 flex">
     <div
       v-if="lineItem.type == 'product'"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
@@ -75,12 +75,14 @@ const removeCartItem = async () => {
           {{option.group}}: {{option.option}}
         </p>
       </div>
-      <p v-if="!enableActions" class="text-sm text-gray-500">
-        Quantity: {{lineItem.quantity}}
-      </p>
-      <div v-else>
-        <SwQuantitySelector class="!h-[38px] !w-[108px]" v-model="quantity" />
-      </div>
+      <template v-if="lineItem.type === 'product'">
+        <p v-if="!enableActions" class="text-sm text-gray-500">
+          Quantity: {{lineItem.quantity}}
+        </p>
+        <div v-else>
+          <SwQuantitySelector class="!h-[38px] !w-[108px]" v-model="quantity" />
+        </div>
+      </template>
     </div>
     <TrashIcon v-if="enableActions" class="shrink-0 cursor-pointer text-gray-700 ml-auto h-6 w-6" @click="removeCartItem" />
   </li>

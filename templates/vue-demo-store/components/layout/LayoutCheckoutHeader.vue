@@ -11,7 +11,7 @@ import { ChevronLeftIcon } from "@heroicons/vue/20/solid";
     <div class="flex-1">
       <RouterLink class="flex gap-2 items-center" to="/">
         <ChevronLeftIcon class="shrink-0 h-4 w-4"/>
-        <span class="text-[10px] md:text-sm font-medium text-gray-700">CONTINUE SHOPPING</span>
+        <span class="text-[10px] md:text-sm uppercase font-medium text-gray-700">{{ $t('continue_method') }}</span>
       </RouterLink>
     </div>
     <div class="flex-1 flex justify-center">
