@@ -41,6 +41,9 @@ watch(
   () => route.hash,
   hash => {
     currentTabHash.value = hash;
+  },
+  {
+    immediate: true
   }
 )
 </script>
@@ -86,7 +89,7 @@ watch(
       </Disclosure>
     </div>
     <!-- For desktop -->
-    <div class="w-full hidden sm:block">
+    <div id="product-meta" class="w-full hidden sm:block">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
           <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[currentTabHash === tab.href ? 'border-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="currentTabHash === tab.href ? 'page' : undefined">{{ tab.name }}</a>
