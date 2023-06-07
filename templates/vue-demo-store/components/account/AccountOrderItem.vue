@@ -23,6 +23,7 @@ const productOptions = computed(() =>
       :src="getMainImageUrl(orderItem)"
       alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
       class="h-full w-full object-cover object-center"
+      loading="lazy"
     />
   </div>
 

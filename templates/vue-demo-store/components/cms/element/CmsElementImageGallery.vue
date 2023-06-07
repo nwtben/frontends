@@ -85,6 +85,7 @@ const breakpoints = ref({
                 class="w-full h-full object-center object-cover"
                 alt="Product image"
                 @click="changeCover(i)"
+                loading="lazy"
               />
             </div>
           </div>

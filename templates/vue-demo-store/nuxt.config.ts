@@ -21,12 +21,32 @@ export default defineNuxtConfig({
         {
           rel: "preload",
           as: "image",
-          href: "https://shopware.nwtsaas.com/media/6c/6f/0d/1682437203/hero-mobile-511745144.jpg",
+          href: "https://shopware.nwtsaas.com/thumbnail/e1/35/d3/1682437171/hero-desktop-511745398_1920x1920.jpg",
         },
         {
           rel: "preload",
           as: "image",
-          href: "https://shopware.nwtsaas.com/media/e1/35/d3/1682437171/hero-desktop-511745398.jpg",
+          href: "https://shopware.nwtsaas.com/thumbnail/e1/35/d3/1682437171/hero-desktop-511745398_800x800.jpg",
+        },
+        {
+          rel: "preload",
+          as: "image",
+          href: "https://shopware.nwtsaas.com/thumbnail/e1/35/d3/1682437171/hero-desktop-511745398_400x400.jpg",
+        },
+        {
+          rel: "preload",
+          as: "image",
+          href: "https://shopware.nwtsaas.com/thumbnail/6c/6f/0d/1682437203/hero-mobile-511745144_1920x1920.jpg",
+        },
+        {
+          rel: "preload",
+          as: "image",
+          href: "https://shopware.nwtsaas.com/thumbnail/6c/6f/0d/1682437203/hero-mobile-511745144_800x800.jpg",
+        },
+        {
+          rel: "preload",
+          as: "image",
+          href: "https://shopware.nwtsaas.com/thumbnail/6c/6f/0d/1682437203/hero-mobile-511745144_400x400.jpg",
         },
       ],
       /*noscript: {

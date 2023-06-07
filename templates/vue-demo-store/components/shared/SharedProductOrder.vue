@@ -58,6 +58,7 @@ const removeCartItem = async () => {
         :src="getSmallestThumbnailUrl(lineItem.cover)"
         :alt="lineItem.label || ''"
         class="h-full w-full object-cover object-center"
+        loading="lazy"
       />
     </div>
     <div>
