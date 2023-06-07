@@ -38,6 +38,12 @@ const availableStock = computed(() => product.value?.availableStock ?? 0);
 const minPurchase = computed(() => product.value?.minPurchase ?? 0);
 const deliveryTime = computed(() => product.value?.deliveryTime);
 const restockTime = computed(() => product.value?.restockTime);
+
+const scrollToReviews = () => {
+  const temp = document.getElementById('product-meta');
+  temp?.scrollIntoView();
+}
+
 </script>
 <template>
   <div class="md:max-w-[488px] md:ml-auto">
@@ -51,7 +57,8 @@ const restockTime = computed(() => product.value?.restockTime);
       />
       <div class="flex flex-col">
         <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews"/>
-        <a class="underline font-medium cursor-pointer">{{ $t('read_reviews') }}</a>
+        <a :href="'#reviews'"
+          @click="scrollToReviews" class="underline font-medium cursor-pointer">{{ $t('read_reviews') }}</a>
       </div>
     </div>
     <SwVariantConfigurator

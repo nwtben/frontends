@@ -24,7 +24,12 @@ const price = computed(() => {
 
 const oldPrice = computed(() => {
   if (props.product) {
-    return getProductCalculatedListingPrice(props.product);
+    const oldPriceTemp = getProductCalculatedListingPrice(props.product);
+    if (oldPriceTemp && price.value && oldPriceTemp > price.value) {
+      return oldPriceTemp
+    } else {
+      return null;
+    }
   } else {
     return null;
   }

@@ -153,7 +153,7 @@ const showNext = computed(() => {
 </script>
 <template>
   <div class="relative">
-    <button v-if="showPrev"  class="hidden md:flex z-40 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
+    <button v-if="showPrev"  class="hidden md:flex z-30 absolute top-1/2 left-0 trasform -translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="prev"><ArrowSmallLeftIcon class="h-5 w-5" /></button>
     <carousel @slide-end="handleEnd" :modelValue="currentSlideIndex" ref="carouselEl" v-bind="settings" :style="carouselStyling">
       <slide :class="{
         'carousel__slide__dynamic__height': props.dynamicHeight
@@ -171,7 +171,7 @@ const showNext = computed(() => {
         />
       </template>
     </carousel>
-    <button v-if="showNext" class="hidden md:flex z-40 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
+    <button v-if="showNext" class="hidden md:flex z-30 absolute top-1/2 right-0 trasform translate-x-1/2 bg-gray-100 rounded-full h-10 w-10 justify-center items-center" @click="next"><ArrowSmallRightIcon class="h-5 w-5" /></button>
   </div>
 </template>
 <style>

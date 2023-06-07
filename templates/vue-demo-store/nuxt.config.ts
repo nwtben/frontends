@@ -71,7 +71,7 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image-edge",
-    "@nuxtjs/robots"
+    "@nuxtjs/robots",
   ],
   image: {
     provider: "vercel",
