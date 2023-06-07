@@ -101,7 +101,7 @@ export default {
 
 <template>
   <div class="container">
-    <h2 class="mt-16 mb-12 font-extrabold text-3xl md:font-normal md:text-4xl">
+    <h2 v-if="hasItems" class="mt-16 mb-12 text-3xl font-normal md:text-4xl">
       {{ $t('shopping_cart') }}
     </h2>
     <div
@@ -130,12 +130,13 @@ export default {
         </div>
       </aside>
     </div>
-    <h3
-      v-else
-      class="m-10 text-center text-2xl font-medium text-gray-900"
-    >
-      {{ $t('your_cart_empty') }}
-    </h3>
+    <div v-else class="mt-40 flex-1 h-full items-center text-center flex flex-col justify-center">
+      <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{ $t('your_cart_empty') }}</h4>
+      <p class="mb-6 text-base text-gray-500">{{  $t('your_cart_empty_desc') }}</p>
+      <div>
+        <nuxt-link to="/" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+      </div>
+    </div>
     <div
       v-if="defaultConfig.data?.products?.length"
       class="mb-27.5 md:mb-47"

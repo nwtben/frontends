@@ -11,18 +11,18 @@ const props = defineProps<{
 
 const information = [
   {
-    title: 'Easy shipping',
-    description: `You'll receive dispatch confirmation and an arrival date`,
+    title: 'easy_shipping',
+    description: `easy_shipping_desc`,
     icon: TruckIcon
   },
   {
-    title: 'Changed your mind?',
-    description: 'We offer free returns within 30 days',
+    title: 'change_your_mind',
+    description: 'change_your_mind_desc',
     icon: ArrowsRightLeftIcon
   },
   {
-    title: 'Safety',
-    description: 'It carefully packaged with a personal touch',
+    title: 'safety',
+    description: 'safety_desc',
     icon: LockClosedIcon
   }
 ];
@@ -37,8 +37,8 @@ const information = [
     <div v-for="item of information" class="flex flex-1" :key="item.title">
       <component :is="item.icon" class="h-6 w-6 mr-3" />
       <div class="flex-1">
-        <h6 class="text-gray-900 mb-2">{{item.title}}</h6>
-        <p class="text-gray-500">{{ item.description }}</p>
+        <h6 class="text-gray-900 mb-2">{{ $t(item.title) }}</h6>
+        <p class="text-gray-500">{{ $t(item.description) }}</p>
       </div>
     </div>
   </div>

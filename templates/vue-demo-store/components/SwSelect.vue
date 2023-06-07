@@ -3,6 +3,15 @@ import {
   ChevronDownIcon
 } from '@heroicons/vue/20/solid';
 
+const props = withDefaults(
+  defineProps<{
+    compact?: boolean;
+  }>(),
+  {
+    compact: true,
+  }
+);
+
 const attrs = useAttrs();
 
 const classes = computed(() => attrs.class);
@@ -20,9 +29,16 @@ const remainingAttrs = computed(()=>{
 
 </script>
 <template>
-  <div :class="['flex', classes || '']">
+  <div 
+    :class="['flex', classes || '', !props.compact && 'border border-gray-300 px-3 py-2']"
+  >
     <select
-      class="appearance-none font-medium bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light text-sm pr-1"
+      props
+      :class="{
+        'appearance-none': true,
+        'font-medium bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light text-sm pr-1': props.compact,
+        'w-full placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm': !props.compact,
+      }"
       v-bind="remainingAttrs"
     >
       <slot></slot>

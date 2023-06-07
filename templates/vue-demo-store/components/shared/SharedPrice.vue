@@ -4,7 +4,7 @@ const props = defineProps<{
   value: number | undefined;
 }>();
 
-const getPrice = computed<string>(() => getFormattedPrice(props.value));
+const getPrice = computed<string>(() => getFormattedPrice(props.value || 0));
 </script>
 
 <template>

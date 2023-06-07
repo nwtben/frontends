@@ -42,7 +42,7 @@ const updateValue = (value: number) => {
 </script>
 
 <template>
-  <div class="flex flex-row h-[50px] w-[5.625rem] shadow-sm border border-gray-300 relative bg-transparent">
+  <div class="flex flex-row h-[50px] w-[5.625rem] bg-white shadow-sm border border-gray-300 relative">
     <button :disabled="props.modelValue === props.min" data-action="decrement" class="pl-1 disabled:opacity-20 h-full outline-none" @click="decrement">
       <MinusIcon class="h-6 w-6" />
     </button>
