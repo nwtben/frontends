@@ -57,6 +57,7 @@ const goToProductDetail =  () => {
         :src="getProductThumbnailUrl(product)"
         :alt="getProductName({ product }) || ''"
         class="cursor-pointer h-full w-full object-cover object-center lg:h-full lg:w-full"
+        loading="lazy"
       />
     </div>
     <div class="mt-4 flex justify-between">

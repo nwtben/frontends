@@ -37,7 +37,7 @@ const invokeLogin = async (): Promise<void> => {
   >
     <div v-if="!isLoggedIn" class="max-w-md w-full space-y-8">
       <div>
-        <img class="mx-auto h-12 w-auto" src="/logo.svg" alt="Logo" />
+        <img class="mx-auto h-12 w-auto" src="/logo.svg" alt="Logo" loading="lazy" />
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>

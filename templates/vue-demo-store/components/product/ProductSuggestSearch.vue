@@ -21,6 +21,7 @@ const { unitPrice, displayFrom } =
         :src="getSmallestThumbnailUrl(product.cover.media)"
         class="h-8 w-8 object-cover"
         alt="Product image"
+        loading="lazy"
       />
     </div>
     <div class="flex items-center justify-between overflow-hidden gap-5 grow">
