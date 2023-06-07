@@ -5,9 +5,15 @@ import {
   useCmsElementImage,
 } from "@shopware-pwa/composables-next";
 
-const props = defineProps<{
-  content: CmsElementImage | CmsElementManufacturerLogo;
-}>();
+const props = withDefaults(
+  defineProps<{
+    content: CmsElementImage | CmsElementManufacturerLogo;
+    loading?: string;
+  }>(),
+  {
+    loading: 'lazy',
+  }
+);
 
 const {
   containerStyle,
@@ -32,8 +38,9 @@ const {
         'absolute inset-0': ['cover', 'stretch'].includes(displayMode),
         'object-cover': displayMode === 'cover',
       }"
-      v-bind="imageAttrs"
       alt="Image link"
+      v-bind="imageAttrs"
+      :loading="props.loading"
     />
   </component>
 </template>
