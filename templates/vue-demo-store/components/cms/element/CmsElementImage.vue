@@ -21,7 +21,7 @@ const {
   imageContainerAttrs,
   imageAttrs,
   imageLink,
-} = useCmsElementImage(props.content);
+}: any = useCmsElementImage(props.content);
 </script>
 <template>
   <!-- TODO: using a tag only works with externalLink, need to improve this element to deal with both internalLink & externalLink -->
@@ -32,15 +32,16 @@ const {
     :style="containerStyle"
     v-bind="imageContainerAttrs"
   >
-    <img
+    <nuxt-img
       :class="{
         'h-full w-full': true,
         'absolute inset-0': ['cover', 'stretch'].includes(displayMode),
         'object-cover': displayMode === 'cover',
       }"
-      alt="Image link"
-      v-bind="imageAttrs"
+      :src="imageAttrs.src"
+      :alt="imageAttrs.alt || 'Image link'"
       :loading="props.loading"
+      preset="standard"
     />
   </component>
 </template>

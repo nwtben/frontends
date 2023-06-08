@@ -5,7 +5,7 @@ specifiers:
   '@heroicons/vue': ^2.0.16
   '@iconify-json/carbon': ^1.1.16
   '@nuxt/devtools': ^0.2.3
-  '@nuxt/image-edge': ^1.0.0-27968280.9739e4d
+  '@nuxt/image': 1.0.0-rc.1
   '@nuxt/types': ^2.16.0
   '@nuxtjs/i18n': 8.0.0-beta.10
   '@nuxtjs/partytown': ^1.3.0
@@ -38,12 +38,12 @@ dependencies:
   '@heroicons/vue': 2.0.18_vue@3.3.4
   '@nuxt/types': 2.16.3
   '@nuxtjs/robots': 3.0.0
-  '@shopware-pwa/api-client': 0.0.0-canary-20230530084408
-  '@shopware-pwa/cms-base': 0.0.0-canary-20230530084408_vue@3.3.4
-  '@shopware-pwa/composables-next': 0.0.0-canary-20230530084408_vue@3.3.4
-  '@shopware-pwa/helpers-next': 0.0.0-canary-20230530084408
-  '@shopware-pwa/nuxt3-module': 0.0.0-canary-20230530084408_vue@3.3.4
-  '@shopware-pwa/types': 0.0.0-canary-20230530084408
+  '@shopware-pwa/api-client': 0.0.0-canary-20230607110245
+  '@shopware-pwa/cms-base': 0.0.0-canary-20230607110245_vue@3.3.4
+  '@shopware-pwa/composables-next': 0.0.0-canary-20230607110245_vue@3.3.4
+  '@shopware-pwa/helpers-next': 0.0.0-canary-20230607110245
+  '@shopware-pwa/nuxt3-module': 0.0.0-canary-20230607110245_vue@3.3.4
+  '@shopware-pwa/types': 0.0.0-canary-20230607110245
   '@unocss/nuxt': 0.50.8_un7f4eatwcepufuafdg5x34ip4
   '@vuelidate/core': 2.0.2_vue@3.3.4
   '@vuelidate/validators': 2.0.2_vue@3.3.4
@@ -55,7 +55,7 @@ dependencies:
 devDependencies:
   '@iconify-json/carbon': 1.1.17
   '@nuxt/devtools': 0.2.5_nuxt@3.3.1+vite@4.1.5
-  '@nuxt/image-edge': 1.0.0-28092818.5c21f4c
+  '@nuxt/image': 1.0.0-rc.1
   '@nuxtjs/i18n': 8.0.0-beta.10_vue@3.3.4
   '@nuxtjs/partytown': 1.3.0
   '@vue/eslint-config-typescript': 11.0.3_g7pbpcymffdvehshewzvqhp4qy
@@ -892,6 +892,12 @@ packages:
     resolution: {integrity: sha512-LxcyMGxwmTh2lY9FwHPGWOHmYFCZvbrFCBZL4FzSSsxsRPuhrYUg/49/0KDfW8tnIEaEHtfmn6+NPN+1DqaNmA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  /@fastify/accept-negotiator/1.1.0:
+    resolution: {integrity: sha512-OIHZrb2ImZ7XG85HXOONLcJWGosv7sIvM2ifAPQVhg9Lv7qdmMBNVaai4QTdyuaqbKM5eO6sLSQOYI7wEQeCJQ==}
+    engines: {node: '>=14'}
+    dev: true
+    optional: true
+
   /@fastify/busboy/1.2.1:
     resolution: {integrity: sha512-7PQA7EH43S0CxcOa9OeAnaeA0oQ+e/DHNPZwSQM9CQHW76jle5+OvLdibRp/Aafs9KXbLhxyjOTkRjWUbQEd3Q==}
     engines: {node: '>=14'}
@@ -1113,8 +1119,8 @@ packages:
       vue-i18n:
         optional: true
     dependencies:
-      '@intlify/message-compiler': 9.3.0-beta.18
-      '@intlify/shared': 9.3.0-beta.18
+      '@intlify/message-compiler': 9.3.0-beta.19
+      '@intlify/shared': 9.3.0-beta.19
       jsonc-eslint-parser: 1.4.1
       source-map: 0.6.1
       vue-i18n: 9.3.0-beta.16_vue@3.3.4
@@ -1146,11 +1152,11 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /@intlify/message-compiler/9.3.0-beta.18:
-    resolution: {integrity: sha512-pN/MOrKjWHJWSRxt0kEdqPcPqHV1pJlJXmvrX8Lv12HRWmiGo1w4lVBz5POS1sych+gk/DK4RvdZZJTmFwrXGA==}
+  /@intlify/message-compiler/9.3.0-beta.19:
+    resolution: {integrity: sha512-5RBn5tMOsWh5FqM65IfEJvfpRS8R0lHEUVNDa2rNc9Y7oGEI7swezlbFqU9Kc5FyHy5Kx2jHtdgFIipDwnIYFQ==}
     engines: {node: '>= 16'}
     dependencies:
-      '@intlify/shared': 9.3.0-beta.18
+      '@intlify/shared': 9.3.0-beta.19
       source-map: 0.6.1
     dev: true
 
@@ -1159,8 +1165,8 @@ packages:
     engines: {node: '>= 14'}
     dev: true
 
-  /@intlify/shared/9.3.0-beta.18:
-    resolution: {integrity: sha512-Z+XZ1YQL/ZudauayZFNbW2PDf4ac7UBs3PCRsBRb2UcAgat3jN9IZYNDyluQBx4Gmko02kvqc8kC5uJmMlGhmQ==}
+  /@intlify/shared/9.3.0-beta.19:
+    resolution: {integrity: sha512-+lhQggrLvlQ/O5OmIYAc9gadcYXMoaDi0Doef+X/f6TLZFr9PTMjOpBWmpwNNHi026e54jckntUn6GzqDtIN4w==}
     engines: {node: '>= 16'}
     dev: true
 
@@ -1180,7 +1186,7 @@ packages:
         optional: true
     dependencies:
       '@intlify/bundle-utils': 4.0.0_vue-i18n@9.3.0-beta.16
-      '@intlify/shared': 9.3.0-beta.18
+      '@intlify/shared': 9.3.0-beta.19
       '@rollup/pluginutils': 4.2.1
       '@vue/compiler-sfc': 3.3.4
       debug: 4.3.4
@@ -1679,21 +1685,22 @@ packages:
       - supports-color
     dev: true
 
-  /@nuxt/image-edge/1.0.0-28092818.5c21f4c:
-    resolution: {integrity: sha512-3bXhj6MsdP+e8Os4lvlCSiBOHNS/1uQ72CEIMB7MD2XRVPoOPdfPCV4SyJbB5e/ZvEHTcsIXA1JHc1O6/qhwoQ==}
+  /@nuxt/image/1.0.0-rc.1:
+    resolution: {integrity: sha512-gCYglIwEuYOdIbcH21RbMfqgQ2jqyd9SJH+GmyvH9M/vBsL7eZ4XEatfZRWa2q1A4DcIMs09/LbQiR3HHy2wZw==}
     engines: {node: ^14.16.0 || >=16.11.0}
     dependencies:
-      '@nuxt/kit': 3.5.2
+      '@nuxt/kit': 3.5.3
       consola: 3.1.0
       defu: 6.1.2
       h3: 1.6.6
       image-meta: 0.1.1
       node-fetch-native: 1.1.1
       ohash: 1.1.2
-      pathe: 1.1.0
+      pathe: 1.1.1
+      std-env: 3.3.3
       ufo: 1.1.2
     optionalDependencies:
-      ipx: 1.1.0
+      ipx: 1.2.0
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -1777,6 +1784,31 @@ packages:
       - rollup
       - supports-color
 
+  /@nuxt/kit/3.5.3:
+    resolution: {integrity: sha512-QzoOGqa1zjKQfg7Y50TrrFAL9DhtIpYYs10gihcM1ISPrn9ROht+VEjqsaMvT+L8JuQbNf8wDYl8qzsdWGU29Q==}
+    engines: {node: ^14.18.0 || >=16.10.0}
+    dependencies:
+      '@nuxt/schema': 3.5.3
+      c12: 1.4.1
+      consola: 3.1.0
+      defu: 6.1.2
+      globby: 13.1.4
+      hash-sum: 2.0.0
+      ignore: 5.2.4
+      jiti: 1.18.2
+      knitwork: 1.0.0
+      mlly: 1.3.0
+      pathe: 1.1.1
+      pkg-types: 1.0.3
+      scule: 1.0.0
+      semver: 7.5.1
+      unctx: 2.3.1
+      unimport: 3.0.7
+      untyped: 1.3.2
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+
   /@nuxt/schema/3.3.1:
     resolution: {integrity: sha512-E8HWzU43rXzqwDTmWduTLHY4xIwRSAUt1LbpuE9IjZ4uJZq5Mbaj4nfhANNsTQGw2c+O+rL81yzAP3i61LEJDw==}
     engines: {node: ^14.18.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0}
@@ -1826,6 +1858,23 @@ packages:
       defu: 6.1.2
       hookable: 5.5.3
       pathe: 1.1.0
+      pkg-types: 1.0.3
+      postcss-import-resolver: 2.0.0
+      std-env: 3.3.3
+      ufo: 1.1.2
+      unimport: 3.0.7
+      untyped: 1.3.2
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+
+  /@nuxt/schema/3.5.3:
+    resolution: {integrity: sha512-Tnon4mYfJZmsCtx4NZ9A+qjwo4DcZ6tERpEhYBY81PX7AiJ+hFPBFR1qR32Tff66/qJjZg5UXj6H9AdzwEYr2w==}
+    engines: {node: ^14.18.0 || >=16.10.0}
+    dependencies:
+      defu: 6.1.2
+      hookable: 5.5.3
+      pathe: 1.1.1
       pkg-types: 1.0.3
       postcss-import-resolver: 2.0.0
       std-env: 3.3.3
@@ -2201,23 +2250,23 @@ packages:
       picomatch: 2.3.1
       rollup: 3.23.0
 
-  /@shopware-pwa/api-client/0.0.0-canary-20230530084408:
-    resolution: {integrity: sha512-aGzEA9JHFwGOP9L3S7CtlTjnEGa2m9hXa9o3OwSrYAFn/O+fn//n5ttKhTvL7zq5GOmYNzO9qLKxIAsrbmCtdQ==}
+  /@shopware-pwa/api-client/0.0.0-canary-20230607110245:
+    resolution: {integrity: sha512-nkrzWYkIKocuixpB7SBIK61Vbg7+o4pHrrUSPSVsLQngBoy/h4rp34B82alCeTzUT1cr7krc7hAB4ZXBvgMARg==}
     dependencies:
-      '@shopware-pwa/types': 0.0.0-canary-20230530084408
+      '@shopware-pwa/types': 0.0.0-canary-20230607110245
       axios: 0.27.2
       query-string: 8.1.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@shopware-pwa/cms-base/0.0.0-canary-20230530084408_vue@3.3.4:
-    resolution: {integrity: sha512-zCOI5G1gUeQn4jQjlMvGLyttVuwR18jyaLCxb0mAjS01yqYGAih609zlMfu8Zd9A8zKTzkIbnFB1wFZKU72jcA==}
+  /@shopware-pwa/cms-base/0.0.0-canary-20230607110245_vue@3.3.4:
+    resolution: {integrity: sha512-NYdcxwpvaxSOVfvEeCi79uQtW5ZH46LDjG3GOxNTht3Lexu0A8xoc8hnbrzuC3tka/pLXKkJzD9HNydOzny2yw==}
     dependencies:
-      '@nuxt/kit': 3.5.2
-      '@shopware-pwa/api-client': 0.0.0-canary-20230530084408
-      '@shopware-pwa/composables-next': 0.0.0-canary-20230530084408_vue@3.3.4
-      '@shopware-pwa/helpers-next': 0.0.0-canary-20230530084408
+      '@nuxt/kit': 3.5.3
+      '@shopware-pwa/api-client': 0.0.0-canary-20230607110245
+      '@shopware-pwa/composables-next': 0.0.0-canary-20230607110245_vue@3.3.4
+      '@shopware-pwa/helpers-next': 0.0.0-canary-20230607110245
       '@vuelidate/core': 2.0.2_vue@3.3.4
       '@vuelidate/validators': 2.0.2_vue@3.3.4
       entities: 4.5.0
@@ -2230,11 +2279,11 @@ packages:
       - vue
     dev: false
 
-  /@shopware-pwa/composables-next/0.0.0-canary-20230530084408_vue@3.3.4:
-    resolution: {integrity: sha512-q5URaQahQBzmoN+G7q0oN78wb24PoTB+sW4wZ8xYwy2hhEDHZisZpwFu77Kt7fhM9bcezkV/X623I7Ew5iI0Lg==}
+  /@shopware-pwa/composables-next/0.0.0-canary-20230607110245_vue@3.3.4:
+    resolution: {integrity: sha512-Hl2zAf0kRO+50sYRYWYwlUH3HvNrYiCS8D4+AdJ4JxEr4kIO+uCqw8GH60s55ZM47cvBdD49VVhmSjB2IZrQpQ==}
     dependencies:
-      '@shopware-pwa/api-client': 0.0.0-canary-20230530084408
-      '@shopware-pwa/helpers-next': 0.0.0-canary-20230530084408
+      '@shopware-pwa/api-client': 0.0.0-canary-20230607110245
+      '@shopware-pwa/helpers-next': 0.0.0-canary-20230607110245
       '@vueuse/core': 10.1.2_vue@3.3.4
       scule: 1.0.0
     transitivePeerDependencies:
@@ -2243,18 +2292,18 @@ packages:
       - vue
     dev: false
 
-  /@shopware-pwa/helpers-next/0.0.0-canary-20230530084408:
-    resolution: {integrity: sha512-7VAnflDMI6anCk371SZkUq9T1f2nfKAGjPMY59qcFQs3zUmGGhFXr28RQaEc8gKPKpmdhyxqAbH88+qHdsF6zg==}
+  /@shopware-pwa/helpers-next/0.0.0-canary-20230607110245:
+    resolution: {integrity: sha512-/ZtMvpSOtTXHoTdUSBsqTBCeUlU+yvlolM95QdpzTM5LuNwlvHSuMZ+os1cSJkSDiBw04bfduk4+7/fxsksjyw==}
     dependencies:
-      '@shopware-pwa/types': 0.0.0-canary-20230530084408
+      '@shopware-pwa/types': 0.0.0-canary-20230607110245
     dev: false
 
-  /@shopware-pwa/nuxt3-module/0.0.0-canary-20230530084408_vue@3.3.4:
-    resolution: {integrity: sha512-prty7a9QBs4R7ClASgTEsZrSqylFXc8nzaruLkWINknQCjpYHjsfSF7e4KXMW8cR8F+0Rm/1aKzCr61YmPLa7g==}
+  /@shopware-pwa/nuxt3-module/0.0.0-canary-20230607110245_vue@3.3.4:
+    resolution: {integrity: sha512-Nn65EkUpgOikASMOLKCMfAxu+fRM4BwyLC1N9RWqSA95H6+H570kSAZR5q0ezjYKUAXCjeXDkkQyzx48f+S7/w==}
     dependencies:
-      '@nuxt/kit': 3.5.2
-      '@shopware-pwa/api-client': 0.0.0-canary-20230530084408
-      '@shopware-pwa/composables-next': 0.0.0-canary-20230530084408_vue@3.3.4
+      '@nuxt/kit': 3.5.3
+      '@shopware-pwa/api-client': 0.0.0-canary-20230607110245
+      '@shopware-pwa/composables-next': 0.0.0-canary-20230607110245_vue@3.3.4
       js-cookie: 3.0.5
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -2264,8 +2313,8 @@ packages:
       - vue
     dev: false
 
-  /@shopware-pwa/types/0.0.0-canary-20230530084408:
-    resolution: {integrity: sha512-xauPEop4BblXwpwZER4vnx3ni0ARkQe5dZ9cs2TMXnyD7ANg1S8WRdFhtqjEP+w8DsbboCoCn7kJy4sQmSdYPg==}
+  /@shopware-pwa/types/0.0.0-canary-20230607110245:
+    resolution: {integrity: sha512-sfmAVTObRDxPTLkeO/fcGDawZUP6xr8Jj1w5O4rsU39fXmuAzfT5cwJP6KD3occ6A8bPvlQH2GDOG4jz3Ivnew==}
     dev: false
 
   /@sigstore/protobuf-specs/0.1.0:
@@ -2842,7 +2891,7 @@ packages:
       consola: 2.15.3
       fast-glob: 3.2.12
       magic-string: 0.30.0
-      pathe: 1.1.0
+      pathe: 1.1.1
       perfect-debounce: 0.1.3
     transitivePeerDependencies:
       - rollup
@@ -5092,7 +5141,7 @@ packages:
     dependencies:
       enhanced-resolve: 5.14.1
       mlly: 1.3.0
-      pathe: 1.1.0
+      pathe: 1.1.1
       ufo: 1.1.2
 
   /fast-deep-equal/3.1.3:
@@ -5462,7 +5511,7 @@ packages:
       https-proxy-agent: 5.0.1
       mri: 1.2.0
       node-fetch-native: 1.1.1
-      pathe: 1.1.0
+      pathe: 1.1.1
       tar: 6.1.15
     transitivePeerDependencies:
       - supports-color
@@ -5927,11 +5976,12 @@ packages:
     engines: {node: '>= 0.10'}
     dev: true
 
-  /ipx/1.1.0:
-    resolution: {integrity: sha512-cqoLMNemwHFTTn+jeupPSqUDQKVQ+FUgtmglCzVTkukhmExwh3gTSNVcBZqeHa2Vwst1cit60q+Kj/fQ0q6t6g==}
+  /ipx/1.2.0:
+    resolution: {integrity: sha512-FkEP56C08HdlqlWKm3pMhatywPtDBTlePTdzskksCR1+7xnB6fQs6pXOTXPTG5i+gGPgCOxbNMUSZEH/DQcWDA==}
     hasBin: true
     requiresBuild: true
     dependencies:
+      '@fastify/accept-negotiator': 1.1.0
       consola: 3.1.0
       defu: 6.1.2
       destr: 1.2.2
@@ -5939,7 +5989,7 @@ packages:
       image-meta: 0.1.1
       listhen: 1.0.4
       node-fetch-native: 1.1.1
-      pathe: 1.1.0
+      pathe: 1.1.1
       sharp: 0.32.1
       ufo: 1.1.2
       xss: 1.0.14
@@ -7977,6 +8027,9 @@ packages:
   /pathe/1.1.0:
     resolution: {integrity: sha512-ODbEPR0KKHqECXW1GoxdDb+AZvULmXjVPy4rt+pGo2+TnjJTIPJQSVS6N63n8T2Ip+syHhbn52OewKicV0373w==}
 
+  /pathe/1.1.1:
+    resolution: {integrity: sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==}
+
   /perfect-debounce/0.1.3:
     resolution: {integrity: sha512-NOT9AcKiDGpnV/HBhI22Str++XWcErO/bALvHCuhv33owZW/CjH8KAFLZDCmu3727sihe0wTxpDhyGc6M8qacQ==}
 
@@ -9750,7 +9803,7 @@ packages:
       cac: 6.7.14
       debug: 4.3.4
       mlly: 1.3.0
-      pathe: 1.1.0
+      pathe: 1.1.1
       picocolors: 1.0.0
       vite: 4.1.5
     transitivePeerDependencies:
@@ -9993,7 +10046,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      '@intlify/shared': 9.3.0-beta.18
+      '@intlify/shared': 9.3.0-beta.19
       '@intlify/vue-i18n-bridge': 0.8.0_vue-i18n@9.3.0-beta.16
       '@intlify/vue-router-bridge': 0.8.0_vue@3.3.4
       ufo: 1.1.2
