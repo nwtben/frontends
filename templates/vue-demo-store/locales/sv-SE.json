@@ -23,7 +23,7 @@
   "view_all_available_payment_methods": "Visa alla tillgängliga betalningsmetoder och välj en standardbetalningsmetod.",
   "change": "Ändra",
   "home": "Hem",
-  "address": "Adress",
+  "street_address": "Adress",
   "company": "Företag",
   "zip_code": "Postnummer",
   "city": "Stad",

@@ -6,11 +6,18 @@ import {
 const props = withDefaults(
   defineProps<{
     compact?: boolean;
+    modelValue?: string;
   }>(),
   {
     compact: true,
   }
 );
+
+const emit = defineEmits(['update:modelValue'])
+
+const updateValue = (event: any) => {
+    emit('update:modelValue', event.target.value)
+}
 
 const attrs = useAttrs();
 
@@ -40,6 +47,8 @@ const remainingAttrs = computed(()=>{
         'w-full placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm': !props.compact,
       }"
       v-bind="remainingAttrs"
+      :value="modelValue" 
+      @change="updateValue"
     >
       <slot></slot>
     </select>

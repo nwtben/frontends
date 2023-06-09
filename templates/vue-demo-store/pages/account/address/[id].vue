@@ -193,7 +193,7 @@ const invokeChange = async (): Promise<void> => {
         </div>
         <div>
           <p class="text-sm font-medium text-brand-dark mb-1">
-            {{ $t('address') }}
+            {{ $t('street_address') }}
           </p>
           <textarea
             v-model="formData.street"

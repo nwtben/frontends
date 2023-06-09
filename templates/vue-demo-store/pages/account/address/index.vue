@@ -79,7 +79,7 @@ const setDefaultBillingAddress = async (id: string) => {
   <section class="flex flex-col space-y-10 mb-24">
     <section>
       <h3 class="mb-4">
-        {{ $t('address') }}
+        {{ $t('street_address') }}
       </h3>
       <p class="text-base">
         {{ $t('view_your_current_default_address') }}
