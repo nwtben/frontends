@@ -23,11 +23,6 @@ export default defineNuxtConfig({
           as: "image",
           href: "https://shopware.nwtsaas.com/media/e1/35/d3/1682437171/hero-desktop-511745398.jpg",
         },
-        {
-          rel: "preload",
-          as: "image",
-          href: "https://shopware.nwtsaas.com/media/6c/6f/0d/1682437203/hero-mobile-511745144.jpg",
-        },
       ],
       /*noscript: {
         link: [
@@ -70,16 +65,20 @@ export default defineNuxtConfig({
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
-    "@nuxt/image-edge",
+    "@nuxt/image",
     "@nuxtjs/robots",
   ],
   image: {
-    provider: "vercel",
-    vercel: {
-      modifiers: {
-        format: 'WebP',
-        effect: 'sharpen:100',
-        quality: 'auto:best',
+    domains: [
+      'shopware.nwtsaas.com'
+    ],
+    presets: {
+      standard: {
+        modifiers: {
+          format: 'webp',
+          quality: '100',
+          // sizes: 'sm:100vw md:50vw'
+        }
       }
     }
   },

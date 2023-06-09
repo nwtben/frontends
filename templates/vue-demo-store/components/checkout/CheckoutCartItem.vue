@@ -54,11 +54,12 @@ const removeCartItem = async () => {
     v-if="!isPromotion"
     class="mr-4 h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-300"
   >
-    <img
+    <nuxt-img
       :src="getSmallestThumbnailUrl(cartItem.cover)"
       alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
       class="h-full w-full object-cover object-center"
       data-testid="cart-product-image"
+      preset="standard"
       loading="lazy"
     />
   </div>

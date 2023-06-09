@@ -19,11 +19,12 @@ const productOptions = computed(() =>
     v-if="!isPromotion"
     class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-300"
   >
-    <img
+    <nuxt-img
       :src="getMainImageUrl(orderItem)"
       alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
       class="h-full w-full object-cover object-center"
       loading="lazy"
+      preset="standard"
     />
   </div>
 

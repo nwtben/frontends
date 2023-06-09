@@ -54,11 +54,12 @@ const removeCartItem = async () => {
       v-if="lineItem.type == 'product'"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
     >
-      <img
+      <nuxt-img
         :src="getSmallestThumbnailUrl(lineItem.cover)"
         :alt="lineItem.label || ''"
         class="h-full w-full object-cover object-center"
         loading="lazy"
+        preset="standard"
       />
     </div>
     <div>

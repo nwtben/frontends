@@ -80,12 +80,13 @@ const breakpoints = ref({
                 // 'border border-gray-500 border-3': i === currentSlideIndex,
               }"
             >
-              <img
+              <nuxt-img
                 :src="image.media.url"
                 class="w-full h-full object-center object-cover"
                 alt="Product image"
                 @click="changeCover(i)"
                 loading="lazy"
+                preset="standard"
               />
             </div>
           </div>
