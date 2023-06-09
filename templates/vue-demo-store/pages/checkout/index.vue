@@ -118,33 +118,24 @@ const state = reactive<any>({
   guest: true,
   password: "",
   shippingAddress: {
-    salutationId: "",
-    firstName: "",
-    lastName: "",
+    phoneNumber: "",
     street: "",
     zipcode: "",
     city: "",
     countryId: "",
-    phoneNumber: ""
   },
   billingAddress: {
-    salutationId: "",
-    firstName: "",
-    lastName: "",
+    phoneNumber: "",
     street: "",
     zipcode: "",
     city: "",
     countryId: "",
-    phoneNumber: ""
   },
   customShipping: false,
   agree: false,
 });
 
 const rules = computed(() => ({
-  // salutationId: {
-  //   required,
-  // },
   firstName: {
     required,
     minLength: minLength(3),
@@ -167,9 +158,6 @@ const rules = computed(() => ({
     minLength: minLength(8),
   },
   billingAddress: {
-    // salutationId: {
-    //   required,
-    // },
     street: {
       required,
       minLength: minLength(3),
@@ -185,9 +173,6 @@ const rules = computed(() => ({
     },
   },
   shippingAddress: {
-    // salutationId: {
-    //   required,
-    // },
     street: {
       required,
       minLength: minLength(3),
@@ -260,6 +245,13 @@ const invokeSubmit = async () => {
 
 const registerUser = async () => {
   try {
+    state.shippingAddress.salutationId = state.salutationId;
+    state.shippingAddress.firstName = state.firstName;
+    state.shippingAddress.lastName = state.lastName;
+    state.billingAddress.salutationId = state.salutationId;
+    state.billingAddress.firstName = state.firstName;
+    state.billingAddress.lastName = state.lastName;
+    console.log(state)
     await register(state);
   } catch (error) {
     const e = error as ClientApiError;
@@ -277,8 +269,6 @@ watch(getSalutations, (salutations) => {
   const id = salutations?.[salutations.length -1]?.id;
   if (id) {
     state.salutationId = id;
-    state.billingAddress.salutationId = id;
-    state.shippingAddress.salutationId = id;
   }
 });
 
@@ -294,8 +284,6 @@ watch(isSameBillingAndShipping, (value) => {
     state.billingAddress = {...state.shippingAddress};
   } else {
     state.billingAddress = {
-      firstName: "",
-      lastName: "",
       street: "",
       zipcode: "",
       city: "",
@@ -412,38 +400,18 @@ const handleChangeGuest = (e: any) => {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="border-b border-gray-200"></div>
-            <div>
-              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_information') }}</h6>
-              <div class="flex flex-col gap-6">
-                <div class="flex flex-col md:flex-row gap-6">
-                  <div class="flex-1">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="shipping-firstName">{{ $t('first_name' )}}</label>
-                    <input
-                      v-model="state.shippingAddress.firstName"
-                      id="shipping-firstName"
-                      name="shipping-firstName"
-                      type="text"
-                      autocomplete="shipping-firstName"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                    />
-                  </div>
-                  <div class="flex-1">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="shipping-lastName">{{ $t('last_name') }}</label>
-                    <input
-                      v-model="state.shippingAddress.lastName"
-                      id="shipping-lastName"
-                      name="shipping-lastName"
-                      type="text"
-                      autocomplete="shipping-lastName"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                    />
-                  </div>
+                <div>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
+                  <input
+                    v-model="state.shippingAddress.phoneNumber"
+                    id="phone"
+                    name="phone"
+                    autocomplete="phone"
+                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                  />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('address') }}</label>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
                   <input
                     v-model="state.shippingAddress.street"
                     id="address"
@@ -465,7 +433,7 @@ const handleChangeGuest = (e: any) => {
                       class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                     />
                   </div>
-                  <div class="w-1/3">
+                  <div class="w-2/3">
                     <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
                     <input
                       v-model="state.shippingAddress.city"
@@ -476,40 +444,29 @@ const handleChangeGuest = (e: any) => {
                       class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                     />
                   </div>
-                  <div class="w-1/3">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
-                    <SwSelect
-                      :compact="false"
-                      id="country"
-                      v-model="state.shippingAddress.countryId"
-                      required
-                      name="country"
-                      autocomplete="country-name"
-                      data-testid="checkout-pi-country-input"
-                      @blur="$v.shippingAddress.countryId.$touch()"
-                    >
-                      <option disabled selected value="">
-                        Choose country...
-                      </option>
-                      <option
-                        v-for="country in getCountries"
-                        :key="country.id"
-                        :value="country.id"
-                      >
-                        {{ country.translated.name }}
-                      </option>
-                    </SwSelect>
-                  </div>
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
-                  <input
-                    v-model="state.shippingAddress.phoneNumber"
-                    id="phone"
-                    name="phone"
-                    autocomplete="phone"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                  />
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
+                  <SwSelect
+                    :compact="false"
+                    id="country"
+                    v-model="state.shippingAddress.countryId"
+                    name="country"
+                    autocomplete="country-name"
+                    data-testid="checkout-pi-country-input"
+                    @blur="$v.shippingAddress.countryId.$touch()"
+                  >
+                    <option disabled selected value="">
+                      Choose country...
+                    </option>
+                    <option
+                      v-for="country in getCountries"
+                      :key="country.id"
+                      :value="country.id"
+                    >
+                      {{ country.translated.name }}
+                    </option>
+                  </SwSelect>
                 </div>
                 <SharedCheckbox 
                   :content="$t('use_same_for_billing_information')"
@@ -520,34 +477,20 @@ const handleChangeGuest = (e: any) => {
             <div class="border-b border-gray-200"></div>
             <template v-if="!isSameBillingAndShipping">
               <div>
-                <h6 class="text-lg font-medium text-dark-primary mb-4">Billing information</h6>
+                <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
                 <div class="flex flex-col gap-6">
-                  <div class="flex flex-col md:flex-row gap-6">
-                    <div class="flex-1">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-firstName">{{ $t('first_name') }}</label>
-                      <input
-                        v-model="state.billingAddress.firstName"
-                        id="billing-firstName"
-                        name="billing-firstName"
-                        type="text"
-                        autocomplete="billing-firstName"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                      />
-                    </div>
-                    <div class="flex-1">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-lastName">{{ $t('last_name') }}</label>
-                      <input
-                        v-model="state.billingAddress.lastName"
-                        id="billing-lastName"
-                        name="billing-lastName"
-                        type="text"
-                        autocomplete="billing-lastName"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                      />
-                    </div>
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
+                    <input
+                      v-model="state.billingAddress.phoneNumber"
+                      id="phone"
+                      name="phone"
+                      autocomplete="phone"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
                   </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('address') }}</label>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
                     <input
                       v-model="state.billingAddress.street"
                       id="address"
@@ -569,7 +512,7 @@ const handleChangeGuest = (e: any) => {
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                       />
                     </div>
-                    <div class="w-1/3">
+                    <div class="w-2/3">
                       <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
                       <input
                         v-model="state.billingAddress.city"
@@ -580,40 +523,29 @@ const handleChangeGuest = (e: any) => {
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                       />
                     </div>
-                    <div class="w-1/3">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
-                      <SwSelect
-                        :compact="false"
-                        id="country"
-                        v-model="state.billingAddress.countryId"
-                        required
-                        name="country"
-                        autocomplete="country-name"
-                        data-testid="checkout-pi-country-input"
-                        @blur="$v.billingAddress.countryId.$touch()"
-                      > 
-                        <option disabled selected value="">
-                          Choose country...
-                        </option>
-                        <option
-                          v-for="country in getCountries"
-                          :key="country.id"
-                          :value="country.id"
-                        >
-                          {{ country.translated.name }}
-                        </option>
-                      </SwSelect>
-                    </div>
                   </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
-                    <input
-                      v-model="state.shippingAddress.phoneNumber"
-                      id="phone"
-                      name="phone"
-                      autocomplete="phone"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                    />
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="country">{{ $t('country') }}</label>
+                    <SwSelect
+                      :compact="false"
+                      id="country"
+                      v-model="state.billingAddress.countryId"
+                      name="country"
+                      autocomplete="country-name"
+                      data-testid="checkout-pi-country-input"
+                      @blur="$v.billingAddress.countryId.$touch()"
+                    > 
+                      <option disabled selected value="">
+                        Choose country...
+                      </option>
+                      <option
+                        v-for="country in getCountries"
+                        :key="country.id"
+                        :value="country.id"
+                      >
+                        {{ country.translated.name }}
+                      </option>
+                    </SwSelect>
                   </div>
                 </div>
               </div>
