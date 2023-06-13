@@ -347,7 +347,7 @@ useBreadcrumbs([
             data-testid="registration-country-select"
             @blur="$v.billingAddress.countryId.$touch()"
           >
-            <option disabled selected value="">Choose country...</option>
+            <option disabled selected value="">{{ $t('choose_country_placeholder') }}</option>
             <option
               v-for="country in getCountries"
               :key="country.id"

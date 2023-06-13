@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const { setLanguage, languages, currentLanguage } = useLanguage();
-
+const languagesOptions = computed(() => {
+  return languages.value?.map(x => ({
+    label: `${x.name}`,
+    value: x.id
+  })) ?? [];
+})
 </script>
 <template>
   <div
@@ -10,17 +15,9 @@ const { setLanguage, languages, currentLanguage } = useLanguage();
     <SwSelect
       id="language"
       name="language"
-      :value="currentLanguage?.id" 
-      @change="(e: any) => setLanguage(e.target.value)"
-      class="mt-2 mb-4"
-    >
-      <option
-        v-for="lang of languages"
-        :key="lang.translationCode?.code"
-        :value="lang.id"
-      >
-        {{ lang.name }}
-      </option>
-    </SwSelect>
+      :modelValue="currentLanguage?.id" 
+      @update:modelValue="(e: any) => setLanguage(e)"
+      :options="languagesOptions"
+    />
   </div>
 </template>

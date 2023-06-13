@@ -114,5 +114,6 @@
   "confirm_order": "Bekräfta order",
   "go_to_checkout": "Gå till kassan",
   "show_shopping_cart": "Visa kundvagn",
-  "cart": "Vagn"
+  "cart": "Vagn",
+  "choose_country_placeholder": "Välj land..."
 }
