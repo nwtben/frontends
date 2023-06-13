@@ -115,5 +115,9 @@
   "go_to_checkout": "Gå till kassan",
   "show_shopping_cart": "Visa kundvagn",
   "cart": "Vagn",
+  "description": "Beskrivning",
+  "specification":  "Detaljer",
+  "reviews": "Recensioner",
+  "delivery_and_returns": "Leverans och retur",
   "choose_country_placeholder": "Välj land..."
 }

@@ -56,9 +56,13 @@ const scrollToReviews = () => {
         class="text-gray-500 text-lg"
       />
       <div class="flex flex-col">
-        <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews"/>
-        <a :href="'#reviews'"
-          @click="scrollToReviews" class="underline font-medium cursor-pointer">{{ $t('read_reviews') }}</a>
+        <a 
+          :href="'#reviews'"
+          @click="scrollToReviews" class="underline font-medium cursor-pointer"
+        >
+          <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews" />
+          {{ $t('read_reviews') }}
+        </a>
       </div>
     </div>
     <SwVariantConfigurator
