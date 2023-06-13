@@ -115,5 +115,9 @@
   "go_to_checkout": "Go to checkout",
   "show_shopping_cart": "Show Shopping cart",
   "cart": "Cart",
+  "description": "Description",
+  "specification":  "Specification",
+  "reviews": "Reviews",
+  "delivery_and_returns": "Delivery and returns",
   "choose_country_placeholder": "Choose country..."
 }
