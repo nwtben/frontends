@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getSmallestThumbnailUrl } from "@shopware-pwa/helpers-next";
 import { LineItem, PropertyGroupOptionCart } from "@shopware-pwa/types";
+import { getPath } from "~~/helpers";
 
 const props = withDefaults(
   defineProps<{
@@ -55,11 +56,10 @@ const removeCartItem = async () => {
     class="mr-4 h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-300"
   >
     <nuxt-img
-      :src="getSmallestThumbnailUrl(cartItem.cover)"
+      :src="getPath(getSmallestThumbnailUrl(cartItem.cover) ?? '')"
       alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
       class="h-full w-full object-cover object-center"
       data-testid="cart-product-image"
-      preset="standard"
       loading="lazy"
     />
   </div>

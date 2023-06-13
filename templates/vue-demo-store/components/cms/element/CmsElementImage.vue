@@ -4,6 +4,7 @@ import {
   CmsElementManufacturerLogo,
   useCmsElementImage,
 } from "@shopware-pwa/composables-next";
+import { getPath } from '~/helpers';
 
 const props = withDefaults(
   defineProps<{
@@ -38,10 +39,9 @@ const {
         'absolute inset-0': ['cover', 'stretch'].includes(displayMode),
         'object-cover': displayMode === 'cover',
       }"
-      :src="imageAttrs.src"
+      :src="getPath(imageAttrs.src)"
       :alt="imageAttrs.alt || 'Image link'"
       :loading="props.loading"
-      preset="standard"
     />
   </component>
 </template>
