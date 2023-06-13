@@ -266,11 +266,11 @@ const getSortingOrdersOptions = computed(() => {
         <TransitionChild
           as="template"
           enter="duration-300 ease-out"
-          enter-from="opacity-0 -translate-x-full"
-          enter-to="opacity-100 translate-x-0"
+          enter-from="-translate-x-full"
+          enter-to="translate-x-0"
           leave="duration-200 ease-in"
-          leave-from="opacity-100 translate-x-0"
-          leave-to="opacity-0 -translate-x-full"
+          leave-from="translate-x-0"
+          leave-to="-translate-x-full"
         >
           <DialogPanel class="flex flex-col fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div class="container py-6 flex items-center justify-between">
