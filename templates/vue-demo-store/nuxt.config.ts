@@ -72,15 +72,16 @@ export default defineNuxtConfig({
     domains: [
       'shopware.nwtsaas.com'
     ],
-    presets: {
-      standard: {
-        modifiers: {
-          format: 'webp',
-          quality: '100',
-          // sizes: 'sm:100vw md:50vw'
-        }
-      }
-    }
+    provider: 'fastly',
+    fastly: {
+      baseURL: 'https://shopware.nwtsaas.com.global.prod.fastly.net',
+      modifiers: {
+        format: 'webp',
+        quality: '85',
+        effect: 'sharpen:100',
+        // sizes: 'sm:100vw md:50vw'
+      },
+    },
   },
   partytown: {
     forward: ['dataLayer.push'],
