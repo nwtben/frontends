@@ -1,24 +1,19 @@
 <script setup lang="ts">
-import { useLanguage } from '../../composables/useLanguage';
+const { setLanguage, languages, currentLanguage } = useLanguage();
 
-const { fetchLang, setLanguage, languages, currentLanguage } = useLanguage();
-
-onMounted(async () => {
-  await fetchLang();
-})
 </script>
 <template>
   <div
     class="sw-language-switcher"
     data-testid="language-switcher"
   >
-     <select
+    <SwSelect
       id="language"
       name="language"
-      :value="currentLanguage?.id"
-      class="caret-current min-w-[70px] py-2.5 bg-transparent cursor-pointer focus:outline-none focus:ring-brand-light focus:border-brand-light sm:text-sm"
+      :value="currentLanguage?.id" 
       @change="(e: any) => setLanguage(e.target.value)"
-      >
+      class="mt-2 mb-4"
+    >
       <option
         v-for="lang of languages"
         :key="lang.translationCode?.code"
@@ -26,6 +21,6 @@ onMounted(async () => {
       >
         {{ lang.name }}
       </option>
-    </select>
+    </SwSelect>
   </div>
 </template>

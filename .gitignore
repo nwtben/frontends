@@ -47,3 +47,4 @@ yarn-error.log*
 .env 
 temp
 .temp
+.idea

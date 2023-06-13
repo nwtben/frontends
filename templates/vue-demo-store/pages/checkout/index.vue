@@ -5,15 +5,27 @@ export default {
 </script>
 <script setup lang="ts">
 import { SharedModal } from "~~/components/shared/SharedModal.vue";
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, requiredIf } from "@vuelidate/validators";
 import { ClientApiError, ShopwareError } from "@shopware-pwa/types";
+import {
+  CheckCircleIcon,
+} from '@heroicons/vue/20/solid';
+import {
+  PencilSquareIcon
+} from '@heroicons/vue/24/outline';
 
 definePageMeta({
   layout: "checkout",
 });
 
+const isSameBillingAndShipping = ref(true);
+const isDifferentBillingAndShipping = ref();
+const submitBtn = ref();
+const isAgree = ref();
 const { push } = useRouter();
+const { currency } = useSessionContext();
 const { getCountries } = useCountries();
 const { getSalutations } = useSalutations();
 const {
@@ -37,6 +49,7 @@ const {
 } = useSessionContext();
 const { cart, cartItems, subtotal, totalPrice, shippingTotal } = useCart();
 const { customerAddresses, loadCustomerAddresses } = useAddress();
+
 const modal = inject<SharedModal>("modal") as SharedModal;
 const isLoading = reactive<{ [key: string]: boolean }>({});
 
@@ -97,26 +110,32 @@ const isCheckoutAvailable = computed(() => {
 
 const isUserSession = computed(() => isLoggedIn.value || isGuestSession.value);
 
-const state = reactive({
+const state = reactive<any>({
   salutationId: "",
   firstName: "",
   lastName: "",
   email: "",
+  guest: true,
   password: "",
-  guest: false,
+  shippingAddress: {
+    phoneNumber: "",
+    street: "",
+    zipcode: "",
+    city: "",
+    countryId: "",
+  },
   billingAddress: {
+    phoneNumber: "",
     street: "",
     zipcode: "",
     city: "",
     countryId: "",
   },
   customShipping: false,
+  agree: false,
 });
 
 const rules = computed(() => ({
-  salutationId: {
-    required,
-  },
   firstName: {
     required,
     minLength: minLength(3),
@@ -128,6 +147,9 @@ const rules = computed(() => ({
   email: {
     required,
     email,
+  },
+  agree: {
+    checked: (value: any) => value === true
   },
   password: {
     required: requiredIf(() => {
@@ -150,16 +172,24 @@ const rules = computed(() => ({
       required,
     },
   },
+  shippingAddress: {
+    street: {
+      required,
+      minLength: minLength(3),
+    },
+    zipcode: {
+      required,
+    },
+    city: {
+      required,
+    },
+    countryId: {
+      required,
+    },
+  },
 }));
 
 const $v = useVuelidate(rules, state);
-
-const placeOrder = async () => {
-  isLoading["placeOrder"] = true;
-  const order = await createOrder();
-  isLoading["placeOrder"] = false;
-  return push("/checkout/success/" + order.id);
-};
 
 onMounted(async () => {
   refreshSessionContext();
@@ -180,27 +210,109 @@ onMounted(async () => {
 });
 
 const registerErrors = ref<ShopwareError[]>([]);
+
+const placeOrder = async () => {
+  isLoading["placeOrder"] = true;
+  const order = await createOrder();
+  isLoading["placeOrder"] = false;
+  return push("/checkout/success/" + order.id);
+};
+
 const invokeSubmit = async () => {
-  $v.value.$touch();
-  registerErrors.value = [];
-  const valid = await $v.value.$validate();
-  if (valid) {
+  if (!isUserSession.value) {
+    $v.value.$touch();
+    registerErrors.value = [];
+    const valid = await $v.value.$validate();
+    if (valid) {
+      isLoading.all = true;
+      try {
+        await registerUser();
+        await placeOrder();
+      } finally {
+        isLoading.all = false;
+      }
+    }
+  } else {
+    if (!isAgree.value) return;
+    isLoading.all = true;
     try {
-      await register(state);
-    } catch (error) {
-      const e = error as ClientApiError;
-      registerErrors.value = e.messages;
+      await placeOrder();
+    } finally {
+      isLoading.all = false;
     }
   }
 };
+
+const registerUser = async () => {
+  try {
+    state.shippingAddress.salutationId = state.salutationId;
+    state.shippingAddress.firstName = state.firstName;
+    state.shippingAddress.lastName = state.lastName;
+    state.billingAddress.salutationId = state.salutationId;
+    state.billingAddress.firstName = state.firstName;
+    state.billingAddress.lastName = state.lastName;
+    console.log(state)
+    await register(state);
+  } catch (error) {
+    const e = error as ClientApiError;
+    registerErrors.value = e.messages;
+  }
+}
+
 async function invokeLogout() {
   await logout();
   await push("/");
 }
+
+watch(getSalutations, (salutations) => {
+  if (!salutations?.length) return;
+  const id = salutations?.[salutations.length -1]?.id;
+  if (id) {
+    state.salutationId = id;
+  }
+});
+
+watch(() => state.shippingAddress, (value) => {
+  if (!isSameBillingAndShipping.value) return;
+  state.billingAddress = {...value};
+}, {
+  deep: true
+});
+
+watch(isSameBillingAndShipping, (value) => {
+  if (value) {
+    state.billingAddress = {...state.shippingAddress};
+  } else {
+    state.billingAddress = {
+      street: "",
+      zipcode: "",
+      city: "",
+      countryId: "",
+      phoneNumber: ""
+    }
+  }
+});
+
+const handleSubmit = () => {
+  if (!isUserSession) {
+    submitBtn.value.click()
+  } else {
+    invokeSubmit();
+  }
+}
+
+const login = () => {
+  modal.open('AccountLoginForm')
+}
+
+const handleChangeGuest = (e: any) => {
+  state.guest = !e.target.checked;
+}
+
 </script>
 
 <template>
-  <div class="m-10">
+  <div class="mt-12 md:mt-16 mb-24">
     <div
       v-if="isCheckoutAvailable || isCartLoading"
       class="checkout-inner"
@@ -208,295 +320,141 @@ async function invokeLogout() {
         'opacity-20': isCartLoading,
       }"
     >
-      <div class="md:grid md:grid-cols-2 md:gap-6">
-        <div class="md:col-span-1">
-          <div class="grid gap-4 shadow px-4 py-5 bg-white sm:p-6 mb-8">
+      <div class="flex flex-col md:flex-row gap-16">
+        <div class="flex-1">
+          <!-- New User -->
+          <form 
+            v-if="!isUserSession"
+            class="flex flex-col gap-10"
+            id="checkout-billing-address"
+            name="checkout-billing-address"
+            method="post"
+            @submit.prevent="invokeSubmit"
+          >
             <div>
-              <h3 class="text-lg font-medium text-gray-900 m-0">
-                Personal Information
-              </h3>
-              <div class="text-sm text-gray-600">
-                Use a permanent address where you can receive mail.
-              </div>
-            </div>
-            <form
-              v-if="!isUserSession"
-              id="checkout-billing-address"
-              class="grid gap-8"
-              name="checkout-billing-address"
-              method="post"
-              @submit.prevent="invokeSubmit"
-            >
-              <div
-                v-if="registerErrors.length"
-                class="bg-red-200 border-l-4 border-red-500 text-red-700 p-4"
-                role="alert"
-              >
-                <p class="font-bold">Error!!!</p>
-                <ul>
-                  <li v-for="error in registerErrors" :key="error.detail">
-                    {{ error.detail }}
-                  </li>
-                </ul>
-              </div>
-              <div class="text-sm">
-                Register or
-                <a
-                  href="#"
-                  class="whitespace-nowrap font-medium text-brand-primary hover:text-brand-dark"
-                  data-testid="checkout-sign-in-link"
-                  @click="modal.open('AccountLoginForm')"
+              <button
+                type="button"
+                class="flex items-center justify-center px-5 py-2 text-base font-medium text-white shadow-sm bg-gray-800"
+                @click="login"
                 >
-                  Sign in
-                </a>
-                <p class="text-gray-500">In order to place an order.</p>
-              </div>
-              <div class="grid grid-cols-6 gap-6">
-                <div class="col-span-6">
-                  <label
-                    for="salutation"
-                    class="block text-sm font-medium text-gray-700"
-                    >Salutation</label
-                  >
-                  <select
-                    id="salutation"
-                    v-model="state.salutationId"
-                    required
-                    name="salutation"
-                    autocomplete="salutation-name"
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-salutation-select"
-                    @blur="$v.salutationId.$touch()"
-                  >
-                    <option disabled selected value="">
-                      Choose salutation...
-                    </option>
-                    <option
-                      v-for="salutation in getSalutations"
-                      :key="salutation.id"
-                      :value="salutation.id"
-                    >
-                      {{ salutation.displayName }}
-                    </option>
-                  </select>
-                  <span
-                    v-if="$v.salutationId.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.salutationId.$errors[0].$message }}
-                  </span>
-                </div>
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="first-name"
-                    class="block text-sm font-medium text-gray-700"
-                    >First name</label
-                  >
-                  <input
-                    id="first-name"
-                    v-model="state.firstName"
-                    type="text"
-                    required
-                    name="first-name"
-                    placeholder="Enter first name..."
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-first-name-input"
-                    @blur="$v.firstName.$touch()"
-                  />
-                  <span
-                    v-if="$v.firstName.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.firstName.$errors[0].$message }}
-                  </span>
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="last-name"
-                    class="block text-sm font-medium text-gray-700"
-                    >Last name</label
-                  >
-                  <input
-                    id="last-name"
-                    v-model="state.lastName"
-                    type="text"
-                    required
-                    name="last-name"
-                    placeholder="Enter last name..."
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-last-name-input"
-                    @blur="$v.lastName.$touch()"
-                  />
-                  <span
-                    v-if="$v.lastName.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.lastName.$errors[0].$message }}
-                  </span>
-                </div>
-
-                <div class="col-span-6">
-                  <div class="flex items-center">
-                    <input
-                      id="create-account"
-                      v-model="state.guest"
-                      type="checkbox"
-                      data-testid="checkout-create-account-checkbox"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="create-account"
-                      class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                      >Do not create a customer account.</label
-                    >
+                {{ $t('log_in_to_your_account') }}
+              </button>
+            </div>
+            <span class="text-base text-dark-variant">{{ $t('or_fill_the_details_below') }}</span>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('personal_information') }}</h6>
+              <div class="flex flex-col gap-6">
+                <div>
+                  <div class="flex flex-col md:flex-row gap-6 mb-4">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="firstName">{{ $t('first_name') }}</label>
+                      <input
+                        v-model="state.firstName"
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        autocomplete="firstName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="lastName">{{  $t('last_name') }}</label>
+                      <input
+                        v-model="state.lastName"
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        autocomplete="lastName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
                   </div>
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="email-address"
-                    class="block text-sm font-medium text-gray-700"
-                    >Email address</label
-                  >
-                  <input
-                    id="email-address"
-                    v-model="state.email"
-                    type="email"
-                    required
-                    name="email-address"
-                    placeholder="Enter email address..."
-                    autocomplete="off"
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-email-input"
-                    @blur="$v.email.$touch()"
+                  <SharedCheckbox 
+                    :content="$t('create_customer_account')"
+                    :value="!state.guest"
+                    @change="handleChangeGuest"
                   />
-                  <span
-                    v-if="$v.email.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.email.$errors[0].$message }}
-                  </span>
                 </div>
-                <div class="col-span-6 sm:col-span-3">
-                  <div v-if="!state.guest">
-                    <label
-                      for="password"
-                      class="block text-sm font-medium text-gray-700"
-                      >Password</label
-                    >
+                <div class="flex flex-col md:flex-row gap-6">
+                  <div class="flex-1">
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="email-address">{{ $t('email_address') }}</label>
                     <input
-                      id="password"
+                      v-model="state.email"
+                      id="email-address"
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
+                  <div class="flex-1">
+                    <label v-if="!state.guest" class="capitalize text-sm font-medium text-gray-700 mb-1" for="password">{{ $t('password') }}</label>
+                    <input
+                      v-if="!state.guest"
                       v-model="state.password"
-                      autocomplete="off"
-                      type="password"
+                      id="password"
                       name="password"
-                      placeholder="Enter password..."
-                      class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                      @blur="$v.password.$touch()"
+                      type="password"
+                      autocomplete="password"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                     />
-                    <span
-                      v-if="$v.password.$error"
-                      class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                    >
-                      {{ $v.password.$errors[0].$message }}
-                    </span>
                   </div>
                 </div>
-
-                <div class="col-span-6">
-                  <label
-                    for="street-address"
-                    class="block text-sm font-medium text-gray-700"
-                    >Street address</label
-                  >
+                <div>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
                   <input
-                    id="street-address"
-                    v-model="state.billingAddress.street"
-                    type="text"
-                    required
-                    name="street-address"
-                    placeholder="Enter street..."
-                    autocomplete="street-address"
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-street-address-input"
-                    @blur="$v.billingAddress.street.$touch()"
+                    v-model="state.shippingAddress.phoneNumber"
+                    id="phone"
+                    name="phone"
+                    autocomplete="phone"
+                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                   />
-                  <span
-                    v-if="$v.billingAddress.street.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.billingAddress.street.$errors[0].$message }}
-                  </span>
                 </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="postal-code"
-                    class="block text-sm font-medium text-gray-700"
-                    >ZIP / Postal code</label
-                  >
+                <div>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
                   <input
-                    id="postal-code"
-                    v-model="state.billingAddress.zipcode"
+                    v-model="state.shippingAddress.street"
+                    id="address"
+                    name="address"
                     type="text"
-                    required
-                    name="postal-code"
-                    placeholder="Enter zip code..."
-                    autocomplete="postal-code"
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-zip-code-input"
-                    @blur="$v.billingAddress.zipcode.$touch()"
+                    autocomplete="address"
+                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                   />
-                  <span
-                    v-if="$v.billingAddress.zipcode.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.billingAddress.zipcode.$errors[0].$message }}
-                  </span>
                 </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="city"
-                    class="block text-sm font-medium text-gray-700"
-                    >City</label
-                  >
-                  <input
-                    id="city"
-                    v-model="state.billingAddress.city"
-                    type="text"
-                    required
-                    name="city"
-                    placeholder="Enter city..."
-                    autocomplete="address-level2"
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
-                    data-testid="checkout-pi-city-input"
-                    @blur="$v.billingAddress.city.$touch()"
-                  />
-                  <span
-                    v-if="$v.billingAddress.city.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.billingAddress.city.$errors[0].$message }}
-                  </span>
+                <div class="flex gap-4">
+                  <div class="w-1/3">
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
+                    <input
+                      v-model="state.shippingAddress.zipcode"
+                      id="zipcode"
+                      name="zipcode"
+                      type="text"
+                      autocomplete="zipcode"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
+                  <div class="w-2/3">
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
+                    <input
+                      v-model="state.shippingAddress.city"
+                      id="city"
+                      name="city"
+                      type="text"
+                      autocomplete="city"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
                 </div>
-
-                <div class="col-span-6">
-                  <label
-                    for="country"
-                    class="block text-sm font-medium text-gray-700"
-                    >Country</label
-                  >
-                  <select
+                <div>
+                  <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
+                  <SwSelect
+                    :compact="false"
                     id="country"
-                    v-model="state.billingAddress.countryId"
-                    required
+                    v-model="state.shippingAddress.countryId"
                     name="country"
                     autocomplete="country-name"
-                    class="mt-1 block w-full p-2.5 border border-gray-300 text-gray-900 text-sm rounded-md shadow-sm focus:ring-brand-light focus:border-brand-light"
                     data-testid="checkout-pi-country-input"
-                    @blur="$v.billingAddress.countryId.$touch()"
+                    @blur="$v.shippingAddress.countryId.$touch()"
                   >
                     <option disabled selected value="">
                       Choose country...
@@ -506,311 +464,438 @@ async function invokeLogout() {
                       :key="country.id"
                       :value="country.id"
                     >
-                      {{ country.name }}
+                      {{ country.translated.name }}
                     </option>
-                  </select>
-                  <span
-                    v-if="$v.billingAddress.countryId.$error"
-                    class="pt-1 text-sm text-red-600 focus:ring-brand-primary border-gray-300"
-                  >
-                    {{ $v.billingAddress.countryId.$errors[0].$message }}
-                  </span>
+                  </SwSelect>
                 </div>
-              </div>
-              <button
-                type="submit"
-                class="flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                data-testid="checkout-pi-submit-button"
-              >
-                Save
-              </button>
-            </form>
-            <div v-else>
-              You are logged-in as {{ user?.firstName }}
-              <span
-                v-if="isGuestSession"
-                class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"
-                >guest</span
-              >! You can log out
-              <a
-                href="#"
-                class="text-brand-primary hover:text-brand-dark"
-                data-testid="checkout-logout"
-                @click="invokeLogout"
-                >here</a
-              >.
-            </div>
-          </div>
-          <fieldset class="grid gap-4 shadow px-4 py-5 bg-white sm:p-6 mb-8">
-            <legend class="pt-5">
-              <h3 class="text-lg font-medium text-gray-900 m-0">
-                Shipping method
-              </h3>
-              <div class="text-sm text-gray-600">Select a payment method.</div>
-            </legend>
-            <div v-if="isLoading['shippingMethods']" class="w-60 h-24">
-              <div
-                class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5"
-              >
-                <div class="w-4 bg-gray-300 h-4 mt-1 rounded-full" />
-                <div class="flex flex-col space-y-3">
-                  <div class="w-36 bg-gray-300 h-6 rounded-md" />
-                  <div class="w-24 bg-gray-300 h-6 rounded-md" />
-                </div>
-              </div>
-            </div>
-            <div
-              v-for="singleShippingMethod in shippingMethods"
-              v-else
-              :key="singleShippingMethod.id"
-              class="flex items-center"
-            >
-              <input
-                :id="singleShippingMethod.id"
-                v-model="selectedShippingMethod"
-                :value="singleShippingMethod.id"
-                name="shipping-method"
-                type="radio"
-                class="focus:ring-brand-primary h-4 w-4 border-gray-300"
-                :data-testid="`checkout-shipping-method-${singleShippingMethod.id}`"
-              />
-              <label
-                :for="singleShippingMethod.id"
-                :class="{ 'animate-pulse': isLoading[singleShippingMethod.id] }"
-                class="ml-2 block text-sm font-medium text-gray-700"
-              >
-                {{ singleShippingMethod.name }}
-              </label>
-            </div>
-          </fieldset>
-          <fieldset class="grid gap-4 shadow px-4 py-5 bg-white sm:p-6">
-            <legend class="pt-5">
-              <h3 class="text-lg font-medium text-gray-900 m-0">
-                Payment method
-              </h3>
-              <div class="text-sm text-gray-600">Select a payment method</div>
-            </legend>
-            <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
-              <div
-                class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5"
-              >
-                <div class="w-4 bg-gray-300 h-4 mt-1 rounded-full" />
-                <div class="flex flex-col space-y-3">
-                  <div class="w-36 bg-gray-300 h-6 rounded-md" />
-                  <div class="w-24 bg-gray-300 h-6 rounded-md" />
-                </div>
-              </div>
-            </div>
-            <div
-              v-for="singlePaymentMethod in paymentMethods"
-              v-else
-              :key="singlePaymentMethod.id"
-              class="flex items-center"
-            >
-              <input
-                :id="singlePaymentMethod.id"
-                v-model="selectedPaymentMethod"
-                :value="singlePaymentMethod.id"
-                name="payment-method"
-                type="radio"
-                class="focus:ring-brand-primary h-4 w-4 border-gray-300"
-                :data-testid="`checkout-payment-method-${singlePaymentMethod.id}`"
-              />
-              <label
-                :for="singlePaymentMethod.id"
-                :class="{ 'animate-pulse': isLoading[singlePaymentMethod.id] }"
-                class="ml-2 block text-sm font-medium text-gray-700"
-              >
-                {{ singlePaymentMethod.name }}
-              </label>
-            </div>
-          </fieldset>
-          <fieldset
-            v-if="isLoggedIn"
-            class="grid gap-4 shadow px-4 py-5 bg-white sm:p-6"
-          >
-            <legend class="pt-5">
-              <h3 class="text-lg font-medium text-gray-900 m-0">
-                Billing Address
-              </h3>
-              <div class="text-sm text-gray-600">Select a billing address</div>
-            </legend>
-            <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
-              <div
-                class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5"
-              >
-                <div class="w-4 bg-gray-300 h-4 mt-1 rounded-full" />
-                <div class="flex flex-col space-y-3">
-                  <div class="w-36 bg-gray-300 h-6 rounded-md" />
-                  <div class="w-24 bg-gray-300 h-6 rounded-md" />
-                </div>
-              </div>
-            </div>
-            <div
-              v-for="address in customerAddresses"
-              v-else
-              :key="address.id"
-              class="flex mb-3"
-            >
-              <input
-                :id="`billing-${address.id}`"
-                v-model="selectedBillingAddress"
-                :value="address.id"
-                name="billing-address"
-                type="radio"
-                class="focus:ring-brand-primary h-4 w-4 border-gray-300"
-                :data-testid="`checkout-billing-address-${address.id}`"
-              />
-              <label
-                :for="`billing-${address.id}`"
-                :class="{ 'animate-pulse': isLoading[`billing-${address.id}`] }"
-                class="ml-2 field-label"
-              >
-                <AccountAddressCard
-                  :key="address.id"
-                  :address="address"
-                  :countries="getCountries"
-                  :salutations="getSalutations"
-                  :can-set-default="false"
+                <SharedCheckbox 
+                  :content="$t('use_same_for_billing_information')"
+                  v-model="isSameBillingAndShipping"
                 />
-              </label>
+              </div>
             </div>
-            <button
-              type="button"
-              class="flex font-medium text-brand-dark"
-              @click="
-                modal.open('AccountAddressForm', {
-                  countries: getCountries,
-                  salutations: getSalutations,
-                  title: 'Add new billing address',
-                })
-              "
-            >
-              Add new billing address
-            </button>
-            <label for="customShipping" class="field-label">
-              <input
-                id="customShipping"
-                v-model="state.customShipping"
-                name="privacy"
-                type="checkbox"
-                class="mt-1 focus:ring-indigo-500 h-4 w-4 border text-indigo-600 rounded"
-              />
-              Different shipping address
-            </label>
-            <div v-if="state.customShipping">
-              <div
-                v-for="address in customerAddresses"
-                :key="address.id"
-                class="flex mb-3"
-              >
-                <input
-                  :id="`shipping-${address.id}`"
-                  v-model="selectedShippingAddress"
-                  :value="address.id"
-                  name="shipping-address"
-                  type="radio"
-                  class="focus:ring-brand-primary h-4 w-4 border-gray-300"
-                  :data-testid="`checkout-shipping-address-${address.id}`"
-                />
-                <label
-                  :for="`shipping-${address.id}`"
-                  :class="{
-                    'animate-pulse': isLoading[`shipping-${address.id}`],
-                  }"
-                  class="ml-2 field-label"
+            <div class="border-b border-gray-200"></div>
+            <template v-if="!isSameBillingAndShipping">
+              <div>
+                <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
+                <div class="flex flex-col gap-6">
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
+                    <input
+                      v-model="state.billingAddress.phoneNumber"
+                      id="phone"
+                      name="phone"
+                      autocomplete="phone"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
+                    <input
+                      v-model="state.billingAddress.street"
+                      id="address"
+                      name="address"
+                      type="text"
+                      autocomplete="address"
+                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    />
+                  </div>
+                  <div class="flex gap-4">
+                    <div class="w-1/3">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
+                      <input
+                        v-model="state.billingAddress.zipcode"
+                        id="zipcode"
+                        name="zipcode"
+                        type="text"
+                        autocomplete="zipcode"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                    <div class="w-2/3">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
+                      <input
+                        v-model="state.billingAddress.city"
+                        id="city"
+                        name="city"
+                        type="text"
+                        autocomplete="city"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1" for="country">{{ $t('country') }}</label>
+                    <SwSelect
+                      :compact="false"
+                      id="country"
+                      v-model="state.billingAddress.countryId"
+                      name="country"
+                      autocomplete="country-name"
+                      data-testid="checkout-pi-country-input"
+                      @blur="$v.billingAddress.countryId.$touch()"
+                    > 
+                      <option disabled selected value="">
+                        Choose country...
+                      </option>
+                      <option
+                        v-for="country in getCountries"
+                        :key="country.id"
+                        :value="country.id"
+                      >
+                        {{ country.translated.name }}
+                      </option>
+                    </SwSelect>
+                  </div>
+                </div>
+              </div>
+              <div class="border-b border-gray-200"></div>
+            </template>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{  $t('shipping_method') }}</h6>
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <li
+                  v-for="singleShippingMethod in shippingMethods"
+                  :key="singleShippingMethod.id"
+                  class="shadow-sm relative"
+                  :class="selectedShippingMethod === singleShippingMethod.id ? 'border-2 border-gray-500' : 'border border-gray-300'"
                 >
-                  <AccountAddressCard
-                    :key="address.id"
-                    :address="address"
-                    :countries="getCountries"
-                    :salutations="getSalutations"
-                    :can-set-default="false"
+                  <input
+                    :id="singleShippingMethod.id"
+                    v-model="selectedShippingMethod"
+                    :value="singleShippingMethod.id"
+                    name="shipping-method"
+                    type="radio"
+                    class="focus:ring-brand-primary h-4 w-4 border-gray-300 hidden"
+                    :data-testid="`checkout-shipping-method-${singleShippingMethod.id}`"
                   />
-                </label>
+                  <label
+                    :for="singleShippingMethod.id"
+                    :class="{ 'animate-pulse': isLoading[singleShippingMethod.id] }"
+                    class="p-4 block text-sm font-medium text-gray-900 cursor-pointer"
+                  >
+                    <p>{{ (singleShippingMethod as any).translated.name }}</p>
+                    <p class="text-sm text-gray-500">
+                      {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
+                    </p>
+                    <br/>
+                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                  </label>
+                  <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
+                </li>
+              </ul>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('payment_method') }}</h6>
+              <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
+                <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
+                  <div class="w-4 bg-gray-300 h-4 rounded-full" />
+                  <div class="flex flex-col space-y-3">
+                    <div class="w-36 bg-gray-300 h-6 rounded-md" />
+                    <div class="w-24 bg-gray-300 h-6 rounded-md" />
+                  </div>
+                </div>
               </div>
+              <form v-else>
+                <RadioGroup
+                  v-model="selectedPaymentMethod"
+                  class="border border-gray-200"
+                >
+                  <RadioGroupOption
+                    v-for="paymentMethod in paymentMethods"
+                    :key="paymentMethod.id"
+                    :value="paymentMethod.id"
+                    v-slot="{ checked }"
+                  >
+                    <div
+                      :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                      class="relative flex cursor-pointer rounded-lg p-4"
+                    >
+                      <div>
+                        <span
+                          :class="[
+                          checked
+                            ? 'bg-gray-800 border-transparent'
+                            : 'bg-white border-gray-300',
+                          ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                        ]"
+                          aria-hidden="true"
+                        >
+                        <span class="rounded-full bg-white w-1.5 h-1.5" />
+                      </span>
+                      </div>
+                      <div>
+                        <RadioGroupLabel class="block cursor-pointer">
+                          <h6 class="block text-sm font-medium text-gray-900">{{ paymentMethod.translated?.name }}</h6>
+                          <p class="text-gray-700 text-sm">
+                            {{ paymentMethod.translated?.description }}
+                          </p>
+                        </RadioGroupLabel>
+                      </div>
+                    </div>
+
+                    <div class="w-full border-b border-b-gray-200" />
+                  </RadioGroupOption>
+                </RadioGroup>
+              </form>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
+              <SharedCheckbox v-model="state.agree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+            </div>
+            <button ref="submitBtn" type="submit" class="hidden">submit</button>
+          </form>
+          <!-- Existed User -->
+          <div 
+            v-else 
+            class="flex flex-col gap-10"
+          >
+            <div class="flex gap-2 items-center">
+              <span class="text-base text-dark-variant">{{$t('you_are_logged_in_as', [user?.firstName, user?.lastName]) }}</span>
               <button
                 type="button"
-                class="flex font-medium text-brand-dark"
-                @click="
-                  modal.open('AccountAddressForm', {
-                    countries: getCountries,
-                    salutations: getSalutations,
-                    title: 'Add new shipping address',
-                  })
-                "
+                class="flex items-center justify-center px-5 py-2 text-base font-medium text-white shadow-sm bg-gray-800"
+                @click="invokeLogout"
               >
-                Add new shipping address
+                {{ $t('log_out') }}
               </button>
             </div>
-          </fieldset>
-        </div>
-        <div class="mt-5 md:mt-0 md:col-span-1">
-          <div class="grid gap-4 shadow px-4 py-5 bg-white sm:p-6">
             <div>
-              <h3 class="text-lg font-medium text-gray-900 m-0">
-                Order summary
-              </h3>
-              <p class="text-sm text-gray-600">Order details and totals.</p>
-            </div>
-            <ul role="list" class="-my-4 divide-y divide-gray-200 pl-0">
-              <li
-                v-for="cartItem in cartItems"
-                :key="cartItem.id"
-                class="flex py-6"
-              >
-                <CheckoutCartItem :cart-item="cartItem" />
-              </li>
-            </ul>
-
-            <div class="flex justify-between text-sm text-gray-500">
-              <p>Subtotal</p>
-              <SharedPrice
-                :value="subtotal"
-                class="text-gray-900 font-medium"
-                data-testid="cart-subtotal"
-              />
-            </div>
-
-            <div
-              class="flex pb-4 border-b justify-between text-sm text-gray-500"
-            >
-              <p>Shipping estimate</p>
-              <SharedPrice
-                :value="shippingTotal"
-                class="text-gray-900 font-medium"
-                data-testid="cart-subtotal"
-              />
-            </div>
-
-            <div class="flex justify-between text-gray-900 font-medium">
-              <p>Order total</p>
-              <SharedPrice :value="totalPrice" data-testid="cart-subtotal" />
-            </div>
-
-            <div class="mt-4">
-              <div class="text-right">
-                <span v-if="!isUserSession" class="text-sm text-gray-600"
-                  >You must be logged-in before submitting an order.</span
-                >
-                <button
-                  :disabled="!isUserSession"
-                  type="button"
-                  :class="{
-                    grayscale: !isUserSession,
-                    'opacity-50 cursor-not-allowed hover:bg-brand-primary':
-                      !isUserSession,
-                    'animate-pulse': isLoading['placeOrder'],
-                  }"
-                  class="w-full flex justify-center py-2 px-4 border border-transparent font-medium rounded-md text-white bg-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                  data-testid="checkout-place-order-button"
-                  @click="placeOrder"
-                >
-                  Place the order
-                </button>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_address') }}</h6>
+              <div class="flex flex-col gap-4">
+                <div>
+                  <RadioGroup
+                    v-model="selectedShippingAddress"
+                    class="border border-gray-200"
+                  >
+                    <RadioGroupOption
+                      class="cursor-pointer"
+                      v-for="customerAddress in customerAddresses"
+                      :key="customerAddress.id"
+                      :value="customerAddress.id"
+                      v-slot="{ checked }"
+                    >
+                      <div
+                        :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                        class="relative flex cursor-pointer rounded-lg p-4"
+                      >
+                        <div>
+                          <span
+                            :class="[
+                            checked
+                              ? 'bg-gray-800 border-transparent'
+                              : 'bg-white border-gray-300',
+                            ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                          ]"
+                            aria-hidden="true"
+                          >
+                          <span class="rounded-full bg-white w-1.5 h-1.5" />
+                        </span>
+                        </div>
+                        <div>
+                          <RadioGroupLabel class="block cursor-pointer">
+                            <h6 class="block text-sm font-medium text-gray-900">{{ `${customerAddress.firstName} ${customerAddress.lastName}` }}</h6>
+                            <p class="text-gray-700 text-sm">
+                              <span class="block">{{ customerAddress.street }}</span>
+                              <span class="block">{{ customerAddress.zipcode }}</span>
+                              <span class="block">{{ customerAddress.city }}</span>
+                            </p>
+                          </RadioGroupLabel>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => e.stopPropagation()"/>
+                        </div>
+                      </div>
+  
+                      <div class="w-full border-b border-b-gray-200" />
+                    </RadioGroupOption>
+                  </RadioGroup>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                  >
+                    {{ $t('add_new_shipping_address') }}
+                  </button>
+                </div>
+                <div>
+                  <SharedCheckbox 
+                    :content="$t('different_billing_address')"
+                    v-model="isDifferentBillingAndShipping"
+                  />
+                </div>
               </div>
             </div>
+            <div class="border-b border-gray-200"></div>
+            <div v-if="isDifferentBillingAndShipping">
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
+              <div class="flex flex-col gap-4">
+                <div>
+                  <RadioGroup
+                    v-model="selectedBillingAddress"
+                    class="border border-gray-200"
+                  >
+                    <RadioGroupOption
+                      v-for="customerAddress in customerAddresses"
+                      :key="customerAddress.id"
+                      :value="customerAddress.id"
+                      v-slot="{ checked }"
+                    >
+                      <div
+                        :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                        class="relative flex cursor-pointer rounded-lg p-4"
+                      >
+                        <div>
+                          <span
+                            :class="[
+                            checked
+                              ? 'bg-gray-800 border-transparent'
+                              : 'bg-white border-gray-300',
+                            ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                          ]"
+                            aria-hidden="true"
+                          >
+                          <span class="rounded-full bg-white w-1.5 h-1.5" />
+                        </span>
+                        </div>
+                        <div>
+                          <RadioGroupLabel class="block cursor-pointer">
+                            <h6 class="block text-sm font-medium text-gray-900">{{ `${customerAddress.firstName} ${customerAddress.lastName}` }}</h6>
+                            <p class="text-gray-700 text-sm">
+                              <span class="block">{{ customerAddress.street }}</span>
+                              <span class="block">{{ customerAddress.zipcode }}</span>
+                              <span class="block">{{ customerAddress.city }}</span>
+                            </p>
+                          </RadioGroupLabel>
+                        </div>
+                      </div>
+  
+                      <div class="w-full border-b border-b-gray-200" />
+                    </RadioGroupOption>
+                  </RadioGroup>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                  >
+                    {{$t('add_new_billing_address')}}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div v-if="isDifferentBillingAndShipping" class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_method') }}</h6>
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <li
+                  v-for="singleShippingMethod in shippingMethods"
+                  :key="singleShippingMethod.id"
+                  class="shadow-sm relative"
+                  :class="selectedShippingMethod === singleShippingMethod.id ? 'border-2 border-gray-500' : 'border border-gray-300'"
+                >
+                  <input
+                    :id="singleShippingMethod.id"
+                    v-model="selectedShippingMethod"
+                    :value="singleShippingMethod.id"
+                    name="shipping-method"
+                    type="radio"
+                    class="focus:ring-brand-primary h-4 w-4 border-gray-300 hidden"
+                    :data-testid="`checkout-shipping-method-${singleShippingMethod.id}`"
+                  />
+                  <label
+                    :for="singleShippingMethod.id"
+                    :class="{ 'animate-pulse': isLoading[singleShippingMethod.id] }"
+                    class="p-4 block text-sm font-medium text-gray-900 cursor-pointer"
+                  >
+                    <p>{{ (singleShippingMethod as any).translated.name }}</p>
+                    <p class="text-sm text-gray-500">
+                      {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
+                    </p>
+                    <br/>
+                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                  </label>
+                  <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
+                </li>
+              </ul>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('payment_method') }}</h6>
+              <div v-if="isLoading['paymentMethods']" class="w-60 h-24">
+                <div class="flex animate-pulse flex-row items-top pt-4 h-full space-x-5">
+                  <div class="w-4 bg-gray-300 h-4 rounded-full" />
+                  <div class="flex flex-col space-y-3">
+                    <div class="w-36 bg-gray-300 h-6 rounded-md" />
+                    <div class="w-24 bg-gray-300 h-6 rounded-md" />
+                  </div>
+                </div>
+              </div>
+              <form v-else>
+                <RadioGroup
+                  v-model="selectedPaymentMethod"
+                  class="border border-gray-200"
+                >
+                  <RadioGroupOption
+                    v-for="paymentMethod in paymentMethods"
+                    :key="paymentMethod.id"
+                    :value="paymentMethod.id"
+                    v-slot="{ checked }"
+                  >
+                    <div
+                      :class="[checked ? 'bg-gray-50 text-white' : 'bg-white ']"
+                      class="relative flex cursor-pointer rounded-lg p-4"
+                    >
+                      <div>
+                        <span
+                          :class="[
+                          checked
+                            ? 'bg-gray-800 border-transparent'
+                            : 'bg-white border-gray-300',
+                          ' h-4 w-4 mr-3 mt-0.25 rounded-full border flex items-center justify-center',
+                        ]"
+                          aria-hidden="true"
+                        >
+                        <span class="rounded-full bg-white w-1.5 h-1.5" />
+                      </span>
+                      </div>
+                      <div>
+                        <RadioGroupLabel class="block cursor-pointer">
+                          <h6 class="block text-sm font-medium text-gray-900">{{ paymentMethod.translated?.name }}</h6>
+                          <p class="text-gray-700 text-sm">
+                            {{ paymentMethod.translated?.description }}
+                          </p>
+                        </RadioGroupLabel>
+                      </div>
+                    </div>
+
+                    <div class="w-full border-b border-b-gray-200" />
+                  </RadioGroupOption>
+                </RadioGroup>
+              </form>
+            </div>
+            <div class="border-b border-gray-200"></div>
+            <div>
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
+              <SharedCheckbox v-model="isAgree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+            </div>
           </div>
+        </div>
+        <div class="w-full md:w-1/2 md:max-w-[574px]">
+          <h5 class="text-lg font-medium text-dark-primary mb-4">{{ $t('order_summary') }}</h5>
+          <SharedOrdersSummary :showCartItems="true">
+            <template #action>
+              <button
+                class="mt-6 w-full flex items-center justify-center px-5 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
+                :disabled="isLoading.all"
+                @click="handleSubmit"
+              >
+                {{ $t('confirm_order') }}
+              </button>
+            </template>
+          </SharedOrdersSummary>
+          <SharedValueProposition class="mt-6" :isColumn="true" />
         </div>
       </div>
     </div>

@@ -34,6 +34,7 @@ export function useCurrency(): IUseCurrency {
     if (current) {
       try {
         await setContextCurrency(current);
+        location.reload();
         // refreshCart();
       } catch (e) {
         console.error(

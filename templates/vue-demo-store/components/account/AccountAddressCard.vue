@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { CustomerAddress, Country, Salutation } from "@shopware-pwa/types";
+import { Country, CustomerAddress, Salutation } from "@shopware-pwa/types";
 import { SharedModal } from "~~/components/shared/SharedModal.vue";
+
 const { pushSuccess, pushError } = useNotifications();
 const {
   setDefaultCustomerShippingAddress,
