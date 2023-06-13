@@ -42,7 +42,7 @@ watch(
     <nav aria-label="Global">
       <!-- For Desktop -->
       <div class="header-desktop hidden lg:block container mx-auto">
-        <div class="flex justify-end gap-4">
+        <div class="flex justify-end gap-4 mt-2 mb-4">
           <LayoutCurrency />
           <LayoutLanguage />
         </div>
@@ -109,7 +109,6 @@ watch(
               </div>
             </div>
           </div>
-
         </div>
       </div>
       <!-- For Mobile -->

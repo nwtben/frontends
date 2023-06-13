@@ -6,6 +6,13 @@ const { fetchAvailableCurrencies, availableCurrencies, currentCurrency, setCurre
 onMounted(async () => {
   await fetchAvailableCurrencies();
 })
+
+const availableCurrenciesOptions = computed(() => {
+  return availableCurrencies.value?.map(x => ({
+    label: `${x.symbol} ${x.isoCode}`,
+    value: x.id
+  })) ?? [];
+})
 </script>
 <template>
   <div
@@ -15,17 +22,9 @@ onMounted(async () => {
     <SwSelect
       id="currency"
       name="currency"
-      :value="currentCurrency?.id"
-      @change="(e: any) => setCurrency(e.target.value)"
-      class="mt-2 mb-4"
-    >
-      <option
-        v-for="currency of availableCurrencies"
-        :key="currency.id"
-        :value="currency.id"
-      >
-        {{ currency.symbol }} {{ currency.isoCode }}
-      </option>
-    </SwSelect>
+      :modelValue="currentCurrency?.id"
+      @update:modelValue="(e: any) => setCurrency(e)"
+      :options="availableCurrenciesOptions"
+    />
   </div>
 </template>

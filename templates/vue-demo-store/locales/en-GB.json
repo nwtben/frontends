@@ -114,5 +114,6 @@
   "confirm_order": "Confirm order",
   "go_to_checkout": "Go to checkout",
   "show_shopping_cart": "Show Shopping cart",
-  "cart": "Cart"
+  "cart": "Cart",
+  "choose_country_placeholder": "Choose country..."
 }

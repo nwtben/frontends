@@ -204,6 +204,13 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
 }, {
   immediate: true
 });
+
+const getSortingOrdersOptions = computed(() => {
+  return getSortingOrders.value.map(x => ({
+    label: x.label,
+    value: x.key
+  }))
+});
 </script>
 <template>
   <ClientOnly>
@@ -218,11 +225,8 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
           name="language"
           v-model="currentSortingOrder"
           class="text-gray-700"
-        >
-          <option v-for="sorting of getSortingOrders" :key="sorting.key" :value="sorting.key">
-            {{ sorting.label }}
-          </option>
-        </SwSelect>
+          :options="getSortingOrdersOptions"
+        />
       </div>
     </div>
     <div class="block md:hidden mt-4">

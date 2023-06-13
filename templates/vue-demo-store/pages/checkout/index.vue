@@ -309,6 +309,13 @@ const handleChangeGuest = (e: any) => {
   state.guest = !e.target.checked;
 }
 
+const getCountriesOptions = computed(() => {
+  return getCountries.value?.map(x => ({
+    label: x.translated.name,
+    value: x.id
+  })) ?? []
+})
+
 </script>
 
 <template>
@@ -453,20 +460,9 @@ const handleChangeGuest = (e: any) => {
                     v-model="state.shippingAddress.countryId"
                     name="country"
                     autocomplete="country-name"
-                    data-testid="checkout-pi-country-input"
-                    @blur="$v.shippingAddress.countryId.$touch()"
-                  >
-                    <option disabled selected value="">
-                      Choose country...
-                    </option>
-                    <option
-                      v-for="country in getCountries"
-                      :key="country.id"
-                      :value="country.id"
-                    >
-                      {{ country.translated.name }}
-                    </option>
-                  </SwSelect>
+                    :options="getCountriesOptions"
+                    :placeholder="$t('choose_country_placeholder')"
+                  />
                 </div>
                 <SharedCheckbox 
                   :content="$t('use_same_for_billing_information')"
@@ -532,20 +528,9 @@ const handleChangeGuest = (e: any) => {
                       v-model="state.billingAddress.countryId"
                       name="country"
                       autocomplete="country-name"
-                      data-testid="checkout-pi-country-input"
-                      @blur="$v.billingAddress.countryId.$touch()"
-                    > 
-                      <option disabled selected value="">
-                        Choose country...
-                      </option>
-                      <option
-                        v-for="country in getCountries"
-                        :key="country.id"
-                        :value="country.id"
-                      >
-                        {{ country.translated.name }}
-                      </option>
-                    </SwSelect>
+                      :options="getCountriesOptions"
+                      :placeholder="$t('choose_country_placeholder')"
+                    />
                   </div>
                 </div>
               </div>
