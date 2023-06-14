@@ -23,6 +23,13 @@ const props = withDefaults(
   }
 );
 
+const countriesOptions = computed(() => {
+  return props.countries.map(country => ({
+    label: country.translated.name,
+    value: country.id
+  }))
+});
+
 const formData = reactive<CustomerAddress>({
   countryId: props.address?.countryId ?? "",
   salutationId: props.address?.salutationId ?? props.salutations?.[0]?.id ?? "",
@@ -122,24 +129,12 @@ const invokeSave = async (): Promise<void> => {
             <div>
               <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
               <SwSelect
-                :compact="false"
-                id="country"
-                v-model="formData.countryId"
                 name="country"
-                autocomplete="country-name"
-                data-testid="checkout-pi-country-input"
-              >
-                <option disabled selected value="">
-                  Choose country...
-                </option>
-                <option
-                  v-for="country in countries"
-                  :key="country.id"
-                  :value="country.id"
-                >
-                  {{ country.translated.name }}
-                </option>
-              </SwSelect>
+                v-model="formData.countryId"
+                class="text-gray-700"
+                :options="countriesOptions"
+                :placeholder="$t('choose_country_placeholder')"
+              />
             </div>
           </div>
         </div>
