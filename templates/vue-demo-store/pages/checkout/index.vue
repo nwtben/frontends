@@ -21,7 +21,6 @@ definePageMeta({
 });
 
 const isSameBillingAndShipping = ref(true);
-const isDifferentBillingAndShipping = ref();
 const submitBtn = ref();
 const isAgree = ref();
 const { push } = useRouter();
@@ -125,6 +124,8 @@ const state = reactive<any>({
     countryId: "",
   },
   billingAddress: {
+    firstName: "",
+    lastName: "",
     phoneNumber: "",
     street: "",
     zipcode: "",
@@ -158,6 +159,14 @@ const rules = computed(() => ({
     minLength: minLength(8),
   },
   billingAddress: {
+    firstName: {
+      required,
+      minLength: minLength(3),
+    },
+    lastName: {
+      required,
+      minLength: minLength(3),
+    },
     street: {
       required,
       minLength: minLength(3),
@@ -251,7 +260,6 @@ const registerUser = async () => {
     state.billingAddress.salutationId = state.salutationId;
     state.billingAddress.firstName = state.firstName;
     state.billingAddress.lastName = state.lastName;
-    console.log(state)
     await register(state);
   } catch (error) {
     const e = error as ClientApiError;
@@ -274,22 +282,44 @@ watch(getSalutations, (salutations) => {
 
 watch(() => state.shippingAddress, (value) => {
   if (!isSameBillingAndShipping.value) return;
-  state.billingAddress = {...value};
+  state.billingAddress = {
+    ...value,
+    lastName: state.lastName,
+    firstName: state.firstName
+  };
 }, {
   deep: true
 });
 
 watch(isSameBillingAndShipping, (value) => {
   if (value) {
-    state.billingAddress = {...state.shippingAddress};
+    state.billingAddress = {
+      ...state.shippingAddress,
+      lastName: state.lastName,
+      firstName: state.firstName
+    };
   } else {
     state.billingAddress = {
       street: "",
       zipcode: "",
       city: "",
       countryId: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      lastName: "",
+      firstName: ""
     }
+  }
+});
+
+watch(() => state.lastName, (value) => {
+  if (isSameBillingAndShipping.value) {
+    state.billingAddress.lastName = value;
+  }
+});
+
+watch(() => state.firstName, (value) => {
+  if (isSameBillingAndShipping.value) {
+    state.billingAddress.firstName = value;
   }
 });
 
@@ -307,6 +337,24 @@ const login = () => {
 
 const handleChangeGuest = (e: any) => {
   state.guest = !e.target.checked;
+}
+
+const editAddress = (e: any, address: any) => {
+  e.stopPropagation();
+  modal.open('AccountAddressForm', {
+    address,
+    salutations: getSalutations,
+    countries: getCountries,
+    title: 'Edit address',
+  })
+}
+
+const createAddress = (e: any) => {
+  e.stopPropagation();
+  modal.open('AccountAddressForm', {
+    salutations: getSalutations,
+    countries: getCountries,
+  })
 }
 
 const getCountriesOptions = computed(() => {
@@ -473,8 +521,32 @@ const getCountriesOptions = computed(() => {
             <div class="border-b border-gray-200"></div>
             <template v-if="!isSameBillingAndShipping">
               <div>
-                <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
+                <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('different_billing_address') }}</h6>
                 <div class="flex flex-col gap-6">
+                  <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-firstName">{{ $t('first_name') }}</label>
+                      <input
+                        v-model="state.billingAddress.firstName"
+                        id="billing-firstName"
+                        name="billing-firstName"
+                        type="text"
+                        autocomplete="firstName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-lastName">{{  $t('last_name') }}</label>
+                      <input
+                        v-model="state.billingAddress.lastName"
+                        id="billing-lastName"
+                        name="billing-lastName"
+                        type="text"
+                        autocomplete="lastName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                  </div>
                   <div>
                     <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
                     <input
@@ -688,7 +760,7 @@ const getCountriesOptions = computed(() => {
                               <span class="block">{{ customerAddress.city }}</span>
                             </p>
                           </RadioGroupLabel>
-                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => e.stopPropagation()"/>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => editAddress(e, customerAddress)" />
                         </div>
                       </div>
   
@@ -700,20 +772,21 @@ const getCountriesOptions = computed(() => {
                   <button
                     type="button"
                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                    @click="createAddress"
                   >
                     {{ $t('add_new_shipping_address') }}
                   </button>
                 </div>
                 <div>
                   <SharedCheckbox 
-                    :content="$t('different_billing_address')"
-                    v-model="isDifferentBillingAndShipping"
+                    :content="$t('use_same_for_billing_information')"
+                    v-model="isSameBillingAndShipping"
                   />
                 </div>
               </div>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div v-if="isDifferentBillingAndShipping">
+            <div v-if="!isSameBillingAndShipping">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
               <div class="flex flex-col gap-4">
                 <div>
@@ -753,6 +826,7 @@ const getCountriesOptions = computed(() => {
                               <span class="block">{{ customerAddress.city }}</span>
                             </p>
                           </RadioGroupLabel>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => editAddress(e, customerAddress)" />
                         </div>
                       </div>
   
@@ -764,13 +838,14 @@ const getCountriesOptions = computed(() => {
                   <button
                     type="button"
                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                    @click="createAddress"
                   >
                     {{$t('add_new_billing_address')}}
                   </button>
                 </div>
               </div>
             </div>
-            <div v-if="isDifferentBillingAndShipping" class="border-b border-gray-200"></div>
+            <div v-if="!isSameBillingAndShipping" class="border-b border-gray-200"></div>
             <div>
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_method') }}</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">

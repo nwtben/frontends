@@ -102,7 +102,7 @@ export default {
 <template>
   <div class="container">
     <h2 v-if="hasItems" class="mt-16 mb-12 text-3xl font-normal md:text-4xl">
-      {{ $t('shopping_cart') }}
+      {{ $t('shopping_bag') }}
     </h2>
     <div
       v-if="hasItems"
@@ -121,7 +121,7 @@ export default {
               to="/checkout"
               data-testid="cart-checkout-link"
             >
-              {{ $t('checkout') }}
+              {{ $t('go_to_checkout') }}
             </RouterLink>
           </template>
         </SharedOrdersSummary>

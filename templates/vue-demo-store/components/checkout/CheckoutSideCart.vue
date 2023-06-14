@@ -47,16 +47,16 @@ const close = () => {
         leave-from="translate-x-0"
         leave-to="translate-x-full"
       >
-        <DialogPanel class="w-full flex flex-col fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <DialogPanel class="w-full flex flex-col fixed inset-y-0 right-0 z-50 overflow-y-auto bg-white sm:max-w-[448px] sm:ring-1 sm:ring-gray-900/10">
           <div class="w-full pointer-events-auto h-full">
-            <div class="flex h-full w-full flex-col bg-white shadow-xl p-6">
+            <div class="flex h-full w-full flex-col bg-white shadow-xl py-6 px-4 sm:p-6">
               <div class="flex flex-col h-full">
                 <div class="flex items-start justify-between">
                   <h2
                     id="slide-over-title"
                     class="text-lg font-medium text-gray-900 py-0"
                   >
-                    {{ $t('cart') }} ({{count}})
+                    {{ $t('shopping_bag') }} ({{count}})
                   </h2>
                   <div class="ml-3 flex h-7 items-center">
                     <button
@@ -76,7 +76,7 @@ const close = () => {
                   <nuxt-link to="/" @click="close" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
                 </div>
 
-                <div v-else class="flex flex-col flex-1 min-h-0 gap-6 mt-6">
+                <div v-else class="flex flex-col flex-1 min-h-0 gap-4 sm:gap-6 mt-6">
                   <div class="flex-1 min-h-0 overflow-y-auto -mr-6">
                     <SharedProductOrders class="flex-1 -mt-6 pr-6" :isMiniCart="true" :enableActions="true" :lineItems="cartItems || []" />
                   </div>

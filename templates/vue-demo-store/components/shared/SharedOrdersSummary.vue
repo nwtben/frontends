@@ -51,7 +51,7 @@ const handleSubmitPromotionCode = async () => {
             :class="promotionErrors.length ? 'border-red-600' : ''"
           />
           <button @click="handleSubmitPromotionCode" :disabled="!discountCode" class="capitalize disabled:opacity-70 flex items-center justify-center px-3 py-1 text-xs font-medium text-white shadow-sm bg-gray-800">
-            {{ $t('apply') }}
+            {{ $t('use') }}
           </button>
         </div>
         <div v-if="promotionErrors.length">
