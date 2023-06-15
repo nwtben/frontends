@@ -120,5 +120,21 @@
   "specification":  "Detaljer",
   "reviews": "Recensioner",
   "delivery_and_returns": "Leverans och retur",
-  "choose_country_placeholder": "Välj land..."
+  "choose_country_placeholder": "Välj land...",
+  "login": "logga in",
+  "signup": "Bli Medlem",
+  "remember_me": "Kom ihåg mig",
+  "forgot_password": "Glömt ditt lösenord",
+  "log_in_with_your_email_and_password": "Logga in med din e-postadress och ditt lösenord.",
+  "do_not_have_an_account_yet": "Har du inget konto än?",
+  "create_a_new_account": "Skapa ett nytt konto.",
+  "agree_data_protection": "Jag godkänner {0} och accepterade de {1}.",
+  "data_protection_information": "dataskyddsinformation",
+  "general_terms_and_conditions": "allmänna villkoren",
+  "create_account": "Skapa konto",
+  "or_log_in_to_your_account": "eller logga in på ditt konto",
+  "send_confirm_email": "Vi skickar ett bekräftelsemail till dig. Klicka på länken i det e-postmeddelandet för att ändra ditt lösenord.",
+  "request_email": "Begär e-post",
+  "back_to_log_in": "Tillbaka till login",
+  "password_recovery": "Återställning av lösenord"
 }

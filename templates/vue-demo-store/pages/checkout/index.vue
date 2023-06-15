@@ -332,7 +332,9 @@ const handleSubmit = () => {
 }
 
 const login = () => {
-  modal.open('AccountLoginForm')
+  modal.open('AccountLoginForm', {
+    position: 'side'
+  })
 }
 
 const handleChangeGuest = (e: any) => {
