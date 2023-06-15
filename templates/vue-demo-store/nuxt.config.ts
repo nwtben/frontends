@@ -18,11 +18,6 @@ export default defineNuxtConfig({
           as: "style",
           onload: "this.onload=null;this.rel='stylesheet'"
         },
-        {
-          rel: "preload",
-          as: "image",
-          href: "https://shopware.nwtsaas.com/media/e1/35/d3/1682437171/hero-desktop-511745398.jpg",
-        },
       ],
       /*noscript: {
         link: [
@@ -79,7 +74,6 @@ export default defineNuxtConfig({
         format: 'webp',
         quality: '85',
         effect: 'sharpen:100',
-        // sizes: 'sm:100vw md:50vw'
       },
     },
   },
