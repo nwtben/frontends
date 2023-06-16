@@ -69,7 +69,6 @@ export default defineNuxtConfig({
     ],
     provider: 'fastly',
     fastly: {
-      baseURL: 'http://shopware.nwtsaas.com.global.prod.fastly.net',
       modifiers: {
         format: 'webp',
         quality: '85',

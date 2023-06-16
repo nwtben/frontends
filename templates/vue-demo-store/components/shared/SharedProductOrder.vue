@@ -5,7 +5,6 @@ import SwQuantitySelector from '../SwQuantitySelector.vue';
 import {
   TrashIcon,
 } from '@heroicons/vue/24/outline';
-import { getPath } from '~/helpers';
 
 const props = defineProps<{
   lineItem: OrderLineItem | LineItem;
@@ -57,7 +56,7 @@ const removeCartItem = async () => {
     >
       <nuxt-link :to="getProductUrl(lineItem as any)" @click="isOpen = false">
         <nuxt-img
-          :src="getPath(getSmallestThumbnailUrl(lineItem.cover) ?? '')"
+          :src="getSmallestThumbnailUrl(lineItem.cover) ?? ''"
           :alt="lineItem.label || ''"
           class="h-full w-full object-cover object-center"
           loading="lazy"
