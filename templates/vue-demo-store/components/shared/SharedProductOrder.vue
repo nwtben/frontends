@@ -2,6 +2,7 @@
 import { OrderLineItem, LineItem } from '@shopware-pwa/types';
 import { getSmallestThumbnailUrl, getProductUrl } from "@shopware-pwa/helpers-next";
 import SwQuantitySelector from '../SwQuantitySelector.vue';
+import { getPath } from '~/helpers';
 import {
   TrashIcon,
 } from '@heroicons/vue/24/outline';
@@ -56,7 +57,7 @@ const removeCartItem = async () => {
     >
       <nuxt-link :to="getProductUrl(lineItem as any)" @click="isOpen = false">
         <nuxt-img
-          :src="getSmallestThumbnailUrl(lineItem.cover) ?? ''"
+          :src="getPath(getSmallestThumbnailUrl(lineItem.cover) ?? '')"
           :alt="lineItem.label || ''"
           class="h-full w-full object-cover object-center"
           loading="lazy"
