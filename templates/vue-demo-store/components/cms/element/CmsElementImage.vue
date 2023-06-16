@@ -4,8 +4,6 @@ import {
   CmsElementManufacturerLogo,
   useCmsElementImage,
 } from "@shopware-pwa/composables-next";
-import { Media } from "@shopware-pwa/types";
-import { getPath } from '~/helpers';
 
 const props = withDefaults(
   defineProps<{
@@ -24,23 +22,6 @@ const {
   imageAttrs,
   imageLink,
 }: any = useCmsElementImage(props.content);
-
-function getSrcSetForMedia(media: Media): string {
-  if (!media?.thumbnails?.length) {
-    return "";
-  }
-
-  return media.thumbnails
-    .map((thumbnail) => {
-      return `${$img((getPath(thumbnail.url)))} ${thumbnail.width}w`;
-    })
-    .join(", ");
-}
-
-const srcset = computed(() => {
-  const media = props.content?.data?.media;
-  return getSrcSetForMedia(media);
-})
 </script>
 <template>
   <!-- TODO: using a tag only works with externalLink, need to improve this element to deal with both internalLink & externalLink -->
@@ -57,8 +38,8 @@ const srcset = computed(() => {
         'absolute inset-0': ['cover', 'stretch'].includes(displayMode),
         'object-cover': displayMode === 'cover',
       }"
-      :src="getPath(imageAttrs.src)"
-      :srcset="srcset"
+      :src="imageAttrs.src"
+      :srcset="imageAttrs.srcset"
       :alt="imageAttrs.alt || 'Image link'"
       :loading="props.loading"
     />
