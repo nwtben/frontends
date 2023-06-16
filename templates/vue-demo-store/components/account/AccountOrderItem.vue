@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getMainImageUrl, isProduct } from "@shopware-pwa/helpers-next";
 import { OrderLineItem, PropertyGroupOptionCart } from "@shopware-pwa/types";
+import { getPath } from "~~/helpers";
 
 const props = defineProps<{
   orderItem: OrderLineItem;
@@ -20,7 +21,7 @@ const productOptions = computed(() =>
     class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-300"
   >
     <nuxt-img
-      :src="getMainImageUrl(orderItem)"
+      :src="getPath(getMainImageUrl(orderItem))"
       alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
       class="h-full w-full object-cover object-center"
       loading="lazy"
