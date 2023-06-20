@@ -21,7 +21,9 @@ const close = () => {
 
 const openAccountOnDesktop = () => {
   if (!isLoggedIn.value) {
-    modal.open('AccountLoginForm')
+    modal.open('AccountLoginForm', {
+      position: 'side'
+    })
   } else {
     router.push('/account');
   }
@@ -29,7 +31,9 @@ const openAccountOnDesktop = () => {
 
 const openAccountOnMobile = () => {
   if (!isLoggedIn.value) {
-    modal.open('AccountLoginForm')
+    modal.open('AccountLoginForm', {
+      position: 'side'
+    })
   } else {
     userMenuOpened.value = true;
   }
