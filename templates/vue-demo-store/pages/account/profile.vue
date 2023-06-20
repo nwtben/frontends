@@ -17,7 +17,6 @@ useBreadcrumbs([
     path: "/account/profile",
   },
 ]);
-
 const { user } = useUser();
 
 </script>
@@ -36,40 +35,58 @@ const currentTab = ref<number>(1);
 <template>
   <section class="flex flex-col space-y-10 mb-24">
     <section>
-      <h3 class="mb-4">{{$t('my_profile')}}</h3>
-      <p class="text-base" v-if="currentTab === 1">{{$t('check_your_personal_data')}}</p>
-      <p class="text-base" v-if="currentTab === 2">{{$t('change_password')}}</p>
+      <h3 class="mb-4">
+        {{ $t('my_profile') }}
+      </h3>
+      <p
+        v-if="currentTab === 1"
+        class="text-base"
+      >
+        {{ $t('check_your_personal_data') }}
+      </p>
+      <p
+        v-if="currentTab === 2"
+        class="text-base"
+      >
+        {{ $t('change_password') }}
+      </p>
     </section>
     <section>
-      <AccountPersonalData v-if="currentTab === 1"/>
+      <AccountPersonalData v-if="currentTab === 1" />
       <AccountChangePassword v-else />
     </section>
     <section v-if="currentTab === 1">
       <h4 class="text-lg font-medium mb-4">
-          {{$t('login_data') }}
+        {{ $t('login_data') }}
       </h4>
       <p class="text-sm text-gray-900">
         {{ user?.email }}
       </p>
       <div class="flex items-center mt-6">
         <p class="mr-1 text-sm text-gray-700 font-medium">
-            {{$t('change_email_address') }}
+          {{ $t('change_email_address') }}
         </p>
         <ChevronDownIcon class="w-5 h-5" />
       </div>
-      <div class="flex items-center mt-6 cursor-pointer" @click="() => toggleTabs(2)">
+      <div
+        class="flex items-center mt-6 cursor-pointer"
+        @click="() => toggleTabs(2)"
+      >
         <p class="mr-1 text-sm text-gray-700 font-medium">
-            {{$t('change_password') }}
+          {{ $t('change_password') }}
         </p>
         <ChevronDownIcon class="w-5 h-5" />
       </div>
     </section>
     <section v-else>
-      <div class="flex items-center mt-1 cursor-pointer" @click="() => toggleTabs(1)">
+      <div
+        class="flex items-center mt-1 cursor-pointer"
+        @click="() => toggleTabs(1)"
+      >
         <p class="mr-1 text-sm text-gray-700 font-medium">
           {{ $t('check_your_personal_data') }}
         </p>
-        <ChevronDownIcon class="w-5 h-5"/>
+        <ChevronDownIcon class="w-5 h-5" />
       </div>
     </section>
   </section>

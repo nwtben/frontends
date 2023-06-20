@@ -32,6 +32,7 @@ defineProps<{
 
 const route = useRoute();
 const router = useRouter();
+const loading = ref<boolean>();
 
 const filterMenuOpened = inject("filterMenuOpened", ref(false));
 
@@ -113,6 +114,12 @@ const onOptionSelectToggle = async ({
     } else {
       sidebarSelectedFilters[code]?.add(value);
     }
+  }
+  try {
+    loading.value = true;
+    await search(searchCriteriaForRequest.value);
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -197,25 +204,29 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
 }, {
   immediate: true
 });
+
+const getSortingOrdersOptions = computed(() => {
+  return getSortingOrders.value.map(x => ({
+    label: x.label,
+    value: x.key
+  }))
+});
 </script>
 <template>
   <ClientOnly>
     <div class="flex gap-6 text-sm justify-between lg:justify-end mt-4 mb-4 lg:mb-6 w-full">
       <button class="flex-1 md:flex-none flex block lg:hidden" @click="filterMenuOpened = true">
         <FunnelIcon class="w-5 h-5 text-gray-500 mr-2"/>
-        <span class="text-sm text-gray-700 font-medium">Filter</span>
+        <span class="text-sm text-gray-700 font-medium">{{ $t('filter') }}</span>
       </button>
-      <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} articles</span>
+      <span class="text-center flex-1 md:flex-none text-sm text-gray-700">{{getTotal}} {{ $t('products') }}</span>
       <div class="flex-1 flex justify-end md:flex-none">
         <SwSelect
           name="language"
           v-model="currentSortingOrder"
           class="text-gray-700"
-        >
-          <option v-for="sorting of getSortingOrders" :key="sorting.key" :value="sorting.key">
-            {{ sorting.label }}
-          </option>
-        </SwSelect>
+          :options="getSortingOrdersOptions"
+        />
       </div>
     </div>
     <div class="block md:hidden mt-4">
@@ -227,9 +238,9 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
             </span>
             <XMarkIcon class="ml-3 w-5 h-5 cursor-pointer text-gray-500" @click="onOptionSelectToggle({code: filter.code, value: filter.id})" />
           </div>
-          <button class="text-gray-900 py-2 underline font-medium text-base" 
+          <button class="text-gray-900 py-2 underline font-medium text-base"
             @click="invokeCleanFilters">
-            Clear all
+            {{ $t('clear_all') }}
           </button>
         </div>
 
@@ -255,19 +266,19 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
         <TransitionChild
           as="template"
           enter="duration-300 ease-out"
-          enter-from="opacity-0 -translate-x-full"
-          enter-to="opacity-100 translate-x-0"
+          enter-from="-translate-x-full"
+          enter-to="translate-x-0"
           leave="duration-200 ease-in"
-          leave-from="opacity-100 scale-100"
-          leave-to="opacity-0 scale-95"
+          leave-from="translate-x-0"
+          leave-to="-translate-x-full"
         >
           <DialogPanel class="flex flex-col fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div class="container py-6 flex items-center justify-between">
               <div>
-                <h4 class="font-medium text-lg">Filter</h4>
+                <h4 class="font-medium text-lg">{{ $t('filter') }}</h4>
               </div>
               <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 outline-none" @click="close">
-                <span class="sr-only">Close menu</span>
+                <span class="sr-only">{{ $t('close_menu') }}</span>
                 <XMarkIcon class="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
@@ -286,8 +297,8 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
               </div>
             </div>
             <div class="container py-4">
-              <button class="w-full text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm" @click="handleSearch">
-                Show products
+              <button class="w-full text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm disabled:opacity-50" :disabled="loading" @click="handleSearch">
+                {{ $t('show_products', [getTotal]) }}
               </button>
             </div>
           </DialogPanel>

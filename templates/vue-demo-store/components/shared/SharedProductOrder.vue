@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { OrderLineItem, LineItem } from '@shopware-pwa/types';
-import { getSmallestThumbnailUrl } from "@shopware-pwa/helpers-next";
+import { getSmallestThumbnailUrl, getProductUrl } from "@shopware-pwa/helpers-next";
 import SwQuantitySelector from '../SwQuantitySelector.vue';
+import { getPath } from '~/helpers';
 import {
   TrashIcon,
 } from '@heroicons/vue/24/outline';
@@ -12,7 +13,7 @@ const props = defineProps<{
 }>();
 
 const { lineItem } = toRefs(props);
-
+const isOpen = inject<boolean>("isSidebarOpen");
 const isLoading = ref(false);
 
 const {
@@ -49,40 +50,43 @@ const removeCartItem = async () => {
 
 </script>
 <template>
-  <li class="relative pb-6 border-b border-b-gray-200 flex">
+  <li class="relative py-6 border-b border-b-gray-200 last:border-0 last:pb-0 flex">
     <div
       v-if="lineItem.type == 'product'"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
     >
-      <img
-        :src="getSmallestThumbnailUrl(lineItem.cover)"
-        :alt="lineItem.label || ''"
-        class="h-full w-full object-cover object-center"
-      />
+      <nuxt-link :to="getProductUrl(lineItem as any)" @click="isOpen = false">
+        <nuxt-img
+          :src="getPath(getSmallestThumbnailUrl(lineItem.cover) ?? '')"
+          :alt="lineItem.label || ''"
+          class="h-full w-full object-cover object-center"
+          loading="lazy"
+        />
+      </nuxt-link>
     </div>
     <div>
-      <p class="text-md text-gray-900 font-medium mb-2">
+      <nuxt-link :to="getProductUrl(lineItem as any)" @click="isOpen = false" class="text-md text-gray-900 font-medium mb-2 block">
         {{ lineItem.label }}
-      </p>
+      </nuxt-link>
       <div class="gap-2 text-sm mb-4">
-      <span class="text-red-800">
-        $40.00
-      </span>
-      <span class="line-through text-gray-500">
-        $50.00
-      </span>
+      <SharedPrice
+        :value="lineItem.price?.unitPrice"
+        data-testid="cart-subtotal"
+      />
       </div>
       <div class="flex flex-col gap-1 mb-4">
         <p v-for="option of (lineItem.payload as any)?.options" class="text-sm text-gray-500">
           {{option.group}}: {{option.option}}
         </p>
       </div>
-      <p v-if="!enableActions" class="text-sm text-gray-500">
-        Quantity: {{lineItem.quantity}}
-      </p>
-      <div v-else>
-        <SwQuantitySelector class="!h-[38px] !w-[108px]" v-model="quantity" />
-      </div>
+      <template v-if="lineItem.type === 'product'">
+        <p v-if="!enableActions" class="text-sm text-gray-500">
+          Quantity: {{lineItem.quantity}}
+        </p>
+        <div v-else>
+          <SwQuantitySelector class="!h-[38px] !w-[108px]" v-model="quantity" />
+        </div>
+      </template>
     </div>
     <TrashIcon v-if="enableActions" class="shrink-0 cursor-pointer text-gray-700 ml-auto h-6 w-6" @click="removeCartItem" />
   </li>

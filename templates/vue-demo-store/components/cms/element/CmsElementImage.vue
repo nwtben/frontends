@@ -4,18 +4,42 @@ import {
   CmsElementManufacturerLogo,
   useCmsElementImage,
 } from "@shopware-pwa/composables-next";
+import { Media } from "@shopware-pwa/types";
+import { getPath } from '~/helpers';
 
-const props = defineProps<{
-  content: CmsElementImage | CmsElementManufacturerLogo;
-}>();
-
+const props = withDefaults(
+  defineProps<{
+    content: CmsElementImage | CmsElementManufacturerLogo;
+    loading?: string;
+  }>(),
+  {
+    loading: 'lazy',
+  }
+);
+const $img = useImage()
 const {
   containerStyle,
   displayMode,
   imageContainerAttrs,
   imageAttrs,
   imageLink,
-} = useCmsElementImage(props.content);
+}: any = useCmsElementImage(props.content);
+
+function getSrcSetForMedia(media: Media): string {
+  if (!media?.thumbnails?.length) {
+    return "";
+  }
+  return media.thumbnails
+    .map((thumbnail) => {
+      return `${$img((getPath(thumbnail.url)))} ${thumbnail.width}w`;
+    })
+    .join(", ");
+}
+const srcset = computed(() => {
+  const media = props.content?.data?.media;
+  return getSrcSetForMedia(media);
+})
+
 </script>
 <template>
   <!-- TODO: using a tag only works with externalLink, need to improve this element to deal with both internalLink & externalLink -->
@@ -26,14 +50,16 @@ const {
     :style="containerStyle"
     v-bind="imageContainerAttrs"
   >
-    <img
+    <nuxt-img
       :class="{
         'h-full w-full': true,
         'absolute inset-0': ['cover', 'stretch'].includes(displayMode),
         'object-cover': displayMode === 'cover',
       }"
-      v-bind="imageAttrs"
-      alt="Image link"
+      :src="getPath(imageAttrs.src)"
+      :srcset="srcset"
+      :alt="imageAttrs.alt || 'Image link'"
+      :loading="props.loading"
     />
   </component>
 </template>

@@ -38,6 +38,33 @@ const handleSize = () => {
   }
 }
 
+const slider = ref();
+const isDown = ref<boolean>(false);
+const startX = ref();
+const scrollLeft = ref();
+
+const handleMouseDown = (e: any) => {
+  isDown.value = true;
+  slider.value?.classList.add('active');
+  startX.value = e.pageX - slider.value?.offsetLeft;
+  scrollLeft.value = slider.value?.scrollLeft;
+};
+const handleMouseLeave = () => {
+  isDown.value = false;
+  slider.value?.classList.remove('active');
+};
+const handleMouseUp = () => {
+  isDown.value = false;
+  slider.value?.classList.remove('active');
+};
+const handleMouseMove = (e: any) => {
+  if(!isDown.value) return;
+  e.preventDefault();
+  const x = e.pageX - slider.value?.offsetLeft;
+  const walk = (x - startX.value) * 3; //scroll-fast
+  slider.value.scrollLeft = scrollLeft.value - walk;
+};
+
 </script>
 <template>
   <div>
@@ -50,8 +77,8 @@ const handleSize = () => {
     <div class="container">
       <div ref="fakeContainer"></div>
     </div>
-    <div class="container box-content flex items-center overflow-x-auto gap-2 pb-6 border-b border-b-gray-200" :style="styling">
-      <div v-for="subCategory of [ ...navigationElements!, ...navigationElements!]" class="font-medium py-2 px-5 text-white bg-gray-800 hover:bg-brand-dark hover:cursor-pointer">
+    <div ref="slider" @mousedown="handleMouseDown" @mouseleave="handleMouseLeave" @mouseup="handleMouseUp" @mousemove="handleMouseMove" class="container box-content flex items-center overflow-x-auto gap-2 pb-6 border-b border-b-gray-200" :style="styling">
+      <div v-for="subCategory of navigationElements" class="font-medium py-2 px-5 text-white bg-gray-800 hover:bg-brand-dark hover:cursor-pointer">
         {{ getTranslatedProperty(subCategory, 'name') }}
       </div>
     </div>

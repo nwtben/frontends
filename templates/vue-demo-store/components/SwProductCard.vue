@@ -19,6 +19,7 @@ import {
 import SwListingProductPrice from "./SwListingProductPrice.vue";
 import SharedReviews from './shared/SharedReviews.vue';
 import SwAddToWishlist from './SwAddToWishlist.vue';
+import { getPath } from "~~/helpers";
 
 const props = withDefaults(
   defineProps<{
@@ -52,11 +53,12 @@ const goToProductDetail =  () => {
       :product="product"
     />
     <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300 hover:opacity-75">
-      <img
+      <nuxt-img
         @click="goToProductDetail"
-        :src="getProductThumbnailUrl(product)"
+        :src="getPath(getProductThumbnailUrl(product))"
         :alt="getProductName({ product }) || ''"
         class="cursor-pointer h-full w-full object-cover object-center lg:h-full lg:w-full"
+        loading="lazy"
       />
     </div>
     <div class="mt-4 flex justify-between">

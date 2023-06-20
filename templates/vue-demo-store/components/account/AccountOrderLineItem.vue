@@ -26,6 +26,7 @@ export default {
           :src="getSmallestThumbnailUrl(lineItem.cover)"
           :alt="lineItem.label"
           class="h-full w-full object-cover object-center"
+          loading="lazy"
         />
       </div>
       <div v-else class="w-24" />
@@ -47,7 +48,7 @@ export default {
       v-if="lineItem.totalPrice"
       class="flex justify-between sm:justify-self-end"
     >
-      <div class="sm:hidden">Subtotal</div>
+      <div class="sm:hidden">{{ $t('subtotal') }}</div>
       <SharedPrice
         :value="lineItem.totalPrice"
         class="text-gray-600 font-normal"

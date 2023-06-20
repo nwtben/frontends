@@ -10,8 +10,12 @@ const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const { locale } = useI18n({ useScope: 'global' });
-const { fetchLang, currentLanguage, languages, syncLanguageData } = useLanguage();
+const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
 const { sessionContext } = useSessionContext();
+
+onBeforeMount(async () => {
+  await fetchLang();
+});
 
 watch(currentLanguage, () => {
   locale.value = currentLanguage.value?.locale?.code || '';
@@ -20,9 +24,6 @@ watch(currentLanguage, () => {
 watch(
   () => sessionContext.value?.salesChannel?.languageId,
   async (newLanguageId) => {
-    if (!languages.value.length) {
-      await fetchLang();
-    }
     if (newLanguageId) {
       await syncLanguageData(newLanguageId!);
     }
@@ -41,7 +42,7 @@ watch(
     <nav aria-label="Global">
       <!-- For Desktop -->
       <div class="header-desktop hidden lg:block container mx-auto">
-        <div class="flex justify-end gap-4">
+        <div class="flex justify-end gap-4 pt-2 mb-4">
           <LayoutCurrency />
           <LayoutLanguage />
         </div>
@@ -108,7 +109,6 @@ watch(
               </div>
             </div>
           </div>
-
         </div>
       </div>
       <!-- For Mobile -->

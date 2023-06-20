@@ -3,6 +3,7 @@
  * Init breadcrumbs context
  */
 useBreadcrumbs();
+const route = useRoute();
 
 useHead({
   title: "Shopware Demo store",
@@ -13,14 +14,15 @@ useHead({
 });
 
 const { sessionContext, refreshSessionContext } = useSessionContext();
-onBeforeMount(async () => {
-  await refreshSessionContext();
-  getWishlistProducts();
-});
+await useAsyncData(
+  "sessionContext",
+  async () => {
+    return await refreshSessionContext();
+  }
+);
+
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
-const route = useRoute();
-const path = computed(() => route.path || '');
 
 useNotifications();
 useAddress();
@@ -30,11 +32,15 @@ onMounted(() => {
   getWishlistProducts();
 });
 
+const path = computed(() => route.path || '');
+
 const isSidebarOpen = ref(false);
 provide("isSidebarOpen", isSidebarOpen);
 
 const modalContent = ref<string>("");
-const modalProps = ref<object | null | undefined>({});
+const modalProps = ref<{
+  position?: string
+} | null | undefined>({});
 const modalHandler = {
   open: (component: string, props?: object | null) => {
     modalContent.value = component;
@@ -51,7 +57,7 @@ provide("modal", { modalContent, modalProps, ...modalHandler });
 const isSideMenuOpened = ref(false);
 provide("isSideMenuOpened", isSideMenuOpened);
 
-const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
+const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'transparent');
 const showBreadCrumb = useState<boolean>('showBreadCrumb');
 
 const scrollPos = ref(0);
@@ -106,9 +112,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <NuxtLayout v-if="sessionContext">
+  <NuxtLayout>
     <NuxtLoadingIndicator />
-    <NuxtPage />
+    <NuxtPage v-if="sessionContext"/>
   </NuxtLayout>
 </template>
 

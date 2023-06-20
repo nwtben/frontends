@@ -5,6 +5,12 @@ import { NuxtConfig } from '@nuxt/types';
 export default defineNuxtConfig({
   app: {
     head: {
+      meta: [
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1.0"
+        }
+      ],
       link: [
         {
           rel: "preload",
@@ -26,11 +32,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       shopware: {
-          shopwareEndpoint: "https://shopware.nwtsaas.com",
-          shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
-        },
+        shopwareEndpoint: "https://shopware.nwtsaas.com",
+        shopwareAccessToken: "SWSCNHRXAKTEBW12C1NETUPVVW",
       },
+      shopwareStoreDomain: process.env.FRONT_DOMAIN
     },
+  },
   build: {
     transpile: ['@headlessui/vue']
   },
@@ -53,9 +60,9 @@ export default defineNuxtConfig({
     "@unocss/nuxt",
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
-    "@nuxt/image-edge",
+    "@nuxt/image",
     "nuxt3-meta-pixel",
-    "@nuxtjs/robots"
+    "@nuxtjs/robots",
   ],
   facebook: {
     track: 'PageView',
@@ -64,14 +71,18 @@ export default defineNuxtConfig({
     disabled: false
   },
   image: {
-    provider: "vercel",
-    vercel: {
+    domains: [
+      'shopware.nwtsaas.com'
+    ],
+    provider: 'fastly',
+    fastly: {
+      baseURL: 'https://shopware.nwtsaas.com',
       modifiers: {
-        format: 'WebP',
+        format: 'webp',
+        quality: '85',
         effect: 'sharpen:100',
-        quality: 'auto:best',
-      }
-    }
+      },
+    },
   },
   partytown: {
     forward: ['dataLayer.push'],

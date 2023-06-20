@@ -80,6 +80,7 @@ const ratingAverage: Ref<number> = computed(() =>
             displayMode === 'standard' && layoutType !== 'image',
         }"
         data-testid="product-box-img"
+        loading="lazy"
       />
     </div>
     <button

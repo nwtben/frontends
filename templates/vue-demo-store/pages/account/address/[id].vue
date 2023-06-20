@@ -160,11 +160,14 @@ const invokeChange = async (): Promise<void> => {
   <section class="flex flex-col space-y-10 mb-24">
     <section>
       <h3 class="mb-4">
-        {{ isCreation ? "Add new address" : "Edit address" }}
+        {{ isCreation ? $t('add_new_address') : $t('edit_address') }}
       </h3>
     </section>
     <div class="flex flex-col gap-4">
-      <div v-if="isLoading" class="w-full h-full">
+      <div
+        v-if="isLoading"
+        class="w-full h-full"
+      >
         <div class="flex animate-pulse flex-col items-top h-full space-y-5">
           <div class="w-full bg-gray-300 h-6 rounded-md" />
           <div class="w-full bg-gray-300 h-12 rounded-md" />
@@ -174,56 +177,72 @@ const invokeChange = async (): Promise<void> => {
           </div>
         </div>
       </div>
-      <form v-else class="flex flex-col gap-6" @submit.prevent="invokeChange">
+      <form
+        v-else
+        class="flex flex-col gap-6"
+        @submit.prevent="invokeChange"
+      >
         <div>
-          <p class="text-sm text-brand-dark mb-1 font-medium">Full name</p>
+          <p class="text-sm text-brand-dark mb-1 font-medium">
+            {{ $t('full_name') }}
+          </p>
           <input
-            class="border border-gray-300 py-2 px-3 text-sm text-gray-900 w-full shadow-input"
             v-model="formData.fullName"
-          />
+            class="border border-gray-300 py-2 px-3 text-sm text-gray-900 w-full shadow-input"
+          >
         </div>
         <div>
-          <p class="text-sm font-medium text-brand-dark mb-1">Address</p>
+          <p class="text-sm font-medium text-brand-dark mb-1">
+            {{ $t('street_address') }}
+          </p>
           <textarea
-            class="border border-gray-300 py-2 px-3 text-sm text-gray-900 w-full shadow-input"
             v-model="formData.street"
+            class="border border-gray-300 py-2 px-3 text-sm text-gray-900 w-full shadow-input"
             :rows="3"
           />
         </div>
         <div>
           <SharedCheckbox
             content="Add company"
-            :modelValue="formData.hasCompany"
+            :model-value="formData.hasCompany"
             @update:modelValue="hasCompanyChange"
           />
         </div>
         <div v-if="formData.hasCompany">
-          <p class="text-sm text-brand-dark mb-1 font-medium">Company</p>
+          <p class="text-sm text-brand-dark mb-1 font-medium">
+            {{ $t('company') }}
+          </p>
           <input
-            class="border border-gray-300 py-2 px-3 text-sm text-gray-900 w-full shadow-input"
             v-model="formData.company"
-          />
+            class="border border-gray-300 py-2 px-3 text-sm text-gray-900 w-full shadow-input"
+          >
         </div>
         <div class="grid grid-col-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <div>
-            <p class="text-sm text-brand-dark mb-1 font-medium">Zip-code</p>
+            <p class="text-sm text-brand-dark mb-1 font-medium">
+              {{ $t('zip_code') }}
+            </p>
             <input
-              class="border border-gray-300 py-2 px-3 text-sm text-dark-primary w-full shadow-input"
               v-model="formData.zipcode"
-            />
+              class="border border-gray-300 py-2 px-3 text-sm text-dark-primary w-full shadow-input"
+            >
           </div>
           <div>
-            <p class="text-sm text-brand-dark mb-1 font-medium">City</p>
+            <p class="text-sm text-brand-dark mb-1 font-medium">
+              {{ $t('city') }}
+            </p>
             <input
-              class="border border-gray-300 py-2 px-3 text-sm text-dark-primary w-full shadow-input"
               v-model="formData.city"
-            />
+              class="border border-gray-300 py-2 px-3 text-sm text-dark-primary w-full shadow-input"
+            >
           </div>
           <div v-if="countries?.length">
-            <p class="text-sm text-brand-dark mb-1 font-medium">Country</p>
+            <p class="text-sm text-brand-dark mb-1 font-medium">
+              {{ $t('country') }}
+            </p>
             <SharedSelect
               :options="countries"
-              :selectedOption="formData.countryId"
+              :selected-option="formData.countryId"
               @change="handleCountryChange"
             />
           </div>
@@ -231,17 +250,17 @@ const invokeChange = async (): Promise<void> => {
 
         <div>
           <SharedCheckbox
-            :modelValue="formData.isShippingAddress"
-            @update:modelValue="isShippingAddressChange"
+            :model-value="formData.isShippingAddress"
             content="Use as shipping address"
+            @update:modelValue="isShippingAddressChange"
           />
         </div>
 
         <div>
           <SharedCheckbox
-            :modelValue="formData.isBillingAddress"
-            @update:modelValue="isBillingAddressChange"
+            :model-value="formData.isBillingAddress"
             content="Use as billing address"
+            @update:modelValue="isBillingAddressChange"
           />
         </div>
         <div>
@@ -249,7 +268,7 @@ const invokeChange = async (): Promise<void> => {
             class="text-white font-medium py-2.5 px-5 bg-brand-primary"
             type="submit"
           >
-            {{ isCreation ? "Add address" : "Update address" }}
+            {{ isCreation ? $t('add_address') : $t('update_address') }}
           </button>
         </div>
       </form>

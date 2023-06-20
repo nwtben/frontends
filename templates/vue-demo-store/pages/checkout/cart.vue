@@ -101,31 +101,49 @@ export default {
 
 <template>
   <div class="container">
-    <h2 class="mt-16 mb-12 font-extrabold text-3xl md:font-normal md:text-4xl">Shopping Cart</h2>
-    <div class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20" v-if="hasItems">
-      <SharedProductOrders :enableActions="true" class="flex-1" :lineItems="cartItems || []" />
+    <h2 v-if="hasItems" class="mt-16 mb-12 text-3xl font-normal md:text-4xl">
+      {{ $t('shopping_bag') }}
+    </h2>
+    <div
+      v-if="hasItems"
+      class="flex flex-col md:flex-row gap-12 mb-24 md:mb-20"
+    >
+      <SharedProductOrders
+        :enable-actions="true"
+        class="flex-1"
+        :line-items="cartItems || []"
+      />
       <aside class="w-full md:w-1/2 md:max-w-[469px]">
-        <SharedOrdersSummary :showTitle="true">
+        <SharedOrdersSummary :show-title="true">
           <template #action>
             <RouterLink
               class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
               to="/checkout"
               data-testid="cart-checkout-link"
             >
-              Checkout
+              {{ $t('go_to_checkout') }}
             </RouterLink>
           </template>
         </SharedOrdersSummary>
         <div class="mt-6">
-          <SharedValueProposition :isColumn="true" />
+          <SharedValueProposition :is-column="true" />
         </div>
       </aside>
     </div>
-    <h3 v-else class="m-10 text-center text-2xl font-medium text-gray-900">
-      Your cart is empty!
-    </h3>
-    <div class="mb-27.5 md:mb-47" v-if="defaultConfig.data?.products?.length">
-      <h4 class="text-lg md:text-2xl text-center mb-6 md:mb-8">Other products you might like</h4>
+    <div v-else class="mt-40 flex-1 h-full items-center text-center flex flex-col justify-center">
+      <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{ $t('your_cart_empty') }}</h4>
+      <p class="mb-6 text-base text-gray-500">{{  $t('your_cart_empty_desc') }}</p>
+      <div>
+        <nuxt-link to="/" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+      </div>
+    </div>
+    <div
+      v-if="defaultConfig.data?.products?.length"
+      class="mb-27.5 md:mb-47"
+    >
+      <h4 class="text-lg md:text-2xl text-center mb-6 md:mb-8">
+        {{ $t('other_products') }}
+      </h4>
       <CmsElementProductSlider :content="defaultConfig" />
     </div>
   </div>

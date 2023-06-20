@@ -24,7 +24,6 @@ const {
   getSelectedOptions,
   findVariantForSelectedOptions,
 } = useProductConfigurator();
-
 const selectedVariant = ref<any>(getSelectedOptions);
 
 const selectedOptions: ComputedRef<any> = computed(() =>
@@ -65,14 +64,14 @@ const getSelectPropertiesName = (name: string) => {
 
 <template>
   <div class="flex flex-col">
-    <div
-      v-if="isLoading"
-      class="fixed inset-0 flex items-center justify-center z-10 bg-white/75"
-    >
-      <div
-        class="h-15 w-15 i-carbon-progress-bar-round animate-spin c-gray-500"
-      />
-    </div>
+<!--    <div-->
+<!--      v-if="isLoading"-->
+<!--      class="fixed inset-0 flex items-center justify-center z-10 bg-white/75"-->
+<!--    >-->
+<!--      <div-->
+<!--        class="h-15 w-15 i-carbon-progress-bar-round animate-spin c-gray-500"-->
+<!--      />-->
+<!--    </div>-->
     <div
       v-for="optionGroup in getOptionGroups"
       :key="optionGroup.id"
@@ -80,7 +79,7 @@ const getSelectPropertiesName = (name: string) => {
       <div class="mb-6">
         <div class="flex justify-between mb-4">
           <h2 class="text-base font-medium ">{{ optionGroup.name }}: {{ getSelectPropertiesName(optionGroup.name) }}</h2>
-          <a v-if="optionGroup.name === 'Size'" class="underline font-medium underline-offset-4 cursor-pointer">Size guide</a>
+          <!-- <a v-if="optionGroup.id === '75f353b589d04bf48e8a9ab1f5422b0e'" class="underline font-medium underline-offset-4 cursor-pointer">Size guide</a> -->
         </div>
         <RadioGroup v-if="optionGroup.displayType === 'color'" v-model="selectedVariant[optionGroup.name]">
           <RadioGroupLabel class="sr-only"> Choose a color </RadioGroupLabel>

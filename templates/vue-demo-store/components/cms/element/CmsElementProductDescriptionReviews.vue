@@ -15,37 +15,11 @@ import {
 } from "@shopware-pwa/helpers-next";
 import SwProductReviews from "../../SwProductReviews.vue";
 
-const DUMMY_REVIEWS: any = [
-  {
-    id: 1,
-    createdAt: new Date().toISOString(),
-    content: `I was looking for a bright light for the kitchen but wanted some item more modern than a strip light. this one is perfect, very bright and looks great. I can't comment on interlation as I had an electrition instal it. Would recommend...`,
-    points: 4,
-    customer: {
-      id: 1,
-      firstName: 'Jane D.',
-      lastName: 'Smith'
-    }
-  },
-  {
-    id: 2,
-    createdAt: new Date().toISOString(),
-    content: `I was looking for a bright light for the kitchen but wanted some item more modern than a strip light. this one is perfect, very bright and looks great. I can't comment on interlation as I had an electrition instal it. Would recommend...`,
-    points: 4,
-    customer: {
-      id: 2,
-      firstName: 'Jane D.',
-      lastName: 'Smith'
-    }
-  }
-]
-
-
 const tabs = ref([
-  { name: 'Description', href: '#description' },
-  { name: 'Specification', href: '#specification' },
-  { name: 'Reviews', href: '#reviews' },
-  { name: 'Delivery and returns', href: '#dar' },
+  { name: 'description', href: '#description' },
+  { name: 'specification', href: '#specification' },
+  { name: 'reviews', href: '#reviews' },
+  { name: 'delivery_and_returns', href: '#dar' },
 ]);
 
 const currentTabHash = ref<string>('#description');
@@ -61,12 +35,17 @@ const description = computed(() =>
   getTranslatedProperty(product.value, "description")
 );
 
-const reviews = computed(() => DUMMY_REVIEWS || props.content.data.reviews?.elements);
+const reviews = computed(() => props.content.data.reviews?.elements);
 
 watch(
   () => route.hash,
   hash => {
-    currentTabHash.value = hash;
+    if (hash) {
+     currentTabHash.value = hash;
+    }
+  },
+  {
+    immediate: true
   }
 )
 </script>
@@ -81,7 +60,7 @@ watch(
       <Disclosure as="div" v-for="tab in tabs" :key="tab.name" v-slot="{ open }" :defaultOpen="tab.href === currentTabHash">
         <h3>
           <DisclosureButton class="group relative flex w-full items-center justify-between p-4 text-left border-t border-gray-200">
-            <span :class="[open ? 'text-gray-900' : 'text-gray-700', 'text-base font-medium']">{{ tab.name }}</span>
+            <span :class="[open ? 'text-gray-900' : 'text-gray-700', 'text-base font-medium']">{{ $t(tab.name) }}</span>
             <span class="ml-6 flex items-center">
               <ChevronDownIcon v-if="!open" class="block h-6 w-6 text-gray-900" aria-hidden="true" />
               <ChevronUpIcon v-else class="block h-6 w-6 text-gray-900" aria-hidden="true" />
@@ -112,10 +91,10 @@ watch(
       </Disclosure>
     </div>
     <!-- For desktop -->
-    <div class="w-full hidden sm:block">
+    <div id="product-meta" class="w-full hidden sm:block">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[currentTabHash === tab.href ? 'border-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="currentTabHash === tab.href ? 'page' : undefined">{{ tab.name }}</a>
+          <a v-for="tab in tabs" :key="tab.name" :href="tab.href"  @click.prevent="currentTabHash = tab.href" :class="[currentTabHash === tab.href ? 'border-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="currentTabHash === tab.href ? 'page' : undefined">{{ $t(tab.name) }}</a>
         </nav>
       </div>
     </div>

@@ -40,24 +40,24 @@ onMounted(async () => {
     <SharedProductOrders :line-items="order?.lineItems || []" />
     <div class="mt-6 border-b border-b-gray-200 text-gray-900">
       <div class="mb-6 flex justify-between">
-        <span>Subtotal</span>
+        <span>{{ $t('subtotal') }}</span>
         <SharedPrice :value="order?.price?.totalPrice" />
       </div>
       <div class="mb-6 flex justify-between">
-        <span>Shipping estimate</span>
+        <span>{{ $t('shipping_estimate') }}</span>
         <SharedPrice :value="order?.shippingTotal" />
       </div>
     </div>
 
     <div class="py-6 border-b border-b-gray-200 text-gray-900 flex items-center justify-between text-lg font-medium">
-      <span>Order total</span>
+      <span>{{ $t('order_total') }}</span>
       <SharedPrice :value="order?.amountTotal" />
     </div>
 
     <div class="py-6 border-b border-b-gray-200 text-gray-900 grid grid-cols-2 text-sm">
       <div>
         <p class="font-medium text-gray-900 mb-2">
-          Shipping address
+          {{ $t('shipping_address') }}
         </p>
         <p class="text-sm text-gray-500">
           {{ shippingAddress?.firstName }} {{ shippingAddress?.lastName }} <br>
@@ -67,7 +67,7 @@ onMounted(async () => {
       </div>
       <div>
         <p class="font-medium text-gray-900 mb-2">
-          Billing Address
+          {{ $t('billing_address') }}
         </p>
         <p class="text-sm text-gray-500">
           {{ billingAddress?.firstName }} {{ billingAddress?.lastName }} <br>
@@ -79,7 +79,7 @@ onMounted(async () => {
     <div class="pt-6 text-gray-900 grid grid-cols-2 text-sm">
       <div>
         <p class="font-medium text-gray-900 mb-2">
-          Payment method
+          {{ $t('payment_method') }}
         </p>
         <p class="text-sm text-gray-500">
           {{ getTranslatedProperty(paymentMethod, 'name') }}
@@ -87,7 +87,7 @@ onMounted(async () => {
       </div>
       <div>
         <p class="font-medium text-gray-900 mb-2">
-          Shipping method
+          {{ $t('shipping_method') }}
         </p>
         <p class="text-sm text-gray-500">
           {{ getTranslatedProperty(shippingMethod, 'name') }}<br>

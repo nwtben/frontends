@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CmsElementImageGallery } from "@shopware-pwa/composables-next";
 import SwSlider from "../../SwSlider.vue";
+import { getPath } from '~/helpers';
 
 const props = defineProps<{
   content: CmsElementImageGallery;
@@ -80,11 +81,12 @@ const breakpoints = ref({
                 // 'border border-gray-500 border-3': i === currentSlideIndex,
               }"
             >
-              <img
-                :src="image.media.url"
+              <nuxt-img
+                :src="getPath(image.media.url)"
                 class="w-full h-full object-center object-cover"
                 alt="Product image"
                 @click="changeCover(i)"
+                loading="lazy"
               />
             </div>
           </div>

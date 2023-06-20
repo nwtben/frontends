@@ -71,78 +71,95 @@ const formatDate = (date: Date) =>
   new Date(date).toLocaleDateString(
     (typeof navigator !== "undefined" && navigator.language) || "en-US"
   );
+
+const sortLineItems = computed(() => {
+  return order.value?.lineItems?.sort((a: any, b: any) => a.position - b.position);
+})
 </script>
 
 <template>
   <ClientOnly>
-    <div class="mt-16 mb-24">
+    <div class="mt-16 mb-24 max-w-[700px] mx-auto">
       <div class="flex flex-col gap-2 mb-10">
-        <p class="text-sm font-medium uppercase">Order complete</p>
-        <h2 class="text-4xl md:text-5xl">Thanks for ordering</h2>
+        <!-- <p class="text-sm font-medium uppercase">
+          {{ $t('order_complete') }}
+        </p> -->
+        <h2 class="text-4xl md:text-5xl">
+          {{ $t('thanks_ordering') }}
+        </h2>
         <p class="text-base text-gray-500">
-          Your order #{{ order?.orderNumber }} will be with you soon.
+          {{ $t('your_order_will_with_you_soon', [order?.orderNumber]) }}
         </p>
       </div>
-      <SharedProductOrders :lineItems="order?.lineItems || []" />
-      <div class="mt-10 mb-6 flex justify-between text-base">
-        <p>Subtotal</p>
+      <SharedProductOrders :line-items="sortLineItems || []" />
+      <div class="mt-6 border-b border-gray-200" />
+      <div class="my-6 flex justify-between text-base">
+        <p>{{ $t('subtotal') }}</p>
         <SharedPrice
           :value="subtotal"
         />
       </div>
       <div class="mb-6 flex justify-between text-base">
-        <p>Shipping estimate</p>
+        <p>{{ $t('shipping_estimate') }}</p>
         <SharedPrice
           :value="shippingCosts"
         />
       </div>
-      <div class="border-b border-gray-200"></div>
-      <div class="mt-6 mb-10 flex justify-between text-lg text-dark-primary font-medium">
-        <p>Order total</p>
+      <div class="border-b border-gray-200" />
+      <div class="my-6 flex justify-between text-lg text-dark-primary font-medium">
+        <p>{{ $t('order_total') }}</p>
         <SharedPrice :value="total" />
       </div>
-      <div class="border-b border-gray-200"></div>
+      <div class="border-b border-gray-200" />
       <div class="grid grid-cols-2 my-6 md:my-10">
         <div>
-          <h6 class="text-sm font-medium text-gray-900">Shipping address</h6>
+          <h6 class="text-sm font-medium text-gray-900">
+            {{ $t('shipping_address') }}
+          </h6>
           <p class="mt-2 text-sm text-gray-500">
-            {{ shippingAddress?.firstName }}{{ shippingAddress?.lastName }} <br/>
-            {{ shippingAddress?.street }} <br/>
+            {{ shippingAddress?.firstName }}{{ shippingAddress?.lastName }} <br>
+            {{ shippingAddress?.street }} <br>
             {{ shippingAddress?.city }}, {{ shippingAddress?.zipcode }}
           </p>
         </div>
         <div>
-          <h6 class="text-sm font-medium text-gray-900">Billing address</h6>
+          <h6 class="text-sm font-medium text-gray-900">
+            {{ $t('billing_address') }}
+          </h6>
           <p class="mt-2 text-sm text-gray-500">
-            {{ billingAddress?.firstName }}{{ billingAddress?.lastName }} <br/>
-            {{ billingAddress?.street }} <br/>
+            {{ billingAddress?.firstName }}{{ billingAddress?.lastName }} <br>
+            {{ billingAddress?.street }} <br>
             {{ billingAddress?.city }}, {{ billingAddress?.zipcode }}
           </p>
         </div>
       </div>
-      <div class="border-b border-gray-200"></div>
+      <div class="border-b border-gray-200" />
       <div class="grid grid-cols-2 my-6 md:my-10">
         <div>
-          <h6 class="text-sm font-medium text-gray-900">Payment method</h6>
+          <h6 class="text-sm font-medium text-gray-900">
+            {{ $t('payment_method') }}
+          </h6>
           <p class="mt-2 text-sm text-gray-500">
             {{ (paymentMethod?.translated as any).name }}
           </p>
         </div>
         <div>
-          <h6 class="text-sm font-medium text-gray-900">Shipping method</h6>
+          <h6 class="text-sm font-medium text-gray-900">
+            {{ $t('shipping_method') }}
+          </h6>
           <p class="mt-2 text-sm text-gray-500">
-            {{ shippingMethod?.translated?.name }} <br/>
-            {{ (shippingMethod?.deliveryTime as any)?.translated?.name}}
+            {{ shippingMethod?.translated?.name }} <br>
+            {{ (shippingMethod?.deliveryTime as any)?.translated?.name }}
           </p>
         </div>
       </div>
-      <div class="border-b border-gray-200"></div>
+      <div class="border-b border-gray-200" />
       <div class="mt-10 flex items-center justify-center">
         <RouterLink
           to="/"
           class="px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
         >
-          Continue shopping
+          {{ $t('continue_method') }}
         </RouterLink>
       </div>
     </div>
