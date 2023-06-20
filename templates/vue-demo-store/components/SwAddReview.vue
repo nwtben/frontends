@@ -7,6 +7,8 @@ import { ReviewStar } from '~/models/enum';
 
 const props = defineProps<{
   product: Product;
+  data?: any;
+  editMode?: boolean;
 }>();
 const emits = defineEmits<{
   (e: "cancel"): void;
@@ -19,6 +21,7 @@ const { addReview } = useProductReviews(product);
 const rating = ref<number>(5);
 
 const state = reactive({
+  id: "",
   title: "",
   content: "",
   points: 5,
@@ -41,6 +44,20 @@ const rules = computed(() => ({
   },
 }));
 
+watch(props.data, (val) => {
+  if (val) {
+    const { title, content, points, id } = val;
+    if (props.editMode) {
+      state.id = id;
+    }
+    state.title = title;
+    state.content = content;
+    state.points = points;
+  }
+}, {
+  immediate: true
+});
+
 const $v = useVuelidate(rules, state);
 
 const onSelectRating = (value: number, type: string = "") => {
@@ -61,11 +78,7 @@ const onAddReview = async (): Promise<void> => {
   if (isFormCorrect) {
     loading.value = true;
     try {
-      const result = await addReview({
-        title: state.title,
-        content: state.content,
-        points: state.points
-      })
+      const result = await addReview(state);
       emits('submit');
     } catch (e) {
       console.error("error add review", e);

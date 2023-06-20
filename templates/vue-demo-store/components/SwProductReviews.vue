@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { Product, ProductReview } from "@shopware-pwa/types";
-import {
-  CheckCircleIcon,
-  ArrowLeftIcon
-} from '@heroicons/vue/24/outline';
 import SharedReviews from './shared/SharedReviews.vue';
-import SwPagination from './SwPagination.vue';
 import { format } from "date-fns";
 import { InformationCircleIcon, ExclamationTriangleIcon, CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/vue/20/solid';
 import { SharedModal } from "./shared/SharedModal.vue";
@@ -17,7 +12,6 @@ const props = defineProps<{
   customerReview?: ProductReview;
   ratingMatrix? : any;
 }>();
-console.log(props.ratingMatrix);
 const { product, reviews } = toRefs(props);
 const modal = inject<SharedModal>("modal") as SharedModal;
 const shouldLoadReviews = !reviews?.value;
@@ -25,7 +19,16 @@ const { isLoggedIn, user } = useUser();
 const loadingReviews = ref<boolean>(shouldLoadReviews);
 const isAddReview = ref<boolean>(false);
 const justAddedReview = ref<boolean>(false);
+const isDisplayReviewsInCurrentLanguage = ref<boolean>(false);
+const { currentLanguage } = useLanguage();
 const { loadProductReviews, productReviews } = useProductReviews(product);
+const filterRating = ref({
+  5: false,
+  4: false,
+  3: false,
+  2: false,
+  1: false
+});
 
 onMounted(async () => {
   shouldLoadReviews && (await loadProductReviews());
@@ -34,13 +37,27 @@ onMounted(async () => {
 
 const reviewsList = computed<ProductReview[]>(
   () => {
-    if (productReviews.value?.length) {
-      return productReviews.value;
-    }
+    let list: ProductReview[] = [];
     if (reviews?.value?.length) {
-      return reviews?.value;
+      list = reviews?.value;
     }
-    return [];
+    if (productReviews.value?.length) {
+      productReviews.value.forEach(productReview => {
+        const indx = list.findIndex(x => x.id === productReview.id);
+        list[indx] = productReview;
+      })
+      list = [...list];
+    }
+    const getRatingFilter = Object.entries(filterRating.value)
+      .filter(([key, value]) => !!value)
+      .map(([key, value]) => +key);
+    if (getRatingFilter.length) {
+      list = list.filter(x => getRatingFilter.includes(+x.points));
+    }
+    if (isDisplayReviewsInCurrentLanguage.value) {
+      list = list.filter(x => x.languageId === currentLanguage.value.id);
+    }
+    return list;
   }
 );
 
@@ -60,11 +77,13 @@ const handleCancel = () => {
   isAddReview.value = false;
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  isAddReview.value = false;
   justAddedReview.value = true;
+  await loadProductReviews();
   setTimeout(() => {
     justAddedReview.value = false;
-  }, 1000)
+  }, 5000);
 }
 
 const getMatrixPercent = (index: number) => {
@@ -73,13 +92,22 @@ const getMatrixPercent = (index: number) => {
     return sum;
   }, 0);
   const currentReview = props.ratingMatrix.find((x: any) => +x.key === 5 - index)?.count || 0;
-  return (currentReview / total) * 100;
+  return total ? ((currentReview / total) * 100) : 0;
 }
 
 const formatDate = (date: string) => format(new Date(date), 'd LLL yyyy');
 const reviewStars = computed(() => {
   return Object.values(ReviewStar).filter((v) => isNaN(Number(v))).reverse();
-})
+});
+
+const checkboxChange = (reviewStar: number, e: boolean) => {
+  filterRating.value = {
+    ...filterRating.value,
+    [reviewStar]: e
+  }
+}
+
+const customerHaveReview = computed(() => isLoggedIn.value && props.customerReview)
 </script>
 
 <template>
@@ -97,7 +125,7 @@ const reviewStars = computed(() => {
       <SharedReviews :product="product" :numberOfReviews="reviewsList.length"/>
       <div v-if="reviewsList?.length" class="border-y border-gray-300 my-8 py-4">
         <div class="flex py-2 justify-between items-center" v-for="(reviewStar, index) of reviewStars">
-          <SharedCheckbox class="w-1/4" :content="$t(reviewStar as string)" />
+          <SharedCheckbox @update:model-value="(e) => checkboxChange(5 - index, e)" class="w-1/4" :content="$t(reviewStar as string)" :disabled="!getMatrixPercent(index)" />
           <div class="w-2/3 flex justify-between items-center">
             <div class="w-full h-3 bg-neutral-200 dark:bg-neutral-600">
               <div class="h-3 bg-brand-primary" :style="{
@@ -108,13 +136,13 @@ const reviewStars = computed(() => {
           </div>
         </div>
       </div>
-      <h5 class="text-lg font-bold mb-2">{{ !customerReview ? $t('leave_a_review') : $t('edit_your_review') }}</h5>
+      <h5 class="text-lg font-bold mb-2">{{ !customerHaveReview ? $t('leave_a_review') : $t('edit_your_review') }}</h5>
       <p class="text-sm mb-4">{{ $t('share_exp') }}</p>
       <button 
         class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
         @click="onHandleReview"
       >
-        {{ !isAddReview ? (customerReview ? $t('edit_review') : $t('write_review')) : $t('show_review') }}
+        {{ !isAddReview ? (customerHaveReview ? $t('edit_review') : $t('write_review')) : $t('show_review') }}
       </button>
     </div>
     <div class="w-2/3">
@@ -128,6 +156,8 @@ const reviewStars = computed(() => {
           </div>
         </div>
       </div>
+      <SharedCheckbox v-model="isDisplayReviewsInCurrentLanguage" class="my-4" :content="$t('display_reviews_current_lang')" />
+      <div class="mb-4 border-b border-gray-3"></div>
       <template v-if="!isAddReview">
         <template v-if="!reviewsList?.length">
           <div class="rounded-md bg-blue-50 p-4">
@@ -167,32 +197,8 @@ const reviewStars = computed(() => {
         </template>
       </template>
       <template v-else>
-        <SwAddReview :product="product" @cancel="handleCancel" @submit="handleSubmit" />
+        <SwAddReview :data="customerHaveReview ? props.customerReview : null" :editMode="!!customerHaveReview" :product="product" @cancel="handleCancel" @submit="handleSubmit" />
       </template>
     </div>
   </div>
-  <!-- <div class="w-full md:w-1/2" v-if="!isAddReview">
-    <div class="flex justify-between mb-6">
-      <h4 class="text-xl md:text-2xl font-semibold">{{ reviewsList?.length }} Reviews</h4>
-      <div class="flex flex-col">
-        <a class="underline text-right font-medium cursor-pointer" @click="onAddReview">Add review</a>
-      </div>
-    </div>
-    <div class="p-4 mb-6 shadow-[0px_1px_0px_#F1F2F3]" v-for="review in reviewsList" :key="review.id">
-      <div class="flex flex-col gap-2">
-        <h6 class="text-base font-normal flex gap-1 items-center">
-          <CheckCircleIcon class="h-6 w-6 text-gray-500"/> {{ review.title }}
-        </h6>
-        <SharedReviews class="justify-end" :hideCount="true" :product="product" />
-        <p class="text-gray-500 text-right">{{ formatDate(review.createdAt) }}</p>
-      </div>
-      <p class="mt-4 font-normal text-base">
-        {{ review.content }}
-      </p>
-    </div>
-  </div>
-  <div v-else>
-    <div class="cursor-pointer mb-5 flex text-gray-500" @click="isAddReview = false"><ArrowLeftIcon class="h-6 w-6 mr-2"/>Back to Reviews</div>
-   <SwAddReview :product="product" />
-  </div> -->
 </template>

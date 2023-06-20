@@ -37,7 +37,6 @@ const description = computed(() =>
 const reviews = computed(() => props.content.data.reviews?.elements);
 const customerReview = computed(() => (props.content.data.reviews as any)?.customerReview);
 const ratingMatrix = computed(() => (props.content.data.reviews.aggregations as any)?.ratingMatrix?.buckets);
-
 const changeTab = (hash: string) => {
   router.replace({
     hash,
@@ -50,7 +49,6 @@ const changeTab = (hash: string) => {
 watch(
   () => route.hash,
   hash => {
-    console.log(hash);
     if (hash) {
       currentTabHash.value = hash;
     }
