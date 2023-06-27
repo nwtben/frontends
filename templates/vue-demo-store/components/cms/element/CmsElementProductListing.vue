@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { CmsElementProductListing } from "@shopware-pwa/composables-next";
 import SwProductCard from "../../SwProductCard.vue";
-import { ShopwareSearchParams } from "@shopware-pwa/types";
 
 const props = defineProps<{
   content: CmsElementProductListing;
@@ -9,24 +8,11 @@ const props = defineProps<{
 const {
   getElements,
   setInitialListing,
-  getCurrentPage,
-  changeCurrentPage,
   getTotal,
-  getTotalPagesCount,
+  loadMore,
+  loadingMore,
 } = useListing({ listingType: "categoryListing" });
 
-const route = useRoute();
-const router = useRouter();
-
-const changePage = async (page: number) => {
-  await router.push({
-    query: {
-      ...route.query,
-      p: page,
-    },
-  });
-  changeCurrentPage(page, <Partial<ShopwareSearchParams>>route.query);
-};
 const isProductListing = computed(
   () => props.content?.type === "product-listing"
 );
@@ -48,12 +34,19 @@ setInitialListing(props?.content?.data?.listing);
         />
       </div>
       <div class="flex flex-col items-center space-y-4 justify-center mt-6 md:mt-8">
-        <p><span class="font-semibold text-base">{{ getElements.length }}</span> of <span class="font-semibold text-base">{{ getTotal }}</span> {{ $t('products') }}</p>
-        <button v-if="getTotal > getElements.length" class="text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm">Load more</button>
+        <p><span class="font-semibold text-base">{{ getElements.length }}</span> {{ $t('of') }} <span class="font-semibold text-base">{{ getTotal }}</span> {{ $t('products') }}</p>
+        <button
+          v-if="getTotal > getElements.length"
+          class="text-white text-base font-medium py-3 px-6 bg-gray-800 shadow-sm disabled:opacity-50"
+          @click="loadMore"
+          :disabled="loadingMore"
+        >
+          {{ $t('load_more') }}
+        </button>
       </div>
     </div>
     <div v-else>
-      <h2 class="mx-auto text-center">No products found 😔</h2>
+      <h2 class="mx-auto text-center">{{ $t('no_products_found') }}</h2>
     </div>
   </div>
 </template>
