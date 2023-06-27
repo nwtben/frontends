@@ -8,7 +8,9 @@ import {
 
 export type SharedModal = {
   modalContent: string;
-  modalProps: object | null;
+  modalProps: {
+    position?: string
+  } | null;
   open: (component: string, props?: object | null) => void;
   close: () => void;
 };
@@ -16,6 +18,28 @@ export type SharedModal = {
 const { close, modalContent, modalProps } = inject<SharedModal>(
   "modal"
 ) as SharedModal;
+
+const animation = computed(() => {
+  if (unref(modalProps)?.position === 'side') {
+    return {
+      'enter': 'duration-300 ease-out',
+      'enter-from': 'translate-x-full',
+      'enter-to': 'translate-x-0',
+      'leave': 'duration-200 ease-in',
+      'leave-from': 'translate-x-0',
+      'leave-to': 'translate-x-full',
+    }
+  } else {
+    return {
+      'enter': 'duration-300 ease-out',
+      'enter-from': 'opacity-0',
+      'enter-to': 'opacity-100',
+      'leave': 'duration-200 ease-in',
+      'leave-from': 'opacity-100',
+      'leave-to': 'opacity-0',
+    }
+  }
+})
 </script>
 
 <template>
@@ -26,7 +50,7 @@ const { close, modalContent, modalProps } = inject<SharedModal>(
   >
     <Dialog
       as="div" 
-      class="fixed z-10 inset-0 overflow-y-auto"
+      class="fixed z-50 inset-0 overflow-y-auto"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -45,14 +69,15 @@ const { close, modalContent, modalProps } = inject<SharedModal>(
       </TransitionChild>
       <TransitionChild
         as="template"
-        enter="duration-300 ease-out"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="duration-200 ease-in"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
+        v-bind="animation"
       >
-        <DialogPanel class="flex flex-col fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-lg sm:w-full overflow-y-auto bg-white sm:ring-1 sm:ring-gray-900/10">
+        <DialogPanel 
+          class="flex flex-col z-60 fixed overflow-y-auto bg-white sm:ring-1 sm:ring-gray-900/10"
+          :class="{
+            'sm:max-w-lg sm:w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2': modalProps?.position !== 'side',
+            'w-full sm:max-w-[448px] top-0 right-0 bottom-0': modalProps?.position === 'side',
+          }"
+        >
           <component :is="modalContent" v-bind="modalProps" @close="close" />
         </DialogPanel>
       </TransitionChild>
