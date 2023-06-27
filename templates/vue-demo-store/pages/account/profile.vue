@@ -22,6 +22,7 @@ const { user } = useUser();
 </script>
 
 <script lang="ts">
+
 export default {
   name: "ProfilePage",
 };
