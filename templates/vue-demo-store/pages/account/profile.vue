@@ -25,6 +25,7 @@ const { user } = useUser();
 export default {
   name: "ProfilePage",
 };
+
 const toggleTabs = (tabNumber: number) => {
  currentTab.value = tabNumber;
 };
