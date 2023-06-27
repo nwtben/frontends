@@ -4,6 +4,7 @@ import {
   CmsElementManufacturerLogo,
   useCmsElementImage,
 } from "@shopware-pwa/composables-next";
+import { Media } from "@shopware-pwa/types";
 import { getPath } from '~/helpers';
 
 const props = withDefaults(
@@ -15,7 +16,7 @@ const props = withDefaults(
     loading: 'lazy',
   }
 );
-
+const $img = useImage()
 const {
   containerStyle,
   displayMode,
@@ -23,6 +24,22 @@ const {
   imageAttrs,
   imageLink,
 }: any = useCmsElementImage(props.content);
+
+function getSrcSetForMedia(media: Media): string {
+  if (!media?.thumbnails?.length) {
+    return "";
+  }
+  return media.thumbnails
+    .map((thumbnail) => {
+      return `${$img((getPath(thumbnail.url)))} ${thumbnail.width}w`;
+    })
+    .join(", ");
+}
+const srcset = computed(() => {
+  const media = props.content?.data?.media;
+  return getSrcSetForMedia(media);
+})
+
 </script>
 <template>
   <!-- TODO: using a tag only works with externalLink, need to improve this element to deal with both internalLink & externalLink -->
@@ -40,6 +57,7 @@ const {
         'object-cover': displayMode === 'cover',
       }"
       :src="getPath(imageAttrs.src)"
+      :srcset="srcset"
       :alt="imageAttrs.alt || 'Image link'"
       :loading="props.loading"
     />
