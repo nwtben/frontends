@@ -70,7 +70,7 @@ const removeCartItem = async () => {
       </nuxt-link>
       <div class="gap-2 text-sm mb-4">
       <SharedPrice
-        :value="lineItem.price?.unitPrice"
+        :value="(lineItem as any)?.price?.unitPrice"
         data-testid="cart-subtotal"
       />
       </div>
