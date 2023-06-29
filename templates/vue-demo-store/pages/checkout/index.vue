@@ -23,6 +23,7 @@ definePageMeta({
 const isSameBillingAndShipping = ref(true);
 const submitBtn = ref();
 const isAgree = ref();
+const isAgreeError = ref();
 const { push } = useRouter();
 const { currency } = useSessionContext();
 const { getCountries } = useCountries();
@@ -83,6 +84,8 @@ const selectedShippingAddress = computed({
     if (shippingAddressId === selectedBillingAddress.value)
       state.customShipping = false;
     isLoading[`shipping-${shippingAddressId}`] = false;
+    if (!isSameBillingAndShipping.value) return;
+    selectedBillingAddress.value = shippingAddressId;
   },
 });
 
@@ -232,6 +235,10 @@ const invokeSubmit = async () => {
     $v.value.$touch();
     registerErrors.value = [];
     const valid = await $v.value.$validate();
+    if ($v.value.agree.$errors?.[0]) {
+      const temp = document.getElementById('tac');
+      temp?.scrollIntoView();
+    }
     if (valid) {
       isLoading.all = true;
       try {
@@ -242,7 +249,14 @@ const invokeSubmit = async () => {
       }
     }
   } else {
-    if (!isAgree.value) return;
+    if (!isAgree.value) {
+      isAgreeError.value = true;
+      const temp = document.getElementById('tac');
+      temp?.scrollIntoView();
+      return;
+    } else {
+      isAgreeError.value = false;
+    }
     isLoading.all = true;
     try {
       await placeOrder();
@@ -279,6 +293,12 @@ watch(getSalutations, (salutations) => {
     state.salutationId = id;
   }
 });
+
+watch(isAgree, (v) => {
+  if (v) {
+    isAgreeError.value = false;
+  }
+})
 
 watch(() => state.shippingAddress, (value) => {
   if (!isSameBillingAndShipping.value) return;
@@ -325,7 +345,7 @@ watch(() => state.firstName, (value) => {
 
 const handleSubmit = () => {
   if (!isUserSession) {
-    submitBtn.value.click()
+    submitBtn.value.click();
   } else {
     invokeSubmit();
   }
@@ -638,7 +658,7 @@ const getCountriesOptions = computed(() => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0  }}</p>
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
@@ -700,9 +720,12 @@ const getCountriesOptions = computed(() => {
               </form>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div>
+            <div id="tac">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
-              <SharedCheckbox v-model="state.agree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+              <SharedCheckbox
+                :error="!!$v.agree.$errors[0]"
+                v-model="state.agree"
+                content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
             <button ref="submitBtn" type="submit" class="hidden">submit</button>
           </form>
@@ -876,7 +899,7 @@ const getCountriesOptions = computed(() => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0 }}</p>
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
@@ -938,15 +961,18 @@ const getCountriesOptions = computed(() => {
               </form>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div>
+            <div id="tac">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
-              <SharedCheckbox v-model="isAgree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+              <SharedCheckbox
+                :error="isAgreeError"
+                v-model="isAgree"
+                content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
           </div>
         </div>
         <div class="w-full md:w-1/2 md:max-w-[574px]">
           <h5 class="text-lg font-medium text-dark-primary mb-4">{{ $t('order_summary') }}</h5>
-          <SharedOrdersSummary :showCartItems="true">
+          <SharedOrdersSummary :showCartItems="true" :preventLastItem="true">
             <template #action>
               <button
                 class="mt-6 w-full flex items-center justify-center px-5 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
@@ -961,17 +987,12 @@ const getCountriesOptions = computed(() => {
         </div>
       </div>
     </div>
-    <div v-else class="text-center">
-      <h1 class="m-10 text-2xl font-medium text-gray-900">
-        Your cart is empty!
-      </h1>
-      <NuxtLink
-        class="inline-flex justify-center py-2 px-4 my-8 border border-transparent text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-light"
-        to="/"
-        data-testid="checkout-go-home-link"
-      >
-        Go to home page
-      </NuxtLink>
+    <div v-else class="mt-40 flex-1 h-full items-center text-center flex flex-col justify-center">
+      <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{ $t('your_cart_empty') }}</h4>
+      <p class="mb-6 text-base text-gray-500">{{  $t('your_cart_empty_desc') }}</p>
+      <div>
+        <nuxt-link to="/" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+      </div>
     </div>
   </div>
 </template>

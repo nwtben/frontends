@@ -10,11 +10,16 @@ import {
 const props = defineProps<{
   lineItem: OrderLineItem | LineItem;
   enableActions?: boolean;
+  preventLastItem?: boolean;
 }>();
 
 const { lineItem } = toRefs(props);
 const isOpen = inject<boolean>("isSidebarOpen");
 const isLoading = ref(false);
+
+const price = computed(() => {
+  return (props.lineItem as LineItem).price?.unitPrice || (props.lineItem as OrderLineItem)?.priceDefinition?.price
+});
 
 const {
   itemOptions,
@@ -50,7 +55,12 @@ const removeCartItem = async () => {
 
 </script>
 <template>
-  <li class="relative py-6 border-b border-b-gray-200 last:border-0 last:pb-0 flex">
+  <li 
+    :class="{
+      'relative py-6 border-b border-b-gray-200 flex': true,
+      'last:border-0 last:pb-0': !preventLastItem
+    }"
+  >
     <div
       v-if="lineItem.type == 'product'"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
@@ -70,7 +80,7 @@ const removeCartItem = async () => {
       </nuxt-link>
       <div class="gap-2 text-sm mb-4">
       <SharedPrice
-        :value="(lineItem as any)?.price?.unitPrice"
+        :value="price"
         data-testid="cart-subtotal"
       />
       </div>
