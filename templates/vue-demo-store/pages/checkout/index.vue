@@ -658,7 +658,7 @@ const getCountriesOptions = computed(() => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0  }}</p>
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
@@ -899,7 +899,7 @@ const getCountriesOptions = computed(() => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0 }}</p>
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
