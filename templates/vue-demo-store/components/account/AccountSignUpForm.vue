@@ -72,6 +72,7 @@ const $v = useVuelidate(rules, formData);
 const invokeSubmit = async () => {
   $v.value.$touch();
   const valid = await $v.value.$validate();
+  console.log(valid, formData.value)
   if (valid) {
     try {
       loading.value = true;

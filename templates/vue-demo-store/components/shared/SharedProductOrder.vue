@@ -3,6 +3,7 @@ import { OrderLineItem, LineItem } from '@shopware-pwa/types';
 import { getSmallestThumbnailUrl, getProductUrl } from "@shopware-pwa/helpers-next";
 import SwQuantitySelector from '../SwQuantitySelector.vue';
 import { getPath } from '~/helpers';
+import { getPath } from '~/helpers';
 import {
   TrashIcon,
 } from '@heroicons/vue/24/outline';
@@ -80,7 +81,7 @@ const removeCartItem = async () => {
       </nuxt-link>
       <div class="gap-2 text-sm mb-4">
       <SharedPrice
-        :value="price"
+        :value="(lineItem as any)?.price?.unitPrice"
         data-testid="cart-subtotal"
       />
       </div>
