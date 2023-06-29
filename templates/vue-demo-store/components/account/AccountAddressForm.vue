@@ -128,13 +128,20 @@ const invokeSave = async (): Promise<void> => {
             </div>
             <div>
               <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
-              <SwSelect
+              <select
                 name="country"
                 v-model="formData.countryId"
-                class="text-gray-700"
-                :options="countriesOptions"
-                :placeholder="$t('choose_country_placeholder')"
-              />
+                class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+              >
+                <!-- <option disabled selected value="">Enter salutation...</option> -->
+                <option
+                  v-for="country in countriesOptions"
+                  :key="country.value"
+                  :value="country.value"
+                >
+                  {{ country.label }}
+                </option>
+              </select>
             </div>
           </div>
         </div>

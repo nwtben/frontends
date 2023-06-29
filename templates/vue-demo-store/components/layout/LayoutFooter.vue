@@ -65,28 +65,28 @@ const gridColumns = computed<number>(() =>
               alt="klarna icon"
               width="44"
               height="24"
-              src="/svg/klarna.svg"
+              src="/assets/svg/klarna.svg"
               loading="lazy"
             />
             <img
               alt="visa icon"
               width="50"
               height="24"
-              src="/svg/visa.svg"
+              src="/assets/svg/visa.svg"
               loading="lazy"
             />
             <img
               alt="mastercard icon"
               width="32"
               height="24"
-              src="/svg/mastercard.svg"
+              src="/assets/svg/mastercard.svg"
               loading="lazy"
             />
             <img
               alt="swish icon"
               width="62.5714"
               height="24"
-              src="/svg/swish.svg"
+              src="/assets/svg/swish.svg"
               loading="lazy"
             />
           </div>

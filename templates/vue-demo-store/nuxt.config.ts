@@ -94,6 +94,13 @@ export default defineNuxtConfig({
   },
   nitro: {
     compressPublicAssets: true,
+    publicAssets: [
+      {
+        baseURL: "assets",
+        dir: 'public/assets',
+        maxAge: 31536000,
+      }
+    ]
   },
   unocss: {
     uno: true, // enabled `@unocss/preset-uno`
