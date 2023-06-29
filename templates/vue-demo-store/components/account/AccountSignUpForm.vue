@@ -20,6 +20,7 @@ const loginErrors = ref<string[]>([]);
 const { getSalutations } = useSalutations();
 const { register } = useUser();
 const router = useRouter();
+const { getCountries } = useCountries();
 
 const formData = ref({
   salutationId: getSalutations.value?.[0]?.id ?? '',
@@ -42,6 +43,13 @@ watch(getSalutations, () => {
   }
 });
 
+const getCountriesOptions = computed(() => {
+  return getCountries.value?.map(x => ({
+    label: x.translated.name,
+    value: x.id
+  })) ?? []
+})
+
 const rules = computed(() => ({
   salutationId: {
     required,
@@ -62,6 +70,21 @@ const rules = computed(() => ({
     required,
     minLength: minLength(8),
   },
+  billingAddress: {
+    street: {
+      required,
+      minLength: minLength(3),
+    },
+    zipcode: {
+      required,
+    },
+    city: {
+      required,
+    },
+    countryId: {
+      required,
+    },
+  },
   agree: {
     checked: (value: any) => value === true
   },
@@ -77,7 +100,10 @@ const invokeSubmit = async () => {
     try {
       loading.value = true;
       const response = await register(formData.value as any);
-      if (response) router.push("/");
+      if (response) {
+        emits("close");
+        router.push("/account");
+      }
     } catch (error) {
       let message =
         (error as ClientApiError)?.messages?.[0]?.detail ||
@@ -99,7 +125,7 @@ const openLogin = () => {
 }
 </script>
 <template>
-  <div class="w-full pointer-events-auto h-full">
+  <div class="flex-1">
     <div class="flex h-full w-full flex-col bg-white shadow-xl p-6">
       <div class="flex flex-col h-full">
         <div class="flex items-start justify-between mb-6">
@@ -166,6 +192,53 @@ const openLogin = () => {
                 type="password"
                 autocomplete="password"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label class="capitalize text-sm font-medium text-gray-700 mb-1" for="street">{{ $t('street_address') }}</label>
+              <input
+                v-model="formData.billingAddress.street"
+                id="street"
+                name="street"
+                type="text"
+                autocomplete="street"
+                class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+              />
+            </div>
+            <div class="flex gap-4">
+              <div class="w-1/3">
+                <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
+                <input
+                  v-model="formData.billingAddress.zipcode"
+                  id="zipcode"
+                  name="zipcode"
+                  type="text"
+                  autocomplete="zipcode"
+                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                />
+              </div>
+              <div class="w-2/3">
+                <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
+                <input
+                  v-model="formData.billingAddress.city"
+                  id="city"
+                  name="city"
+                  type="text"
+                  autocomplete="city"
+                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
+              <SwSelect
+                :compact="false"
+                id="country"
+                v-model="formData.billingAddress.countryId"
+                name="country"
+                autocomplete="country-name"
+                :options="getCountriesOptions"
+                :placeholder="$t('choose_country_placeholder')"
               />
             </div>
             <div class="">
