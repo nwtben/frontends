@@ -65,7 +65,7 @@ watch(
     v-if="product"
   >
     <!-- For mobile -->
-    <div class="sm:hidden w-full">
+    <div class="product-meta sm:hidden w-full">
       <Disclosure as="div" v-for="tab in tabs" :key="tab.name" v-slot="{ open }" :defaultOpen="tab.href === currentTabHash">
         <h3>
           <DisclosureButton class="group relative flex w-full items-center justify-between p-4 text-left border-t border-gray-200">
@@ -100,7 +100,7 @@ watch(
       </Disclosure>
     </div>
     <!-- For desktop -->
-    <div id="product-meta" class="w-full hidden sm:block">
+    <div class="product-meta w-full hidden sm:block">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
           <nuxt-link 
