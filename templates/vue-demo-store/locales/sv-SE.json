@@ -1,4 +1,10 @@
 {
+  "validation": {
+    "required": "Värde behövs",
+    "email": "Värde är inte en giltig e-postadress",
+    "minLength": "Detta fält bör vara minst {min} tecken långt",
+    "maxLength": "Den maximala tillåtna längden är {max}"
+  },
   "search": "sök",
   "search_brands": "Sök varumärken",
   "sign_in": "logga in",
