@@ -4,7 +4,7 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/solid';
 import { SharedModal } from "../shared/SharedModal.vue";
-import { required, email, minLength } from "@vuelidate/validators";
+import { required, email, minLength, maxLength } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 
 const emits = defineEmits<{
@@ -77,6 +77,8 @@ const rules = computed(() => ({
     },
     zipcode: {
       required,
+      minLength: minLength(5),
+      maxLength: maxLength(6),
     },
     city: {
       required,
@@ -150,7 +152,12 @@ const openLogin = () => {
           <form class="flex-1 min-h-0 flex flex-col gap-6" @submit.prevent="invokeSubmit">
             <p>{{ $t('create_a_new_account') }}</p>
             <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="email">{{ $t('email_address') }}</label>
+              <label
+                class="text-sm font-medium text-gray-700 mb-1" for="email"
+                :class="{
+                  'text-red-600': $v.email.$error
+                }"
+              >{{ $t('email_address') }}</label>
               <input
                 v-model="formData.email"
                 id="email-address"
@@ -158,78 +165,177 @@ const openLogin = () => {
                 type="email"
                 autocomplete="email"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                :class="{
+                  'border-red-600': $v.email.$error
+                }"
               />
+              <span
+                v-if="$v.email.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.email.$errors[0].$params as any).type}`) }}
+              </span>
             </div>
             <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="firstname">{{ $t('first_name') }}</label>
+              <label
+                class="text-sm font-medium text-gray-700 mb-1"
+                :class="{
+                  'text-red-600': $v.firstName.$error
+                }"
+                for="firstname"
+              >{{ $t('first_name') }}</label>
               <input
                 v-model="formData.firstName"
                 id="firstname"
                 name="firstname"
                 type="firstname"
                 autocomplete="firstname"
+                :class="{
+                  'border-red-600': $v.firstName.$error
+                }"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
               />
+              <span
+                v-if="$v.firstName.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.firstName.$errors[0].$params as any).type}`, $v.firstName.$errors[0].$params as any) }}
+              </span>
             </div>
             <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="lastname">{{ $t('last_name') }}</label>
+              <label
+                class="text-sm font-medium text-gray-700 mb-1"
+                :class="{
+                  'text-red-600': $v.lastName.$error
+                }"
+                for="lastname"
+              >{{ $t('last_name') }}</label>
               <input
                 v-model="formData.lastName"
                 id="lastname"
                 name="lastname"
                 type="lastname"
                 autocomplete="lastname"
+                :class="{
+                  'border-red-600': $v.lastName.$error
+                }"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
               />
+              <span
+                v-if="$v.lastName.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.lastName.$errors[0].$params as any).type}`, $v.lastName.$errors[0].$params as any) }}
+              </span>
             </div>
             <div>
-              <label class="capitalize text-sm font-medium text-gray-700 mb-1" for="password">{{ $t('password') }}</label>
+              <label
+                class="capitalize text-sm font-medium text-gray-700 mb-1"
+                :class="{
+                  'text-red-600': $v.password.$error
+                }"
+                for="password">{{ $t('password') }}</label>
               <input
                 v-model="formData.password"
                 id="password"
                 name="password"
                 type="password"
                 autocomplete="password"
+                :class="{
+                  'border-red-600': $v.password.$error
+                }"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
               />
+              <span
+                v-if="$v.password.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.password.$errors[0].$params as any).type}`, $v.password.$errors[0].$params as any) }}
+              </span>
             </div>
             <div>
-              <label class="capitalize text-sm font-medium text-gray-700 mb-1" for="street">{{ $t('street_address') }}</label>
+              <label
+                class="capitalize text-sm font-medium text-gray-700 mb-1"
+                :class="{
+                  'text-red-600': $v.billingAddress.street.$error
+                }"
+                for="street">{{ $t('street_address') }}</label>
               <input
                 v-model="formData.billingAddress.street"
                 id="street"
                 name="street"
                 type="text"
                 autocomplete="street"
+                :class="{
+                  'border-red-600': $v.billingAddress.street.$error
+                }"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
               />
+              <span
+                v-if="$v.billingAddress.street.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.billingAddress.street.$errors[0].$params as any).type}`, $v.billingAddress.street.$errors[0].$params as any) }}
+              </span>
             </div>
             <div class="flex gap-4">
               <div class="w-1/3">
-                <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
+                <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode"
+                  :class="{
+                    'text-red-600': $v.billingAddress.zipcode.$error
+                  }"
+                >{{ $t('zip_code') }}</label>
                 <input
                   v-model="formData.billingAddress.zipcode"
                   id="zipcode"
                   name="zipcode"
                   type="text"
                   autocomplete="zipcode"
+                  :class="{
+                    'border-red-600': $v.billingAddress.zipcode.$error
+                  }"
                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                 />
+                <span
+                  v-if="$v.billingAddress.zipcode.$error"
+                  class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+                >
+                  {{ $t(`validation.${($v.billingAddress.zipcode.$errors[0].$params as any).type}`, $v.billingAddress.zipcode.$errors[0].$params as any) }}
+                </span>
               </div>
               <div class="w-2/3">
-                <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
+                <label class="text-sm font-medium text-gray-700 mb-1"
+                  for="city"
+                  :class="{
+                    'text-red-600': $v.billingAddress.city.$error
+                  }"
+                >{{ $t('city') }}</label>
                 <input
                   v-model="formData.billingAddress.city"
                   id="city"
                   name="city"
                   type="text"
                   autocomplete="city"
+                  :class="{
+                    'border-red-600': $v.billingAddress.city.$error
+                  }"
                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                 />
+                <span
+                  v-if="$v.billingAddress.city.$error"
+                  class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+                >
+                  {{ $t(`validation.${($v.billingAddress.city.$errors[0].$params as any).type}`, $v.billingAddress.city.$errors[0].$params as any) }}
+                </span>
               </div>
             </div>
             <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
+              <label 
+                class="text-sm font-medium text-gray-700 mb-1" 
+                :class="{
+                  'text-red-600': $v.billingAddress.countryId.$error
+                }"
+                for="city">{{ $t('country') }}</label>
               <SwSelect
                 :compact="false"
                 id="country"
@@ -238,7 +344,16 @@ const openLogin = () => {
                 autocomplete="country-name"
                 :options="getCountriesOptions"
                 :placeholder="$t('choose_country_placeholder')"
+                :class="{
+                  'border-red-600': $v.billingAddress.countryId.$error
+                }"
               />
+              <span
+                v-if="$v.billingAddress.countryId.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.billingAddress.countryId.$errors[0].$params as any).type}`, $v.billingAddress.countryId.$errors[0].$params as any) }}
+              </span>
             </div>
             <div class="">
               <SharedCheckbox
@@ -246,6 +361,7 @@ const openLogin = () => {
                   `<a class='underline' target='_blank' href='#'>${$t('data_protection_information')}</a>`,
                   `<a class='underline' target='_blank' href='#'>${$t('general_terms_and_conditions')}</a>`
                   ])"
+                :error="!!$v.agree.$error"
                 v-model="formData.agree"
               />
             </div>
