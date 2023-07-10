@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install --no-frozen-lockfile"
+  "installCommand": "pnpm install"
 }
 
