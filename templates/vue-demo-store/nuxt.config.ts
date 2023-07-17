@@ -64,6 +64,10 @@ export default defineNuxtConfig({
     "nuxt3-meta-pixel",
     "@nuxtjs/robots",
   ],
+  plugins: [
+    "~/plugins/vue-gtm.client.js",
+    "~/plugins/gtm-events"
+  ],
   facebook: {
     track: 'PageView',
     pixelId: process.env.PIXEL_ID,
