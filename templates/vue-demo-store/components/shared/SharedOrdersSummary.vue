@@ -7,6 +7,7 @@ import {
 const props = defineProps<{
   showTitle?: boolean;
   showCartItems?: boolean;
+  preventLastItem?: boolean;
 }>();
 
 const isAddDiscountCode = ref<boolean>();
@@ -37,8 +38,8 @@ const handleSubmitPromotionCode = async () => {
 </script>
 
 <template>
-  <SharedProductOrders v-if="props.showCartItems" :is-container="true" class="bg-gray-50" :enableActions="true" :lineItems="cartItems || []" />
-  <div class="bg-gray-50 py-6 px-4 md:p-8">
+  <SharedProductOrders v-if="props.showCartItems" :preventLastItem="preventLastItem" :is-container="true" class="bg-gray-50" :enableActions="true" :lineItems="cartItems || []" />
+  <div class="bg-gray-50 py-6 px-4 md:pt-6 md:pb-8 md:px-8">
     <h5 v-if="props.showTitle" class="text-xl font-medium text-dark-primary mb-8.5">{{ $t('order_summary') }}</h5>
     <div class="flex flex-col gap-6">
       <SharedCheckbox v-model="isAddDiscountCode" :content="$t('add_discount_code')" />
@@ -51,7 +52,7 @@ const handleSubmitPromotionCode = async () => {
             :class="promotionErrors.length ? 'border-red-600' : ''"
           />
           <button @click="handleSubmitPromotionCode" :disabled="!discountCode" class="capitalize disabled:opacity-70 flex items-center justify-center px-3 py-1 text-xs font-medium text-white shadow-sm bg-gray-800">
-            {{ $t('apply') }}
+            {{ $t('use') }}
           </button>
         </div>
         <div v-if="promotionErrors.length">

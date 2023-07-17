@@ -18,11 +18,6 @@ export default defineNuxtConfig({
           as: "style",
           onload: "this.onload=null;this.rel='stylesheet'"
         },
-        {
-          rel: "preload",
-          as: "image",
-          href: "https://shopware.nwtsaas.com/media/e1/35/d3/1682437171/hero-desktop-511745398.jpg",
-        },
       ],
       /*noscript: {
         link: [
@@ -66,25 +61,32 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image",
+    "nuxt3-meta-pixel",
     "@nuxtjs/robots",
   ],
   plugins: [
     "~/plugins/vue-gtm.client.js",
     "~/plugins/gtm-events"
   ],
+  facebook: {
+    track: 'PageView',
+    pixelId: process.env.PIXEL_ID,
+    autoPageView: true,
+    disabled: false
+  },
   image: {
     domains: [
       'shopware.nwtsaas.com'
     ],
-    presets: {
-      standard: {
-        modifiers: {
-          format: 'webp',
-          quality: '100',
-          // sizes: 'sm:100vw md:50vw'
-        }
-      }
-    }
+    provider: 'fastly',
+    fastly: {
+      baseURL: 'https://shopware.nwtsaas.com',
+      modifiers: {
+        format: 'webp',
+        quality: '85',
+        effect: 'sharpen:100',
+      },
+    },
   },
   partytown: {
     forward: ['dataLayer.push'],
@@ -103,6 +105,13 @@ export default defineNuxtConfig({
   },
   nitro: {
     compressPublicAssets: true,
+    publicAssets: [
+      {
+        baseURL: "assets",
+        dir: 'public/assets',
+        maxAge: 31536000,
+      }
+    ]
   },
   unocss: {
     uno: true, // enabled `@unocss/preset-uno`

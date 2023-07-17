@@ -204,6 +204,13 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
 }, {
   immediate: true
 });
+
+const getSortingOrdersOptions = computed(() => {
+  return getSortingOrders.value.map(x => ({
+    label: x.label,
+    value: x.key
+  }))
+});
 </script>
 <template>
   <ClientOnly>
@@ -218,11 +225,8 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
           name="language"
           v-model="currentSortingOrder"
           class="text-gray-700"
-        >
-          <option v-for="sorting of getSortingOrders" :key="sorting.key" :value="sorting.key">
-            {{ sorting.label }}
-          </option>
-        </SwSelect>
+          :options="getSortingOrdersOptions"
+        />
       </div>
     </div>
     <div class="block md:hidden mt-4">
@@ -262,11 +266,11 @@ watch([selectedOptionIds, getInitialFilters], ([value, list]) => {
         <TransitionChild
           as="template"
           enter="duration-300 ease-out"
-          enter-from="opacity-0 -translate-x-full"
-          enter-to="opacity-100 translate-x-0"
+          enter-from="-translate-x-full"
+          enter-to="translate-x-0"
           leave="duration-200 ease-in"
-          leave-from="opacity-100 translate-x-0"
-          leave-to="opacity-0 -translate-x-full"
+          leave-from="translate-x-0"
+          leave-to="-translate-x-full"
         >
           <DialogPanel class="flex flex-col fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div class="container py-6 flex items-center justify-between">

@@ -21,9 +21,9 @@ definePageMeta({
 });
 
 const isSameBillingAndShipping = ref(true);
-const isDifferentBillingAndShipping = ref();
 const submitBtn = ref();
 const isAgree = ref();
+const isAgreeError = ref();
 const { push } = useRouter();
 const { currency } = useSessionContext();
 const { getCountries } = useCountries();
@@ -84,6 +84,8 @@ const selectedShippingAddress = computed({
     if (shippingAddressId === selectedBillingAddress.value)
       state.customShipping = false;
     isLoading[`shipping-${shippingAddressId}`] = false;
+    if (!isSameBillingAndShipping.value) return;
+    selectedBillingAddress.value = shippingAddressId;
   },
 });
 
@@ -125,6 +127,8 @@ const state = reactive<any>({
     countryId: "",
   },
   billingAddress: {
+    firstName: "",
+    lastName: "",
     phoneNumber: "",
     street: "",
     zipcode: "",
@@ -158,6 +162,14 @@ const rules = computed(() => ({
     minLength: minLength(8),
   },
   billingAddress: {
+    firstName: {
+      required,
+      minLength: minLength(3),
+    },
+    lastName: {
+      required,
+      minLength: minLength(3),
+    },
     street: {
       required,
       minLength: minLength(3),
@@ -223,6 +235,10 @@ const invokeSubmit = async () => {
     $v.value.$touch();
     registerErrors.value = [];
     const valid = await $v.value.$validate();
+    if ($v.value.agree.$errors?.[0]) {
+      const temp = document.getElementById('tac');
+      temp?.scrollIntoView();
+    }
     if (valid) {
       isLoading.all = true;
       try {
@@ -233,7 +249,14 @@ const invokeSubmit = async () => {
       }
     }
   } else {
-    if (!isAgree.value) return;
+    if (!isAgree.value) {
+      isAgreeError.value = true;
+      const temp = document.getElementById('tac');
+      temp?.scrollIntoView();
+      return;
+    } else {
+      isAgreeError.value = false;
+    }
     isLoading.all = true;
     try {
       await placeOrder();
@@ -251,7 +274,6 @@ const registerUser = async () => {
     state.billingAddress.salutationId = state.salutationId;
     state.billingAddress.firstName = state.firstName;
     state.billingAddress.lastName = state.lastName;
-    console.log(state)
     await register(state);
   } catch (error) {
     const e = error as ClientApiError;
@@ -272,42 +294,97 @@ watch(getSalutations, (salutations) => {
   }
 });
 
+watch(isAgree, (v) => {
+  if (v) {
+    isAgreeError.value = false;
+  }
+})
+
 watch(() => state.shippingAddress, (value) => {
   if (!isSameBillingAndShipping.value) return;
-  state.billingAddress = {...value};
+  state.billingAddress = {
+    ...value,
+    lastName: state.lastName,
+    firstName: state.firstName
+  };
 }, {
   deep: true
 });
 
 watch(isSameBillingAndShipping, (value) => {
   if (value) {
-    state.billingAddress = {...state.shippingAddress};
+    state.billingAddress = {
+      ...state.shippingAddress,
+      lastName: state.lastName,
+      firstName: state.firstName
+    };
   } else {
     state.billingAddress = {
       street: "",
       zipcode: "",
       city: "",
       countryId: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      lastName: "",
+      firstName: ""
     }
+  }
+});
+
+watch(() => state.lastName, (value) => {
+  if (isSameBillingAndShipping.value) {
+    state.billingAddress.lastName = value;
+  }
+});
+
+watch(() => state.firstName, (value) => {
+  if (isSameBillingAndShipping.value) {
+    state.billingAddress.firstName = value;
   }
 });
 
 const handleSubmit = () => {
   if (!isUserSession) {
-    submitBtn.value.click()
+    submitBtn.value.click();
   } else {
     invokeSubmit();
   }
 }
 
 const login = () => {
-  modal.open('AccountLoginForm')
+  modal.open('AccountLoginForm', {
+    position: 'side'
+  })
 }
 
 const handleChangeGuest = (e: any) => {
   state.guest = !e.target.checked;
 }
+
+const editAddress = (e: any, address: any) => {
+  e.stopPropagation();
+  modal.open('AccountAddressForm', {
+    address,
+    salutations: getSalutations,
+    countries: getCountries,
+    title: 'Edit address',
+  })
+}
+
+const createAddress = (e: any) => {
+  e.stopPropagation();
+  modal.open('AccountAddressForm', {
+    salutations: getSalutations,
+    countries: getCountries,
+  })
+}
+
+const getCountriesOptions = computed(() => {
+  return getCountries.value?.map(x => ({
+    label: x.translated.name,
+    value: x.id
+  })) ?? []
+})
 
 </script>
 
@@ -453,20 +530,9 @@ const handleChangeGuest = (e: any) => {
                     v-model="state.shippingAddress.countryId"
                     name="country"
                     autocomplete="country-name"
-                    data-testid="checkout-pi-country-input"
-                    @blur="$v.shippingAddress.countryId.$touch()"
-                  >
-                    <option disabled selected value="">
-                      Choose country...
-                    </option>
-                    <option
-                      v-for="country in getCountries"
-                      :key="country.id"
-                      :value="country.id"
-                    >
-                      {{ country.translated.name }}
-                    </option>
-                  </SwSelect>
+                    :options="getCountriesOptions"
+                    :placeholder="$t('choose_country_placeholder')"
+                  />
                 </div>
                 <SharedCheckbox 
                   :content="$t('use_same_for_billing_information')"
@@ -477,8 +543,32 @@ const handleChangeGuest = (e: any) => {
             <div class="border-b border-gray-200"></div>
             <template v-if="!isSameBillingAndShipping">
               <div>
-                <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
+                <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('different_billing_address') }}</h6>
                 <div class="flex flex-col gap-6">
+                  <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-firstName">{{ $t('first_name') }}</label>
+                      <input
+                        v-model="state.billingAddress.firstName"
+                        id="billing-firstName"
+                        name="billing-firstName"
+                        type="text"
+                        autocomplete="firstName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-lastName">{{  $t('last_name') }}</label>
+                      <input
+                        v-model="state.billingAddress.lastName"
+                        id="billing-lastName"
+                        name="billing-lastName"
+                        type="text"
+                        autocomplete="lastName"
+                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      />
+                    </div>
+                  </div>
                   <div>
                     <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
                     <input
@@ -532,20 +622,9 @@ const handleChangeGuest = (e: any) => {
                       v-model="state.billingAddress.countryId"
                       name="country"
                       autocomplete="country-name"
-                      data-testid="checkout-pi-country-input"
-                      @blur="$v.billingAddress.countryId.$touch()"
-                    > 
-                      <option disabled selected value="">
-                        Choose country...
-                      </option>
-                      <option
-                        v-for="country in getCountries"
-                        :key="country.id"
-                        :value="country.id"
-                      >
-                        {{ country.translated.name }}
-                      </option>
-                    </SwSelect>
+                      :options="getCountriesOptions"
+                      :placeholder="$t('choose_country_placeholder')"
+                    />
                   </div>
                 </div>
               </div>
@@ -579,7 +658,7 @@ const handleChangeGuest = (e: any) => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0  }}</p>
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
@@ -641,9 +720,12 @@ const handleChangeGuest = (e: any) => {
               </form>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div>
+            <div id="tac">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
-              <SharedCheckbox v-model="state.agree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+              <SharedCheckbox
+                :error="!!$v.agree.$errors[0]"
+                v-model="state.agree"
+                content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
             <button ref="submitBtn" type="submit" class="hidden">submit</button>
           </form>
@@ -703,7 +785,7 @@ const handleChangeGuest = (e: any) => {
                               <span class="block">{{ customerAddress.city }}</span>
                             </p>
                           </RadioGroupLabel>
-                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => e.stopPropagation()"/>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => editAddress(e, customerAddress)" />
                         </div>
                       </div>
   
@@ -715,20 +797,21 @@ const handleChangeGuest = (e: any) => {
                   <button
                     type="button"
                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                    @click="createAddress"
                   >
                     {{ $t('add_new_shipping_address') }}
                   </button>
                 </div>
                 <div>
                   <SharedCheckbox 
-                    :content="$t('different_billing_address')"
-                    v-model="isDifferentBillingAndShipping"
+                    :content="$t('use_same_for_billing_information')"
+                    v-model="isSameBillingAndShipping"
                   />
                 </div>
               </div>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div v-if="isDifferentBillingAndShipping">
+            <div v-if="!isSameBillingAndShipping">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('billing_address') }}</h6>
               <div class="flex flex-col gap-4">
                 <div>
@@ -768,6 +851,7 @@ const handleChangeGuest = (e: any) => {
                               <span class="block">{{ customerAddress.city }}</span>
                             </p>
                           </RadioGroupLabel>
+                          <PencilSquareIcon class="cursor-pointer absolute top-4 right-4 h-6 w-6 text-gray-900" @click="(e: any) => editAddress(e, customerAddress)" />
                         </div>
                       </div>
   
@@ -779,13 +863,14 @@ const handleChangeGuest = (e: any) => {
                   <button
                     type="button"
                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white shadow-sm bg-gray-800"
+                    @click="createAddress"
                   >
                     {{$t('add_new_billing_address')}}
                   </button>
                 </div>
               </div>
             </div>
-            <div v-if="isDifferentBillingAndShipping" class="border-b border-gray-200"></div>
+            <div v-if="!isSameBillingAndShipping" class="border-b border-gray-200"></div>
             <div>
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_method') }}</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -814,7 +899,7 @@ const handleChangeGuest = (e: any) => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}}{{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross  }}</p>
+                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0 }}</p>
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
@@ -876,15 +961,18 @@ const handleChangeGuest = (e: any) => {
               </form>
             </div>
             <div class="border-b border-gray-200"></div>
-            <div>
+            <div id="tac">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('terms_and_conditions') }}</h6>
-              <SharedCheckbox v-model="isAgree" content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
+              <SharedCheckbox
+                :error="isAgreeError"
+                v-model="isAgree"
+                content="I have read and accepted the <a class='underline underline-offset-2' href='https://shopware-6-demo.shop-studio.io/widgets/cms/7c7e4047d6df467ca9f5c7f1611fe4e6'>terms and conditions</a>." />
             </div>
           </div>
         </div>
         <div class="w-full md:w-1/2 md:max-w-[574px]">
           <h5 class="text-lg font-medium text-dark-primary mb-4">{{ $t('order_summary') }}</h5>
-          <SharedOrdersSummary :showCartItems="true">
+          <SharedOrdersSummary :showCartItems="true" :preventLastItem="true">
             <template #action>
               <button
                 class="mt-6 w-full flex items-center justify-center px-5 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
@@ -899,17 +987,12 @@ const handleChangeGuest = (e: any) => {
         </div>
       </div>
     </div>
-    <div v-else class="text-center">
-      <h1 class="m-10 text-2xl font-medium text-gray-900">
-        Your cart is empty!
-      </h1>
-      <NuxtLink
-        class="inline-flex justify-center py-2 px-4 my-8 border border-transparent text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-light"
-        to="/"
-        data-testid="checkout-go-home-link"
-      >
-        Go to home page
-      </NuxtLink>
+    <div v-else class="mt-40 flex-1 h-full items-center text-center flex flex-col justify-center">
+      <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{ $t('your_cart_empty') }}</h4>
+      <p class="mb-6 text-base text-gray-500">{{  $t('your_cart_empty_desc') }}</p>
+      <div>
+        <nuxt-link to="/" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+      </div>
     </div>
   </div>
 </template>

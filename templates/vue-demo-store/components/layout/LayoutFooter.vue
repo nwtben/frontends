@@ -62,33 +62,33 @@ const gridColumns = computed<number>(() =>
           </h4>
           <div class="flex space-x-6">
             <img
-               alt="klarna icon"
-               width="44"
-               height="24"
-               src="/svg/klarna.svg"
-               loading="lazy"
-             />
-             <img
-               alt="visa icon"
-               width="50"
-               height="24"
-               src="/svg/visa.svg"
-               loading="lazy"
-             />
-             <img
-               alt="mastercard icon"
-               width="32"
-               height="24"
-               src="/svg/mastercard.svg"
-               loading="lazy"
-             />
-             <img
-               alt="swish icon"
-               width="62.5714"
-               height="24"
-               src="/svg/swish.svg"
-               loading="lazy"
-          />
+              alt="klarna icon"
+              width="44"
+              height="24"
+              src="/assets/svg/klarna.svg"
+              loading="lazy"
+            />
+            <img
+              alt="visa icon"
+              width="50"
+              height="24"
+              src="/assets/svg/visa.svg"
+              loading="lazy"
+            />
+            <img
+              alt="mastercard icon"
+              width="32"
+              height="24"
+              src="/assets/svg/mastercard.svg"
+              loading="lazy"
+            />
+            <img
+              alt="swish icon"
+              width="62.5714"
+              height="24"
+              src="/assets/svg/swish.svg"
+              loading="lazy"
+            />
           </div>
         </div>
       </div>

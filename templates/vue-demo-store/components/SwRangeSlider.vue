@@ -91,9 +91,9 @@ const handleClickTrackBar = (e: any) => {
     currentMarkerType.value = 'right';
     moveMarker(tempPercent, 'right');
   } else {
-    if (currentMarkerType.value === 'left') {
+    if (tempPercent < ((rightMarkerPos.value + leftMarkerPos.value) / 2)) {
       moveMarker(tempPercent, 'left');
-    } else if (currentMarkerType.value === 'right') {
+    } else {
       moveMarker(tempPercent, 'right');
     }
   }
@@ -207,7 +207,7 @@ watch([leftMarkerPos, rightMarkerPos], ([leftPos, rightPos], [prevLeftPos, prevR
 
 <style scoped>
 .range-slider-contaniner {
-  @apply relative mx-2;
+  @apply relative mx-2 h-2;
 }
 .track-bar {
   @apply box-content absolute top-0 translate -translate-y-1/2 w-full h-1 py-1.5;

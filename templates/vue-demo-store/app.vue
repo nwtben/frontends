@@ -21,6 +21,23 @@ await useAsyncData(
   }
 );
 
+// Navigation for default theme
+const { loadNavigationElements } = useNavigation();
+
+const { data } = useAsyncData("mainNavigation", () => {
+  return loadNavigationElements({ depth: 2 });
+});
+
+provide("swNavigation-main-navigation", data);
+
+const { loadNavigationElements: loadFooterNavigationElements } = useNavigation({
+  type: "footer-navigation",
+});
+const { data: footerData } = useAsyncData("mainFooterNavigation", () => {
+  return loadFooterNavigationElements({ depth: 2 });
+});
+provide("swNavigation-footer-navigation", footerData);
+
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
 
@@ -38,7 +55,9 @@ const isSidebarOpen = ref(false);
 provide("isSidebarOpen", isSidebarOpen);
 
 const modalContent = ref<string>("");
-const modalProps = ref<object | null | undefined>({});
+const modalProps = ref<{
+  position?: string
+} | null | undefined>({});
 const modalHandler = {
   open: (component: string, props?: object | null) => {
     modalContent.value = component;

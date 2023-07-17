@@ -22,6 +22,7 @@ const props = defineProps<{
 }>();
 
 const { getConfigValue } = useCmsElementConfig(props.content);
+const router = useRouter();
 const alignment = computed(() => getConfigValue("alignment"));
 
 const { taxState, currency } = useSessionContext();
@@ -39,9 +40,19 @@ const minPurchase = computed(() => product.value?.minPurchase ?? 0);
 const deliveryTime = computed(() => product.value?.deliveryTime);
 const restockTime = computed(() => product.value?.restockTime);
 
-const scrollToReviews = () => {
-  const temp = document.getElementById('product-meta');
-  temp?.scrollIntoView();
+const scrollToReviews = async (e: any) => {
+  e.preventDefault();
+  await router.push({
+    hash: '#reviews',
+  });
+  setTimeout(() => {
+    const elements: any = document.getElementsByClassName('product-meta');
+    Array.from(elements).forEach((x: any) => {
+      if (window.getComputedStyle(x).display !== "none") {
+        x?.scrollIntoView();
+      }
+    })
+  }, 100);
 }
 
 </script>
@@ -56,9 +67,12 @@ const scrollToReviews = () => {
         class="text-gray-500 text-lg"
       />
       <div class="flex flex-col">
-        <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews"/>
-        <a :href="'#reviews'"
-          @click="scrollToReviews" class="underline font-medium cursor-pointer">{{ $t('read_reviews') }}</a>
+        <a 
+          @click="scrollToReviews" class="underline font-medium cursor-pointer"
+        >
+          <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews" />
+          {{ $t('read_reviews') }}
+        </a>
       </div>
     </div>
     <SwVariantConfigurator
