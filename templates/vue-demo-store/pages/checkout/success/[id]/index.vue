@@ -80,7 +80,7 @@ const sortLineItems = computed(() => {
 <template>
   <ClientOnly>
     <div class="mt-16 mb-24 max-w-[700px] mx-auto">
-      <div class="flex flex-col gap-2 mb-10">
+      <div class="flex flex-col gap-4 mb-10">
         <!-- <p class="text-sm font-medium uppercase">
           {{ $t('order_complete') }}
         </p> -->
@@ -91,6 +91,7 @@ const sortLineItems = computed(() => {
           {{ $t('your_order_will_with_you_soon', [order?.orderNumber]) }}
         </p>
       </div>
+      <div class="mt-6 border-b border-gray-200" />
       <SharedProductOrders :line-items="sortLineItems || []" />
       <div class="mt-6 border-b border-gray-200" />
       <div class="my-6 flex justify-between text-base">
@@ -140,7 +141,7 @@ const sortLineItems = computed(() => {
             {{ $t('payment_method') }}
           </h6>
           <p class="mt-2 text-sm text-gray-500">
-            {{ (paymentMethod?.translated as any).name }}
+            {{ (paymentMethod?.translated as any)?.name }}
           </p>
         </div>
         <div>

@@ -4,6 +4,8 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/solid';
 import { SharedModal } from "../shared/SharedModal.vue";
+import { required } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
 
 const emits = defineEmits<{
   (e: "success"): void;
@@ -13,8 +15,17 @@ const modal = inject<SharedModal>("modal") as SharedModal;
 const { login } = useUser();
 const loading = ref();
 const { mergeWishlistProducts } = useWishlist();
-const { pushSuccess } = useNotifications();
-const loginErrors = ref<string[]>([]);
+const { pushSuccess, pushError } = useNotifications();
+
+
+const rules = computed(() => ({
+  username: {
+    required,
+  },
+  password: {
+    required,
+  },
+}));
 
 const formData = ref({
   username: "",
@@ -22,20 +33,26 @@ const formData = ref({
   remember: true,
 });
 
+const $v = useVuelidate(rules, formData);
+
 const invokeLogin = async (): Promise<void> => {
-  loading.value = true;
-  loginErrors.value = [];
-  try {
-    await login(formData.value);
-    emits("success");
-    pushSuccess("You are logged in");
-    emits("close");
-    mergeWishlistProducts();
-  } catch (error) {
-    const e = error as ClientApiError;
-    loginErrors.value = e.messages.map(({ detail }) => detail);
-  } finally {
-    loading.value = false;
+  $v.value.$touch();
+  const valid = await $v.value.$validate();
+  if (valid) {
+    loading.value = true;
+    try {
+      await login(formData.value);
+      emits("success");
+      pushSuccess("You are logged in");
+      emits("close");
+      mergeWishlistProducts();
+    } catch (error) {
+      const e = error as ClientApiError;
+      const loginErrors = e.messages.map(({ detail }) => detail);
+      pushError(loginErrors?.[0]);
+    } finally {
+      loading.value = false;
+    }
   }
 };
 
@@ -84,26 +101,52 @@ const openForgotPassword = () => {
           <form class="flex-1 min-h-0 flex flex-col gap-6" @submit.prevent="invokeLogin">
             <p>{{ $t('log_in_with_your_email_and_password') }}</p>
             <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="email">{{ $t('email_address') }}</label>
+              <label
+                :class="{
+                  'text-red-600': $v.username.$error
+                }"
+                class="text-sm font-medium text-gray-700 mb-1" for="email">{{ $t('email_address') }}</label>
               <input
                 v-model="formData.username"
                 id="email-address"
                 name="email"
                 type="email"
                 autocomplete="email"
+                :class="{
+                  'border-red-600': $v.username.$error
+                }"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
               />
+              <span
+                v-if="$v.username.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.username.$errors[0].$params as any).type}`, $v.username.$errors[0].$params as any) }}
+              </span>
             </div>
             <div>
-              <label class="capitalize text-sm font-medium text-gray-700 mb-1" for="password">{{ $t('password') }}</label>
+              <label
+                :class="{
+                  'text-red-600': $v.password.$error
+                }"
+                class="capitalize text-sm font-medium text-gray-700 mb-1" for="password">{{ $t('password') }}</label>
               <input
                 v-model="formData.password"
                 id="password"
                 name="password"
                 type="password"
                 autocomplete="password"
+                :class="{
+                  'border-red-600': $v.password.$error
+                }"
                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
               />
+              <span
+                v-if="$v.password.$error"
+                class="text-red-600 text-sm focus:ring-brand-primary border-gray-300 rounded"
+              >
+                {{ $t(`validation.${($v.password.$errors[0].$params as any).type}`, $v.password.$errors[0].$params as any) }}
+              </span>
             </div>
             <div class="flex justify-between">
               <SharedCheckbox

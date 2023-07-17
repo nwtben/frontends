@@ -6,6 +6,7 @@ const props = defineProps<{
   enableActions?: boolean;
   isContainer?: boolean;
   isMiniCart?: boolean;
+  preventLastItem?: boolean;
 }>();
 </script>
 <template>
@@ -22,6 +23,7 @@ const props = defineProps<{
         }"
         :line-item="lineItem"
         :enable-actions="props.enableActions"
+        :preventLastItem="props.preventLastItem"
       />
     </template>
   </ul>

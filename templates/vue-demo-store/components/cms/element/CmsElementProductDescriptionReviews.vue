@@ -23,7 +23,7 @@ const tabs = ref([
 ]);
 
 const currentTabHash = ref<string>('#description');
-
+const router = useRouter();
 const route = useRoute();
 
 const props = defineProps<{
@@ -34,14 +34,23 @@ const { product } = useProduct(props.content.data?.product);
 const description = computed(() =>
   getTranslatedProperty(product.value, "description")
 );
-
 const reviews = computed(() => props.content.data.reviews?.elements);
+const customerReview = computed(() => (props.content.data.reviews as any)?.customerReview);
+const ratingMatrix = computed(() => (props.content.data.reviews.aggregations as any)?.ratingMatrix?.buckets);
+const changeTab = (hash: string) => {
+  router.replace({
+    hash,
+    query: {
+      preventScroll: 1
+    },
+  });
+}
 
 watch(
   () => route.hash,
   hash => {
     if (hash) {
-     currentTabHash.value = hash;
+      currentTabHash.value = hash;
     }
   },
   {
@@ -56,7 +65,7 @@ watch(
     v-if="product"
   >
     <!-- For mobile -->
-    <div class="sm:hidden w-full">
+    <div class="product-meta sm:hidden w-full">
       <Disclosure as="div" v-for="tab in tabs" :key="tab.name" v-slot="{ open }" :defaultOpen="tab.href === currentTabHash">
         <h3>
           <DisclosureButton class="group relative flex w-full items-center justify-between p-4 text-left border-t border-gray-200">
@@ -85,16 +94,23 @@ watch(
               tab.href === tabs[2].href ? 'block' : 'hidden',
             ]"
           >
-            <SwProductReviews :product="product" :reviews="reviews" />
+            <SwProductReviews :product="product" :reviews="reviews" :customerReview="customerReview" :ratingMatrix="ratingMatrix" />
           </div>
         </DisclosurePanel>
       </Disclosure>
     </div>
     <!-- For desktop -->
-    <div id="product-meta" class="w-full hidden sm:block">
+    <div class="product-meta w-full hidden sm:block">
       <div class="border-b border-gray-200">
-        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a v-for="tab in tabs" :key="tab.name" :href="tab.href"  @click.prevent="currentTabHash = tab.href" :class="[currentTabHash === tab.href ? 'border-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="currentTabHash === tab.href ? 'page' : undefined">{{ $t(tab.name) }}</a>
+        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+          <nuxt-link 
+            v-for="tab in tabs" 
+            :key="tab.name"
+            @click="() => changeTab(tab.href)"
+            :class="[currentTabHash === tab.href ? 'border-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'cursor-pointer whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']"
+            :aria-current="currentTabHash === tab.href ? 'page' : undefined">
+              {{ $t(tab.name) }}
+          </nuxt-link>
         </nav>
       </div>
     </div>
@@ -117,7 +133,7 @@ watch(
             currentTabHash !== tabs[2].href ? 'hidden' : 'block',
           ]"
         >
-          <SwProductReviews :product="product" :reviews="reviews" />
+          <SwProductReviews :product="product" :reviews="reviews" :customerReview="customerReview" :ratingMatrix="ratingMatrix" />
         </div>
       </div>
     </div>
