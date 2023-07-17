@@ -61,8 +61,15 @@ export default defineNuxtConfig({
     "@shopware-pwa/nuxt3-module",
     "@shopware-pwa/cms-base",
     "@nuxt/image",
+    "nuxt3-meta-pixel",
     "@nuxtjs/robots",
   ],
+  facebook: {
+    track: 'PageView',
+    pixelId: process.env.PIXEL_ID,
+    autoPageView: true,
+    disabled: false
+  },
   image: {
     domains: [
       'shopware.nwtsaas.com'
