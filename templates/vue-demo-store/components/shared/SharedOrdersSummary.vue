@@ -8,6 +8,7 @@ const props = defineProps<{
   showTitle?: boolean;
   showCartItems?: boolean;
   preventLastItem?: boolean;
+  shippingEstimate?: boolean;
 }>();
 
 const isAddDiscountCode = ref<boolean>();
@@ -68,7 +69,7 @@ const handleSubmitPromotionCode = async () => {
         />
       </div>
       <div class="flex justify-between text-base">
-        <p>{{ $t('shipping_estimate') }}</p>
+        <p>{{shippingEstimate ? $t('shipping_estimate') : $t('shipping') }}</p>
         <SharedPrice
           :value="shippingTotal"
           data-testid="cart-subtotal"

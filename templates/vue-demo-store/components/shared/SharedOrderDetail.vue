@@ -44,7 +44,7 @@ onMounted(async () => {
         <SharedPrice :value="order?.price?.totalPrice" />
       </div>
       <div class="mb-6 flex justify-between">
-        <span>{{ $t('shipping_estimate') }}</span>
+        <span>{{ $t('shipping') }}</span>
         <SharedPrice :value="order?.shippingTotal" />
       </div>
     </div>

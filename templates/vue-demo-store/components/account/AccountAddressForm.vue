@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { CustomerAddress, Country, Salutation } from "@shopware-pwa/types";
+import { useVuelidate } from "@vuelidate/core";
+import { required, minLength } from "@vuelidate/validators";
 import { SharedModal } from "~~/components/shared/SharedModal.vue";
+import {
+  XMarkIcon,
+} from '@heroicons/vue/24/outline';
+
 const { createCustomerAddress, updateCustomerAddress } = useAddress();
 
 const { close } = inject<SharedModal>("modal") as SharedModal;
-
+const loading = ref();
 const emits = defineEmits<{
   (e: "success"): void;
   (e: "close"): void;
@@ -18,7 +24,7 @@ const props = withDefaults(
     title?: string;
   }>(),
   {
-    title: "Account address",
+    title: "new_address",
     address: undefined,
   }
 );
@@ -31,19 +37,48 @@ const countriesOptions = computed(() => {
 });
 
 const formData = reactive<CustomerAddress>({
-  countryId: props.address?.countryId ?? "",
+  id: props.address?.id ?? "",
   salutationId: props.address?.salutationId ?? props.salutations?.[0]?.id ?? "",
   firstName: props.address?.firstName ?? "",
   lastName: props.address?.lastName ?? "",
+  street: props.address?.street ?? "",
   zipcode: props.address?.zipcode ?? "",
   city: props.address?.city ?? "",
-  street: props.address?.street ?? "",
-  id: props.address?.id ?? "",
+  countryId: props.address?.countryId ?? "",
 });
+
+const rules = computed(() => ({
+  salutationId: {
+    required,
+  },
+  firstName: {
+    required,
+    minLength: minLength(3),
+  },
+  lastName: {
+    required,
+    minLength: minLength(3),
+  },
+  street: {
+    required,
+    minLength: minLength(3),
+  },
+  zipcode: {
+    required,
+  },
+  city: {
+    required,
+  },
+  countryId: {
+    required,
+  },
+}));
+
+const $v = useVuelidate(rules, formData);
 
 const invokeSave = async (): Promise<void> => {
   try {
-    let addressResult = false;
+    loading.value = true;
     const saveAddress = formData.id
       ? updateCustomerAddress
       : createCustomerAddress;
@@ -52,109 +87,115 @@ const invokeSave = async (): Promise<void> => {
     close();
   } catch (error) {
     console.error("error save address", error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
 
 <template>
-  <div class="mt-5 md:mt-0 md:col-span-2">
-    <div class="shadow overflow-hidden sm:rounded-md">
-      <form id="account-address" name="account-address" method="post">
-        <div class="px-4 py-5 bg-white sm:p-6">
-          <h3 class="text-2xl border-b pb-3">
-            {{ props.title }}
+  <div class="px-4 py-5 sm:p-6 bg-white">
+    <form id="account-address" name="account-address" method="post">
+      <div class="flex flex-col gap-6">
+        <div class="flex justify-between">
+          <h3 class="text-lg font-medium">
+            {{ $t(props.title) }}
           </h3>
-          <div class="flex flex-col mt-6 gap-6">
-            <div>
-              <div class="flex flex-col md:flex-row gap-6">
-                <div class="flex-1">
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="firstName">{{ $t('first_name') }}</label>
-                  <input
-                    v-model="formData.firstName"
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    autocomplete="firstName"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                  />
-                </div>
-                <div class="flex-1">
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="lastName">{{  $t('last_name') }}</label>
-                  <input
-                    v-model="formData.lastName"
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    autocomplete="lastName"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
-              <input
-                v-model="formData.street"
-                id="address"
-                name="address"
-                type="text"
-                autocomplete="address"
-                class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+          <button
+            type="button"
+            class="outline-none"
+            @click="close"
+          >
+            <span class="sr-only">Close popup</span>
+            <XMarkIcon
+              class="h-6 w-6"
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+        <div>
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-1">
+              <SharedInput 
+                :label="$t('first_name')" 
+                :label-required="true" 
+                v-model="formData.firstName"
+                :errors="$v.firstName.$errors"
+                @blur="$v.firstName.$touch()"
               />
             </div>
-            <div class="flex gap-4">
-              <div class="w-1/3">
-                <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
-                <input
-                  v-model="formData.zipcode"
-                  id="zipcode"
-                  name="zipcode"
-                  type="text"
-                  autocomplete="zipcode"
-                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                />
-              </div>
-              <div class="w-2/3">
-                <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
-                <input
-                  v-model="formData.city"
-                  id="city"
-                  name="city"
-                  type="text"
-                  autocomplete="city"
-                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
-              <select
-                name="country"
-                v-model="formData.countryId"
-                class="appearance-none relative block w-full px-3 py-2 border placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-              >
-                <!-- <option disabled selected value="">Enter salutation...</option> -->
-                <option
-                  v-for="country in countriesOptions"
-                  :key="country.value"
-                  :value="country.value"
-                >
-                  {{ country.label }}
-                </option>
-              </select>
+            <div class="flex-1">
+              <SharedInput 
+                :label="$t('last_name')" 
+                :label-required="true" 
+                v-model="formData.lastName"
+                :errors="$v.lastName.$errors"
+                @blur="$v.lastName.$touch()"
+              />
             </div>
           </div>
         </div>
-        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <div>
+          <SharedInput 
+            :label="$t('street_address')" 
+            :label-required="true" 
+            v-model="formData.street"
+            :errors="$v.street.$errors"
+            @blur="$v.street.$touch()"
+          />
+        </div>
+        <div class="flex gap-4 flex-col sm:flex-row">
+          <div class="w-full sm:w-1/3">
+            <SharedInput 
+              :label="$t('zip_code')" 
+              :label-required="true" 
+              v-model="formData.zipcode"
+              :errors="$v.zipcode.$errors"
+              @blur="$v.zipcode.$touch()"
+            />
+          </div>
+          <div class="w-full sm:w-2/3">
+            <SharedInput 
+              :label="$t('city')" 
+              :label-required="true" 
+              v-model="formData.city"
+              :errors="$v.city.$errors"
+              @blur="$v.city.$touch()"
+            />
+          </div>
+        </div>
+        <div>
+          <SwSelect
+            name="country"
+            :label="$t('country')"
+            :label-required="true"
+            :compact="false"
+            v-model="formData.countryId"
+            autocomplete="country-name"
+            :options="countriesOptions"
+            :placeholder="$t('choose_country_placeholder')"
+            :errors="$v.countryId.$errors"
+            position="top"
+          />
+        </div>
+        <div class="flex gap-3">
           <button
             type="submit"
             class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-brand-primary hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-light"
             @click.stop.prevent="invokeSave"
+            :disabled="loading"
           >
-            Save
+            {{ $t('add_address') }}
+          </button>
+          <button
+            type="button"
+            class="group relative w-20 flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            @click="close"
+          >
+            {{ $t('cancel') }}
           </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
 </template>

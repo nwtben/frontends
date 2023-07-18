@@ -156,7 +156,7 @@ const ratingAverage: Ref<number> = computed(() =>
         data-testid="add-to-cart-button"
         @click="addToCartProxy"
       >
-        Add to cart
+        {{ $t('add_to_cart') }}
       </button>
       <RouterLink v-else :to="getProductUrl(product)">
         <button

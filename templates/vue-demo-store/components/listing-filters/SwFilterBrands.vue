@@ -46,8 +46,9 @@ const searchBrand = (e: any) => {
 
 <template>
   <div class="mb-8">
-    <div
-      class="w-full border border-gray-300 py-2 px-3"
+    <label
+      for="search-box"
+      class="block cursor-pointer w-full border border-gray-300 py-2 px-3"
     >
       <div class="flex items-center">
         <MagnifyingGlassIcon
@@ -55,6 +56,7 @@ const searchBrand = (e: any) => {
         />
 
         <input
+          id="search-box"
           @input="searchBrand"
           data-testid="layout-search-input"
           type="text"
@@ -62,7 +64,7 @@ const searchBrand = (e: any) => {
           :placeholder="$t('search_brands')"
         >
       </div>
-    </div>
+    </label>
     <div class="flex flex-col my-2 max-h-[308px] overflow-y-auto">
       <div
         v-for="option in showElements"

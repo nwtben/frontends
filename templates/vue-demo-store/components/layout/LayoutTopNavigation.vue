@@ -11,8 +11,16 @@ import {
   ChevronDownIcon,
   ChevronUpIcon
 } from '@heroicons/vue/20/solid';
+import { Category } from "@shopware-pwa/types";
 
 const { navigationElements } = useNavigation();
+const router = useRouter();
+
+const test = (item: Category) => {
+  if (!item?.children?.length) {
+    router.push(`/${item?.seoUrls?.[0]?.seoPathInfo}`);
+  }
+}
 </script>
 
 <template>
@@ -24,6 +32,7 @@ const { navigationElements } = useNavigation();
       <PopoverButton
         class="flex items-center gap-1 text-sm font-medium uppercase text-current outline-none"
         v-slot="{ open }"
+        @click="test(navigationElement)"
       >
         {{ getTranslatedProperty(navigationElement, "name") }}
         <template v-if="navigationElement.children?.length">

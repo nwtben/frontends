@@ -38,7 +38,7 @@ export const logProductView = ( product: any, currency: string, quantity: number
     })  
   }
 
-  // product Add to Cart
+  // product
 
   export const logAddToCart = (product: any, currency: string, quantity: number ) => {
     pushToDataLayer({

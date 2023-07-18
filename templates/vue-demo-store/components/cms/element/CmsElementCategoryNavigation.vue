@@ -7,7 +7,6 @@ const { category: activeCategory } = useCategory();
 const { navigationElements, loadNavigationElements } = useNavigation({
   type: activeCategory.value.id as any
 });
-
 const fakeContainer = ref<any>(null);
 const styling = ref({});
 
@@ -78,9 +77,13 @@ const handleMouseMove = (e: any) => {
       <div ref="fakeContainer"></div>
     </div>
     <div ref="slider" @mousedown="handleMouseDown" @mouseleave="handleMouseLeave" @mouseup="handleMouseUp" @mousemove="handleMouseMove" class="container box-content flex items-center overflow-x-auto gap-2 pb-6 border-b border-b-gray-200" :style="styling">
-      <div v-for="subCategory of navigationElements" class="font-medium py-2 px-5 text-white bg-gray-800 hover:bg-brand-dark hover:cursor-pointer">
+      <nuxt-link
+        v-for="subCategory of navigationElements"
+        class="font-medium py-2 px-5 text-white bg-gray-800 hover:bg-brand-dark hover:cursor-pointer"
+        :to="'/' + subCategory?.seoUrls?.[0]?.seoPathInfo"
+      >
         {{ getTranslatedProperty(subCategory, 'name') }}
-      </div>
+      </nuxt-link>
     </div>
   </div>
 </template>

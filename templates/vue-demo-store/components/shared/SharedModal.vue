@@ -32,11 +32,11 @@ const animation = computed(() => {
   } else {
     return {
       'enter': 'duration-300 ease-out',
-      'enter-from': 'opacity-0',
-      'enter-to': 'opacity-100',
+      'enter-from': 'translate-y-full sm:opacity-0',
+      'enter-to': 'translate-y-0 sm:opacity-100',
       'leave': 'duration-200 ease-in',
-      'leave-from': 'opacity-100',
-      'leave-to': 'opacity-0',
+      'leave-from': 'translate-y-0 sm:opacity-100',
+      'leave-to': 'translate-y-full sm:opacity-0',
     }
   }
 })
@@ -74,7 +74,7 @@ const animation = computed(() => {
         <DialogPanel 
           class="flex flex-col z-60 fixed overflow-y-auto bg-white sm:ring-1 sm:ring-gray-900/10"
           :class="{
-            'sm:max-w-lg sm:w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2': modalProps?.position !== 'side',
+            'w-full sm:max-w-lg bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 h-max max-h-100vh sm:max-h-90vh': modalProps?.position !== 'side',
             'w-full sm:max-w-[448px] top-0 right-0 bottom-0': modalProps?.position === 'side',
           }"
         >
