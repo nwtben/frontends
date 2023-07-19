@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { useCurrency } from '../../composables/useCurrency';
 
-const { fetchAvailableCurrencies, availableCurrencies, currentCurrency, setCurrency } = useCurrency();
-
-onMounted(async () => {
-  await fetchAvailableCurrencies();
-})
+const { availableCurrencies, currentCurrency, setCurrency } = useCurrency();
 
 const availableCurrenciesOptions = computed(() => {
   return availableCurrencies.value?.map(x => ({

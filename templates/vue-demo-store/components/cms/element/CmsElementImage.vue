@@ -25,6 +25,12 @@ const {
   imageLink,
 }: any = useCmsElementImage(props.content);
 
+const processedImageAttrs = computed(() => {
+  const href = imageContainerAttrs.value?.href?.replace('124c71d524604ccbad6042edce3ac799/', '');
+  imageContainerAttrs.value.href = href;
+  return imageContainerAttrs.value;
+})
+
 function getSrcSetForMedia(media: Media): string {
   if (!media?.thumbnails?.length) {
     return "";
@@ -48,7 +54,7 @@ const srcset = computed(() => {
     class="cms-element-image flex relative"
     :is="imageLink.url ? 'a' : 'div'"
     :style="containerStyle"
-    v-bind="imageContainerAttrs"
+    v-bind="processedImageAttrs"
   >
     <nuxt-img
       :class="{

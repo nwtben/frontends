@@ -36,7 +36,6 @@ const { routeName, foreignKey } = useNavigationContext(
 
 function render() {
   const componentName = routeName.value;
-  console.log(componentName);
   if (!componentName)
     return h("div", h(resolveComponent(pascalCase(NOT_FOUND_COMPONENT))));
 

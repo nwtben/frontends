@@ -11,8 +11,7 @@ const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const { locale } = useI18n({ useScope: 'global' });
-const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
-const { sessionContext } = useSessionContext();
+const { currentLanguage, syncLanguageData } = useLanguage();
 const modal = inject<SharedModal>("modal") as SharedModal;
 
 const openWishlist = () => {
@@ -20,25 +19,6 @@ const openWishlist = () => {
     position: 'side'
   })
 }
-
-onBeforeMount(async () => {
-  await fetchLang();
-});
-
-watch(currentLanguage, () => {
-  locale.value = currentLanguage.value?.locale?.code || '';
-});
-
-watch(
-  () => sessionContext.value?.salesChannel?.languageId,
-  async (newLanguageId) => {
-    if (newLanguageId) {
-      await syncLanguageData(newLanguageId!);
-    }
-  }, {
-    immediate: true
-  });
-
 </script>
 
 <template>

@@ -20,12 +20,10 @@ export default defineNuxtPlugin((nuxtApp: any) => {
     // Watch for changes to the cart
 
     const trackAddToCart = debounce((newItem: any, qty: any) => {
-      console.log('Product added to cart:', newItem)
       logAddToCart(newItem, currency, qty)
     }, 300)
 
     const trackRemoveFromCart = debounce((removedItem: any) => {
-      console.log('Product removed from cart:', removedItem)
       logRemoveFromCart(removedItem, currency)
     }, 300)
 

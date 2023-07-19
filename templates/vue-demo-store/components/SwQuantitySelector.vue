@@ -24,7 +24,6 @@ const decrement = () => {
 }
 
 const increment = () => {
-  console.log(props.max, props.modelValue);
   if (props.max && props.modelValue + 1 > props.max) {
     return;
   }

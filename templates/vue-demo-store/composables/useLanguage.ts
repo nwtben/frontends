@@ -23,22 +23,9 @@ export function useLanguage() {
     location.reload();
   };
 
-  const syncLanguageData = async (languageId: string) => {
-    const response = await apiInstance.invoke.post<
-      EntityResult<"language", Language[]>
-    >("/store-api/language", {
-      filter: [
-        {
-          type: "equals",
-          field: "id",
-          value: languageId,
-        },
-      ],
-      associations: {
-        locale: {},
-      },
-    });
-    currentLanguage.value = response.data.elements?.[0];
+  const syncLanguageData = (languageId: string) => {
+    if (currentLanguage.value?.id === languageId) return;
+    currentLanguage.value = languages.value.find(x => x.id === languageId)!;
   };
 
   return {
