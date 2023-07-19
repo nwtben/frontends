@@ -1,4 +1,10 @@
 {
+  "validation": {
+    "required": "Value is required",
+    "email": "Value is not a valid email address",
+    "minLength": "This field should be at least {min} characters long",
+    "maxLength": "The maximum length allowed is {max}"
+  },
   "search": "search",
   "search_brands": "Search brands",
   "sign_in": "sign in",
@@ -138,6 +144,7 @@
   "title": "Title",
   "submit": "Submit",
   "cancel": "Cancel",
+  "your_review_has_not_approved": "Your review has not been approved yet",
   "unsatisfactory": "Unsatisfactory",
   "acceptable": "Acceptable",
   "good": "Good",

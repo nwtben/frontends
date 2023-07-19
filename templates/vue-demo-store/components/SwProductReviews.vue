@@ -180,7 +180,7 @@ const customerHaveReview = computed(() => isLoggedIn.value && props.customerRevi
                     <ExclamationTriangleIcon class="h-5 w-5 text-yellow-400" aria-hidden="true" />
                   </div>
                   <div class="ml-3 flex-1 md:flex md:justify-between">
-                    <p class="text-sm text-yellow-800">Your review has not been approved yet</p>
+                    <p class="text-sm text-yellow-800">{{ $t('your_review_has_not_approved') }}</p>
                   </div>
                 </div>
               </div>

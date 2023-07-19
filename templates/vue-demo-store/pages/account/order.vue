@@ -21,7 +21,7 @@ useBreadcrumbs([
 
 onMounted(async () => {
   if (orders?.value && Object.keys(orders.value).length === 0) {
-    await loadOrders({});
+    await loadOrders();
   }
   isLoading.value = false;
 });
