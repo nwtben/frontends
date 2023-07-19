@@ -11,7 +11,7 @@ const cmsContent = getSlotContent("image");
 </script>
 <template>
   <div class="cms-block-image-cover relative">
-    <CmsGenericElement v-if="cmsContent" :content="cmsContent" :loading="'eager'" />
+    <CmsGenericElement v-if="cmsContent" :content="cmsContent" :loading="props.content.name =='hero' ? 'preload' : 'eager'" />
     <div class="absolute bottom-0 left-1/2 translate -translate-x-1/2 text-white text-center" v-if="props.content.name?.toLowerCase() === 'introduction'">
       <p class="font-semibold mb-2 uppercase">{{ $t('new_collection') }}</p>
       <p class="text-3xl md:text-4xl mb-8 whitespace-nowrap" v-html="$t('shop_the_new_signature_collection')"></p>

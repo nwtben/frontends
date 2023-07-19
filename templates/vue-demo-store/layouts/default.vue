@@ -15,14 +15,6 @@ const headLinks: any = [
     href: runtimeConfig.public.shopwareStoreDomain + route.path,
   },
 ];
-if (route.path === '/') {
-  headLinks.push({
-    rel: "preload",
-    as: "image",
-    href: "https://shopware.nwtsaas.com.global.prod.fastly.net/media/bd/5f/85/1686677688/hero-desktop-511745398.jpg?format=webp&quality=85&effect=sharpen:100",
-    imagesrcset: "https://shopware.nwtsaas.com.global.prod.fastly.net/thumbnail/bd/5f/85/1686677688/hero-desktop-511745398_400x400.jpg?format=webp&quality=85&effect=sharpen:100 400w, https://shopware.nwtsaas.com.global.prod.fastly.net/thumbnail/bd/5f/85/1686677688/hero-desktop-511745398_800x800.jpg?format=webp&quality=85&effect=sharpen:100 800w, https://shopware.nwtsaas.com.global.prod.fastly.net/thumbnail/bd/5f/85/1686677688/hero-desktop-511745398_1920x1920.jpg?format=webp&quality=85&effect=sharpen:100 1920w",
-  })
-}
 useHead({
   link: headLinks
 });
