@@ -175,7 +175,7 @@ const invokeSave = async (): Promise<void> => {
             :options="countriesOptions"
             :placeholder="$t('choose_country_placeholder')"
             :errors="$v.countryId.$errors"
-            position="top"
+            position="top-right"
           />
         </div>
         <div class="flex gap-3">

@@ -66,8 +66,8 @@ const loadProductsByItemIds = async (itemIds: string[]): Promise<void> => {
         type: 'product-wishlist',
         price: x.calculatedPrice,
         payload: {
-          options: x.options?.map(y => ({
-            group: y.group?.translated?.name,
+          options: x.options?.map((y: any) => ({
+            group: (y.group as any)?.translated?.name,
             option: y.translated?.name,
           }))
         }

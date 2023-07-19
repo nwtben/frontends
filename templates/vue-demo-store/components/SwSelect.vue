@@ -18,13 +18,11 @@ const props = withDefaults(
     }[],
     placeholder?: string;
     errors?: any[];
-    position?: 'top' | 'bottom';
-    nativeOnMobile?: boolean;
+    position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left';
   }>(),
   {
     compact: true,
-    nativeOnMobile: false,
-    position: 'bottom'
+    position: 'bottom-right'
   }
 );
 const value = ref('');
@@ -77,7 +75,7 @@ watch(() => props.modelValue, (v) => {
     </label>
     <Listbox
       :id="name"
-      :class="['relative', props.nativeOnMobile ? 'hidden md:flex' : 'flex', !props.compact && 'border px-3 py-2', props.errors?.length ? 'text-red-700 border-red-700 ring-red-500' : 'border-gray-300 ring-gray-700']"
+      :class="['flex relative', !props.compact && 'border px-3 py-2', props.errors?.length ? 'text-red-700 border-red-700 ring-red-500' : 'border-gray-300 ring-gray-700']"
       as="div"
       v-model="value"
     >
@@ -97,10 +95,12 @@ watch(() => props.modelValue, (v) => {
 
       <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
         <ListboxOptions
-          class="absolute min-w-50 w-full trans z-30 mt-1 max-h-60 right-0 overflow-hidden bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          class="absolute min-w-50 w-full trans z-30 mt-1 max-h-60 overflow-hidden bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
           :class="{
-            '-bottom-2 translate translate-y-full': position === 'bottom',
-            '-top-2 translate -translate-y-full ': position === 'top'
+            '-bottom-2 translate translate-y-full right-0': position === 'bottom-right',
+            '-top-2 translate -translate-y-full right-0': position === 'top-right',
+            '-bottom-2 translate translate-y-full left-0': position === 'bottom-left',
+            '-top-2 translate -translate-y-full left-0': position === 'top-left'
           }"
         >
           <ListboxOption as="template" v-for="item in options" :key="item.value" :value="item.value" v-slot="{ active, selected }">
@@ -114,18 +114,5 @@ watch(() => props.modelValue, (v) => {
         </ListboxOptions>
       </transition>
     </Listbox>
-    <select
-      v-if="props.nativeOnMobile"
-      v-model="value"
-      :class="['block md:hidden relative outline-none', !props.compact && 'border border-gray-300 px-3 py-2']"
-    >
-      <option
-        v-for="item in options"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </option>
-    </select>
   </div>
 </template>
