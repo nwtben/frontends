@@ -17,11 +17,13 @@ const props = withDefaults(
       value: any
     }[],
     placeholder?: string;
+    nativeOnMobile?: boolean;
     errors?: any[];
     position?: 'top' | 'bottom';
   }>(),
   {
     compact: true,
+    nativeOnMobile: false
     position: 'bottom'
   }
 );
@@ -93,24 +95,30 @@ watch(() => props.modelValue, (v) => {
         </span>
       </ListboxButton>
 
-      <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-        <ListboxOptions
-          class="absolute min-w-50 w-full trans z-30 mt-1 max-h-60 right-0 overflow-hidden bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-          :class="{
-            '-bottom-2 translate translate-y-full': position === 'bottom',
-            '-top-2 translate -translate-y-full ': position === 'top'
-          }"
-        >
-          <ListboxOption as="template" v-for="item in options" :key="item.value" :value="item.value" v-slot="{ active, selected }">
-            <li :class="[active ? 'bg-gray-700 text-white' : 'text-gray-900', 'relative cursor-pointer select-none py-2 px-4']">
-              <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ item.label }}</span>
-              <span v-if="selected" :class="[active ? 'text-white' : 'text-gray-700', 'absolute inset-y-0 right-0 flex items-center pr-4']">
-                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-              </span>
-            </li>
-          </ListboxOption>
-        </ListboxOptions>
-      </transition>
-    </Listbox>
-  </div>
+    <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+      <ListboxOptions class="absolute min-w-50 w-full -bottom-2 translate translate-y-full trans z-30 mt-1 max-h-60 right-0 overflow-hidden bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+        <ListboxOption as="template" v-for="item in options" :key="item.value" :value="item.value" v-slot="{ active, selected }">
+          <li :class="[active ? 'bg-gray-700 text-white' : 'text-gray-900', 'relative cursor-pointer select-none py-2 px-4']">
+            <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ item.label }}</span>
+            <span v-if="selected" :class="[active ? 'text-white' : 'text-gray-700', 'absolute inset-y-0 right-0 flex items-center pr-4']">
+              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+            </span>
+          </li>
+        </ListboxOption>
+      </ListboxOptions>
+    </transition>
+  </Listbox>
+  <select
+    v-if="props.nativeOnMobile"
+    v-model="value"
+    :class="['block md:hidden relative outline-none', !props.compact && 'border border-gray-300 px-3 py-2']"
+  >
+    <option
+      v-for="item in options"
+      :key="item.value"
+      :value="item.value"
+    >
+      {{ item.label }}
+    </option>
+  </select>
 </template>

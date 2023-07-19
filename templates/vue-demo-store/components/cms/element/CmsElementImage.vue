@@ -63,9 +63,11 @@ const srcset = computed(() => {
         'object-cover': displayMode === 'cover',
       }"
       :src="getPath(imageAttrs.src)"
-      :srcset="srcset"
+      :srcset="props.loading=='preload' ? srcset : null"
       :alt="imageAttrs.alt || 'Image link'"
       :loading="props.loading"
+      :preload="props.loading=='preload' ? true : false"
+      :imagesizes="props.loading=='preload' ? '100vw' : null"
     />
   </component>
 </template>
