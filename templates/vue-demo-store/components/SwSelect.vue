@@ -14,9 +14,11 @@ const props = withDefaults(
       value: any
     }[],
     placeholder?: string;
+    nativeOnMobile?: boolean;
   }>(),
   {
     compact: true,
+    nativeOnMobile: false
   }
 );
 const value = ref('');
@@ -56,7 +58,7 @@ watch(() => props.modelValue, (v) => {
 </script>
 <template>
   <Listbox
-    :class="['flex relative', !props.compact && 'border border-gray-300 px-3 py-2']"
+    :class="['relative', props.nativeOnMobile ? 'hidden md:flex' : 'flex', !props.compact && 'border border-gray-300 px-3 py-2']"
     as="div"
     v-model="value"
   >
@@ -87,4 +89,17 @@ watch(() => props.modelValue, (v) => {
       </ListboxOptions>
     </transition>
   </Listbox>
+  <select
+    v-if="props.nativeOnMobile"
+    v-model="value"
+    :class="['block md:hidden relative outline-none', !props.compact && 'border border-gray-300 px-3 py-2']"
+  >
+    <option
+      v-for="item in options"
+      :key="item.value"
+      :value="item.value"
+    >
+      {{ item.label }}
+    </option>
+  </select>
 </template>

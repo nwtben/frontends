@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const attrs = useAttrs();
+
 const { setLanguage, languages, currentLanguage } = useLanguage();
 const languagesOptions = computed(() => {
   return languages.value?.map(x => ({
@@ -18,6 +20,7 @@ const languagesOptions = computed(() => {
       :modelValue="currentLanguage?.id" 
       @update:modelValue="(e: any) => setLanguage(e)"
       :options="languagesOptions"
+      v-bind="attrs"
     />
   </div>
 </template>

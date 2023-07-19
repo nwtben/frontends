@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCurrency } from '../../composables/useCurrency';
+const attrs = useAttrs();
 
 const { fetchAvailableCurrencies, availableCurrencies, currentCurrency, setCurrency } = useCurrency();
 
@@ -25,6 +26,7 @@ const availableCurrenciesOptions = computed(() => {
       :modelValue="currentCurrency?.id"
       @update:modelValue="(e: any) => setCurrency(e)"
       :options="availableCurrenciesOptions"
+      v-bind="attrs"
     />
   </div>
 </template>

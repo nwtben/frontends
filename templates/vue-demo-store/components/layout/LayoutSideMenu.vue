@@ -199,8 +199,8 @@ const secondNavigate = (value: Category) => {
               </div>
             </div>
             <div class="py-2.5 fixed w-full bottom-0 left-0 flex gap-5 items-center bg-gray-50 px-6 block text-base leading-7 hover:bg-gray-50">
-              <LayoutCurrency />
-              <LayoutLanguage />
+              <LayoutCurrency nativeOnMobile />
+              <LayoutLanguage nativeOnMobile />
             </div>
           </div>
         </DialogPanel>
