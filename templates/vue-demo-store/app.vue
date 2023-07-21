@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { getSessionContext } from "@shopware-pwa/api-client";
+import { SessionContext } from "@shopware-pwa/types";
 /**
  * Init breadcrumbs context
  */
 useBreadcrumbs();
 const route = useRoute();
-
+const { apiInstance } = useShopwareContext();
 useHead({
   title: "Shopware Demo store",
   meta: [{ name: "description", content: "Shopware Demo store" }],
@@ -12,12 +14,27 @@ useHead({
     lang: "en",
   },
 });
-
-const { sessionContext, refreshSessionContext } = useSessionContext();
-await useAsyncData(
+const { locale } = useI18n({ useScope: 'global' });
+const { data: sessionContextData } = await useAsyncData(
   "sessionContext",
   async () => {
-    return await refreshSessionContext();
+    return await getSessionContext(apiInstance);
+  }
+);
+const { sessionContext, refreshSessionContext } = useSessionContext(sessionContextData.value as SessionContext);
+const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
+const { fetchAvailableCurrencies } = useCurrency();
+
+await useAsyncData(
+  "fetchLang",
+  async () => {
+    return await fetchLang();
+  }
+);
+await useAsyncData(
+  "fetchAvailableCurrencies",
+  async () => {
+    return await fetchAvailableCurrencies();
   }
 );
 
@@ -28,14 +45,14 @@ const { data } = useAsyncData("mainNavigation", () => {
   return loadNavigationElements({ depth: 2 });
 });
 
-provide("swNavigation-main-navigation", data);
-
 const { loadNavigationElements: loadFooterNavigationElements } = useNavigation({
   type: "footer-navigation",
 });
 const { data: footerData } = useAsyncData("mainFooterNavigation", () => {
   return loadFooterNavigationElements({ depth: 2 });
 });
+
+provide("swNavigation-main-navigation", data);
 provide("swNavigation-footer-navigation", footerData);
 
 const { getWishlistProducts } = useWishlist();
@@ -44,9 +61,16 @@ const { refreshCart } = useCart();
 useNotifications();
 useAddress();
 
-onMounted(() => {
-  refreshCart();
-  getWishlistProducts();
+onBeforeMount(async () => {
+  await refreshSessionContext();
+  syncLanguageData(sessionContext.value?.salesChannel?.languageId!);
+  locale.value = currentLanguage.value?.translationCode?.code || '';
+  const [ dataTemp, footerDataTemp ]: any = await Promise.all([
+    loadNavigationElements({ depth: 2 }),
+    loadFooterNavigationElements({ depth: 2 })
+  ]);
+  data.value = dataTemp;
+  footerData.value = footerDataTemp;
 });
 
 const path = computed(() => route.path || '');
@@ -118,6 +142,8 @@ watch(path, () => {
 });
 
 onMounted(() => {
+  refreshCart();
+  getWishlistProducts();
   controlState();
   window.addEventListener('scroll', handleScroll);
 })
@@ -125,13 +151,12 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 })
-
 </script>
 
 <template>
   <NuxtLayout>
     <NuxtLoadingIndicator />
-    <NuxtPage v-if="sessionContext"/>
+    <NuxtPage />
   </NuxtLayout>
 </template>
 

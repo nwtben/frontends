@@ -4,33 +4,21 @@ import {
   HeartIcon,
   ShoppingCartIcon
 } from '@heroicons/vue/24/outline';
+import { SharedModal } from "../shared/SharedModal.vue";
 
 const { count } = useCart();
 const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const { locale } = useI18n({ useScope: 'global' });
-const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
-const { sessionContext } = useSessionContext();
+const { currentLanguage, syncLanguageData } = useLanguage();
+const modal = inject<SharedModal>("modal") as SharedModal;
 
-onBeforeMount(async () => {
-  await fetchLang();
-});
-
-watch(currentLanguage, () => {
-  locale.value = currentLanguage.value?.locale?.code || '';
-});
-
-watch(
-  () => sessionContext.value?.salesChannel?.languageId,
-  async (newLanguageId) => {
-    if (newLanguageId) {
-      await syncLanguageData(newLanguageId!);
-    }
-  }, {
-    immediate: true
-  });
-
+const openWishlist = () => {
+  modal.open('LayoutFlyoutWistlist', {
+    position: 'side'
+  })
+}
 </script>
 
 <template>
@@ -74,7 +62,7 @@ watch(
                   class="group -m-2 p-2 flex items-center relative"
                   aria-label="wishlist"
                   data-testid="wishlist-button"
-                  @click="$router.push('/wishlist')"
+                  @click="openWishlist"
                 >
                   <HeartIcon
                     class="w-6 h-6 text-current"
@@ -140,7 +128,7 @@ watch(
                 class="group -m-2 p-2 flex items-center relative"
                 aria-label="wishlist"
                 data-testid="wishlist-button"
-                @click="$router.push('/wishlist')"
+                @click="openWishlist"
               >
                 <HeartIcon
                   class="w-6 h-6 text-current hover:text-brand-primary"

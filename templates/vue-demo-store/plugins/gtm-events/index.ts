@@ -19,13 +19,11 @@ export default defineNuxtPlugin((nuxtApp: any) => {
     let lineItemQuantityMap = new Map<string, number>()
     // Watch for changes to the cart
 
-    const trackAddToCart = debounce((newItem, qty) => {
-      console.log('Product added to cart:', newItem)
+    const trackAddToCart = debounce((newItem: any, qty: any) => {
       logAddToCart(newItem, currency, qty)
     }, 300)
 
-    const trackRemoveFromCart = debounce((removedItem) => {
-      console.log('Product removed from cart:', removedItem)
+    const trackRemoveFromCart = debounce((removedItem: any) => {
       logRemoveFromCart(removedItem, currency)
     }, 300)
 

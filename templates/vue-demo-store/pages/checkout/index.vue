@@ -47,7 +47,7 @@ const {
   activeBillingAddress,
   setActiveBillingAddress,
 } = useSessionContext();
-const { cart, cartItems, subtotal, totalPrice, shippingTotal } = useCart();
+const { cart, cartItems, subtotal, totalPrice, shippingTotal, refreshCart } = useCart();
 const { customerAddresses, loadCustomerAddresses } = useAddress();
 
 const modal = inject<SharedModal>("modal") as SharedModal;
@@ -60,6 +60,7 @@ const selectedShippingMethod = computed({
   async set(shippingMethodId: string) {
     isLoading[shippingMethodId] = true;
     await setShippingMethod({ id: shippingMethodId });
+    await refreshCart();
     isLoading[shippingMethodId] = false;
   },
 });
@@ -221,6 +222,12 @@ onMounted(async () => {
   });
 });
 
+watch(isLoggedIn, (v) => {
+  if (v) {
+    loadCustomerAddresses();
+  }
+})
+
 const registerErrors = ref<ShopwareError[]>([]);
 
 const placeOrder = async () => {
@@ -354,7 +361,7 @@ const handleSubmit = () => {
 const login = () => {
   modal.open('AccountLoginForm', {
     position: 'side'
-  })
+  });
 }
 
 const handleChangeGuest = (e: any) => {
@@ -367,7 +374,7 @@ const editAddress = (e: any, address: any) => {
     address,
     salutations: getSalutations,
     countries: getCountries,
-    title: 'Edit address',
+    title: 'edit_address'
   })
 }
 
@@ -376,6 +383,7 @@ const createAddress = (e: any) => {
   modal.open('AccountAddressForm', {
     salutations: getSalutations,
     countries: getCountries,
+    title: 'new_address'
   })
 }
 
@@ -424,25 +432,21 @@ const getCountriesOptions = computed(() => {
                 <div>
                   <div class="flex flex-col md:flex-row gap-6 mb-4">
                     <div class="flex-1">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="firstName">{{ $t('first_name') }}</label>
-                      <input
+                      <SharedInput 
+                        :label="$t('first_name')" 
+                        :label-required="true" 
                         v-model="state.firstName"
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        autocomplete="firstName"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                        :errors="$v.firstName.$errors"
+                        @blur="$v.firstName.$touch()"
                       />
                     </div>
                     <div class="flex-1">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="lastName">{{  $t('last_name') }}</label>
-                      <input
+                      <SharedInput 
+                        :label="$t('last_name')" 
+                        :label-required="true" 
                         v-model="state.lastName"
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        autocomplete="lastName"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                        :errors="$v.lastName.$errors"
+                        @blur="$v.lastName.$touch()"
                       />
                     </div>
                   </div>
@@ -454,84 +458,67 @@ const getCountriesOptions = computed(() => {
                 </div>
                 <div class="flex flex-col md:flex-row gap-6">
                   <div class="flex-1">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="email-address">{{ $t('email_address') }}</label>
-                    <input
+                    <SharedInput 
+                      :label="$t('email_address')" 
+                      :label-required="true" 
                       v-model="state.email"
-                      id="email-address"
-                      name="email"
-                      type="email"
-                      autocomplete="email"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      :errors="$v.email.$errors"
+                      @blur="$v.email.$touch()"
                     />
                   </div>
                   <div class="flex-1">
-                    <label v-if="!state.guest" class="capitalize text-sm font-medium text-gray-700 mb-1" for="password">{{ $t('password') }}</label>
-                    <input
+                    <SharedInput
                       v-if="!state.guest"
+                      :label="$t('password')" 
                       v-model="state.password"
-                      id="password"
-                      name="password"
-                      type="password"
-                      autocomplete="password"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                      :errors="$v.password.$errors"
+                      @blur="$v.password.$touch()"
                     />
                   </div>
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
-                  <input
+                  <SharedInput
+                    :label="$t('phone_number_optional')" 
                     v-model="state.shippingAddress.phoneNumber"
-                    id="phone"
-                    name="phone"
-                    autocomplete="phone"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                   />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
-                  <input
+                  <SharedInput
+                    :label="$t('street_address')" 
+                    :label-required="true" 
+                    :errors="$v.shippingAddress.street.$errors"
                     v-model="state.shippingAddress.street"
-                    id="address"
-                    name="address"
-                    type="text"
-                    autocomplete="address"
-                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                   />
                 </div>
                 <div class="flex gap-4">
                   <div class="w-1/3">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
-                    <input
+                    <SharedInput
+                      :label="$t('zip_code')" 
+                      :label-required="true" 
+                      :errors="$v.shippingAddress.zipcode.$errors"
                       v-model="state.shippingAddress.zipcode"
-                      id="zipcode"
-                      name="zipcode"
-                      type="text"
-                      autocomplete="zipcode"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                     />
                   </div>
                   <div class="w-2/3">
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
-                    <input
+                    <SharedInput
+                      :label="$t('city')" 
+                      :label-required="true" 
+                      :errors="$v.shippingAddress.city.$errors"
                       v-model="state.shippingAddress.city"
-                      id="city"
-                      name="city"
-                      type="text"
-                      autocomplete="city"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
                     />
                   </div>
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('country') }}</label>
                   <SwSelect
-                    :compact="false"
-                    id="country"
-                    v-model="state.shippingAddress.countryId"
                     name="country"
+                    :label="$t('country')"
+                    :label-required="true"
+                    :compact="false"
+                    v-model="state.shippingAddress.countryId"
                     autocomplete="country-name"
                     :options="getCountriesOptions"
                     :placeholder="$t('choose_country_placeholder')"
+                    :errors="$v.shippingAddress.countryId.$errors"
                   />
                 </div>
                 <SharedCheckbox 
@@ -545,85 +532,57 @@ const getCountriesOptions = computed(() => {
               <div>
                 <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('different_billing_address') }}</h6>
                 <div class="flex flex-col gap-6">
-                  <div class="flex flex-col md:flex-row gap-6">
-                    <div class="flex-1">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-firstName">{{ $t('first_name') }}</label>
-                      <input
-                        v-model="state.billingAddress.firstName"
-                        id="billing-firstName"
-                        name="billing-firstName"
-                        type="text"
-                        autocomplete="firstName"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                      />
-                    </div>
-                    <div class="flex-1">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="billing-lastName">{{  $t('last_name') }}</label>
-                      <input
-                        v-model="state.billingAddress.lastName"
-                        id="billing-lastName"
-                        name="billing-lastName"
-                        type="text"
-                        autocomplete="lastName"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
-                      />
-                    </div>
-                  </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="phone">{{ $t('phone_number_optional') }}</label>
-                    <input
-                      v-model="state.billingAddress.phoneNumber"
-                      id="phone"
-                      name="phone"
-                      autocomplete="phone"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    <SharedInput
+                      name="billing-phone"
+                      :label="$t('phone_number_optional')" 
+                      v-model="state.shippingAddress.phoneNumber"
+                      @blur="$v.shippingAddress.phoneNumber.$touch()"
                     />
                   </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="address">{{ $t('street_address') }}</label>
-                    <input
-                      v-model="state.billingAddress.street"
-                      id="address"
-                      name="address"
-                      type="text"
-                      autocomplete="address"
-                      class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                    <SharedInput
+                      name="billing-address"
+                      :label="$t('street_address')" 
+                      v-model="state.shippingAddress.street"
+                      :label-required="true"
+                      :errors="$v.shippingAddress.street?.$errors"
+                      @blur="$v.shippingAddress.street.$touch()"
                     />
                   </div>
                   <div class="flex gap-4">
                     <div class="w-1/3">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="zipcode">{{ $t('zip_code') }}</label>
-                      <input
-                        v-model="state.billingAddress.zipcode"
-                        id="zipcode"
+                      <SharedInput
                         name="zipcode"
-                        type="text"
-                        autocomplete="zipcode"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                        :label="$t('zip_code')" 
+                        v-model="state.shippingAddress.zipcode"
+                        :label-required="true"
+                        :errors="$v.shippingAddress.zipcode?.$errors"
+                        @blur="$v.shippingAddress.zipcode.$touch()"
                       />
                     </div>
                     <div class="w-2/3">
-                      <label class="text-sm font-medium text-gray-700 mb-1" for="city">{{ $t('city') }}</label>
-                      <input
-                        v-model="state.billingAddress.city"
-                        id="city"
+                      <SharedInput
                         name="city"
-                        type="text"
-                        autocomplete="city"
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:z-10 sm:text-sm"
+                        :label="$t('city')" 
+                        v-model="state.shippingAddress.city"
+                        :label-required="true"
+                        :errors="$v.shippingAddress.city?.$errors"
+                        @blur="$v.shippingAddress.city.$touch()"
                       />
                     </div>
                   </div>
                   <div>
-                    <label class="text-sm font-medium text-gray-700 mb-1" for="country">{{ $t('country') }}</label>
                     <SwSelect
-                      :compact="false"
-                      id="country"
-                      v-model="state.billingAddress.countryId"
                       name="country"
-                      autocomplete="country-name"
+                      :label="$t('country')"
+                      :label-required="true"
+                      :compact="false"
+                      v-model="state.billingAddress.countryId"
                       :options="getCountriesOptions"
                       :placeholder="$t('choose_country_placeholder')"
+                      :errors="$v.shippingAddress.countryId.$errors"
+                      @blur="$v.shippingAddress.countryId.$touch()"
                     />
                   </div>
                 </div>
@@ -658,7 +617,7 @@ const getCountriesOptions = computed(() => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0  }}</p>
+                    <!-- <SharedPrice :value="(singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0" data-testid="cart-subtotal" /> -->
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>
@@ -899,7 +858,7 @@ const getCountriesOptions = computed(() => {
                       {{(singleShippingMethod.deliveryTime as any)?.translated?.name}}
                     </p>
                     <br/>
-                    <p class="font-medium text-sm">{{currency?.symbol}} {{ (singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0 }}</p>
+                    <!-- <SharedPrice :value="(singleShippingMethod.prices?.[0] as any)?.currencyPrice?.[0].gross || 0" /> -->
                   </label>
                   <CheckCircleIcon v-if="selectedShippingMethod === singleShippingMethod.id" class="text-gray-600 absolute top-4 right-4 h-5 w-5" />
                 </li>

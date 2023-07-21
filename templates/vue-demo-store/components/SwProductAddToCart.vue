@@ -32,7 +32,7 @@ const addToCartProxy = async () => {
         class="w-full h-full bg-gray-800 py-3 text-white font-medium text-base px-3"
         data-testid="add-to-cart-button"
       >
-        Add to cart
+        {{ $t('add_to_cart') }}
       </button>
     </div>
     <div>

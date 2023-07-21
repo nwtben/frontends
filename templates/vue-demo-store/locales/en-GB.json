@@ -35,6 +35,7 @@
   "city": "City",
   "country": "Country",
   "add_new_address": "Add new address",
+  "new_address": "New address",
   "edit_address": "Edit address",
   "add_address": "Add address",
   "update_address": "Update address",
@@ -68,6 +69,7 @@
   "thanks_ordering": "Thanks for ordering",
   "subtotal": "Subtotal",
   "shipping_estimate": "Shipping estimate",
+  "shipping": "Shipping",
   "order_total": "Order total",
   "payment_method": "Payment method",
   "shipping_method": "Shipping method",
@@ -166,5 +168,9 @@
   "send_confirm_email": "We will send you a confirmation email. Click the link in that email in order to change your password.",
   "request_email": "Request email",
   "back_to_log_in": "Back to Log in",
-  "password_recovery": "Password recovery"
+  "password_recovery": "Password recovery",
+  "shop_now": "Shop now",
+  "wishlist": "wishlist",
+  "add_all_to_cart": "Add all to cart",
+  "add_to_cart": "Add to cart"
 }

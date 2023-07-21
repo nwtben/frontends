@@ -77,7 +77,7 @@ const goToProductDetail =  () => {
           class="ml-auto"
           data-testid="product-box-product-price"
         />
-        <SharedReviews :product="product" />
+        <SharedReviews :product="product" :hide-count="false" />
       </div>
     </div>
   </div>

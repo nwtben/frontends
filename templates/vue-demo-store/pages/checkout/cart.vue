@@ -114,7 +114,7 @@ export default {
         :line-items="cartItems || []"
       />
       <aside class="w-full md:w-1/2 md:max-w-[469px]">
-        <SharedOrdersSummary :show-title="true">
+        <SharedOrdersSummary :show-title="true" :shipping-estimate="true">
           <template #action>
             <RouterLink
               class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"

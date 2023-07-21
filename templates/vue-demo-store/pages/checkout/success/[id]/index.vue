@@ -14,6 +14,7 @@ definePageMeta({
 
 const { params } = useRoute();
 const router = useRouter();
+const { refreshCart } = useCart();
 const orderId = params.id as string;
 const { isLoggedIn, isGuestSession } = useUser();
 if (!isLoggedIn.value && !isGuestSession.value) {
@@ -38,7 +39,8 @@ onMounted(async () => {
   const FAILURE_PAYMENT_URL: string = `${window?.location?.origin}/checkout/success/${orderId}/unpaid`;
 
   await loadOrderDetails();
-  handlePayment(SUCCESS_PAYMENT_URL, FAILURE_PAYMENT_URL);
+  await handlePayment(SUCCESS_PAYMENT_URL, FAILURE_PAYMENT_URL);
+  await refreshCart();
 });
 
 const goToUrl = (url: string | null) => {

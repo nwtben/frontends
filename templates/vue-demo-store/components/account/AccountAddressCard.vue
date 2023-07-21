@@ -79,7 +79,7 @@ const removeAddress = async (addressId: string) => {
             address,
             salutations,
             countries,
-            title: 'Edit address',
+            title: 'edit_address'
           })
         "
       />

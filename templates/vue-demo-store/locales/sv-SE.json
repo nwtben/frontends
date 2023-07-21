@@ -35,6 +35,7 @@
   "city": "Ort",
   "country": "Land",
   "add_new_address": "Lägg till ny adress",
+  "new_address": "Ny adress",
   "edit_address": "Redigera adress",
   "add_address": "Lägg till adress",
   "update_address": "Uppdatera adress",
@@ -68,6 +69,7 @@
   "thanks_ordering": "Tack för beställningen",
   "subtotal": "Delsumma",
   "shipping_estimate": "Fraktuppskattning",
+  "shipping": "Frakt",
   "order_total": "Beställning totalt",
   "payment_method": "Betalningsmetod",
   "shipping_method": "Leveransmetod",
@@ -166,5 +168,9 @@
   "send_confirm_email": "Vi skickar ett bekräftelsemail till dig. Klicka på länken i det e-postmeddelandet för att ändra ditt lösenord.",
   "request_email": "Begär e-post",
   "back_to_log_in": "Tillbaka till login",
-  "password_recovery": "Återställning av lösenord"
+  "password_recovery": "Återställning av lösenord",
+  "shop_now": "Shoppa nu",
+  "wishlist": "önskelista",
+  "add_all_to_cart": "Lägg allt i varukorgen",
+  "add_to_cart": "Lägg till i kundvagn"
 }
