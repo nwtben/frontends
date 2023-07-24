@@ -49,7 +49,7 @@ const promoCode = ref("");
         >
           <span>{{ appliedPromotionCode.label }}</span>
           <button
-            class="text-brand-dark"
+            class="text-gray-700"
             type="button"
             @click="removeItemHandler(appliedPromotionCode)"
           >

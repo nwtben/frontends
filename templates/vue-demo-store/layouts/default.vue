@@ -4,27 +4,28 @@ export default {
 };
 </script>
 <script setup lang="ts">
-// Navigation for default theme
-const { loadNavigationElements } = useNavigation();
-const { data } = useAsyncData("mainNavigation", () => {
-  return loadNavigationElements({ depth: 2 });
-});
-provide("swNavigation-main-navigation", data);
+const showBreadCrumb = useState<boolean>('showBreadCrumb');
 
-const { loadNavigationElements: loadFooterNavigationElements } = useNavigation({
-  type: "footer-navigation",
+// Canonical
+const route = useRoute();
+const runtimeConfig = useRuntimeConfig();
+const headLinks: any = [
+  {
+    rel: 'canonical',
+    href: runtimeConfig.public.shopwareStoreDomain + route.path,
+  },
+];
+useHead({
+  link: headLinks
 });
-const { data: footerData } = useAsyncData("mainFooterNavigation", () => {
-  return loadFooterNavigationElements({ depth: 2 });
-});
-provide("swNavigation-footer-navigation", footerData);
+
 </script>
 <template>
   <div>
     <LayoutHeader />
     <LayoutNotifications />
-    <div class="mx-auto">
-      <LayoutBreadcrumbs />
+    <div class="min-h-[100vh] mx-auto">
+      <LayoutBreadcrumbs v-if="showBreadCrumb" />
       <slot />
     </div>
     <LayoutFooter />

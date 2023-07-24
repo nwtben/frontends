@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { CustomerAddress, Country, Salutation } from "@shopware-pwa/types";
+import { Country, CustomerAddress, Salutation } from "@shopware-pwa/types";
+import { SharedModal } from "~~/components/shared/SharedModal.vue";
+
 const { pushSuccess, pushError } = useNotifications();
 const {
   setDefaultCustomerShippingAddress,
@@ -79,8 +81,14 @@ const addAddressModalController = useModal();
       <button
         v-if="canEdit"
         class="cursor-pointer i-carbon-edit text-xl inline-block"
-        data-testid="address-edit"
-        @click.prevent="addAddressModalController.open"
+        @click.prevent="
+          modal.open('AccountAddressForm', {
+            address,
+            salutations,
+            countries,
+            title: 'edit_address'
+          })
+        "
       />
       <SharedModal :controller="addAddressModalController">
         <SharedAccountAddressForm

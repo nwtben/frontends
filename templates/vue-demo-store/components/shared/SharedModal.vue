@@ -1,60 +1,86 @@
 <script setup lang="ts">
-const props = defineProps<{
-  controller: ReturnType<typeof useModal>;
-}>();
+import {
+  Dialog,
+  DialogPanel,
+  TransitionRoot,
+  TransitionChild
+} from '@headlessui/vue';
 
-const { controller } = toRefs(props);
-const { isOpen, close } = controller.value;
+export type SharedModal = {
+  modalContent: string;
+  modalProps: {
+    position?: string
+  } | null;
+  open: (component: string, props?: object | null) => void;
+  close: () => void;
+};
 
-const { escape } = useMagicKeys();
+const { close, modalContent, modalProps } = inject<SharedModal>(
+  "modal"
+) as SharedModal;
 
-watch(escape, () => {
-  isOpen.value && close();
-});
-
-const modalContentElement = ref();
-onClickOutside(modalContentElement, () => close());
+const animation = computed(() => {
+  if (unref(modalProps)?.position === 'side') {
+    return {
+      'enter': 'duration-300 ease-out',
+      'enter-from': 'translate-x-full',
+      'enter-to': 'translate-x-0',
+      'leave': 'duration-200 ease-in',
+      'leave-from': 'translate-x-0',
+      'leave-to': 'translate-x-full',
+    }
+  } else {
+    return {
+      'enter': 'duration-300 ease-out',
+      'enter-from': 'translate-y-full sm:opacity-0',
+      'enter-to': 'translate-y-0 sm:opacity-100',
+      'leave': 'duration-200 ease-in',
+      'leave-from': 'translate-y-0 sm:opacity-100',
+      'leave-to': 'translate-y-full sm:opacity-0',
+    }
+  }
+})
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition
-      enter-active-class="transition ease-out duration-200 transform"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition ease-in duration-200 transform"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
+  <TransitionRoot
+    :show="!!modalContent.length"
+    appear
+    as="template"
+  >
+    <Dialog
+      as="div" 
+      class="fixed z-50 inset-0 overflow-y-auto"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+      @close="close"
     >
-      <div
-        v-show="isOpen"
-        class="fixed z-10 inset-0 overflow-y-auto bg-black bg-opacity-50"
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
       >
-        <div
-          class="flex items-center justify-center min-h-screen lg:-mt-3% text-center"
+        <div class="fixed inset-0 z-50 bg-gray-500 bg-opacity-60" />
+      </TransitionChild>
+      <TransitionChild
+        as="template"
+        v-bind="animation"
+      >
+        <DialogPanel 
+          class="flex flex-col z-60 fixed overflow-y-auto bg-white sm:ring-1 sm:ring-gray-900/10"
+          :class="{
+            'w-full sm:max-w-lg bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 h-max max-h-100vh sm:max-h-90vh': modalProps?.position !== 'side',
+            'w-full sm:max-w-[448px] top-0 right-0 bottom-0': modalProps?.position === 'side',
+          }"
         >
-          <Transition
-            enter-active-class="transition ease-out duration-500 transform "
-            enter-from-class="opacity-0 translate-y-10 scale-95"
-            enter-to-class="opacity-100 translate-y-0 scale-100"
-            leave-active-class="ease-in duration-200"
-            leave-from-class="opacity-100 translate-y-0 scale-100"
-            leave-to-class="opacity-0 translate-y-10 translate-y-0 scale-95"
-          >
-            <div
-              v-if="isOpen"
-              id="modal-content"
-              ref="modalContentElement"
-              class="bg-white rounded-lg text-left overflow-hidden shadow-xl p-8"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              <slot></slot>
-            </div>
-          </Transition>
-        </div>
-      </div>
-    </Transition>
-  </Teleport>
+          <component :is="modalContent" v-bind="modalProps" @close="close" />
+        </DialogPanel>
+      </TransitionChild>
+    </Dialog>
+  </TransitionRoot>
 </template>

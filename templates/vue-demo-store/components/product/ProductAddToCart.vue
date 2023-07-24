@@ -43,7 +43,7 @@ onMounted(() => {
         :disabled="loading"
         @click="addToCartProxy"
       >
-        🛍 {{ $t("product.addToCart") }}
+        {{ $t('add_to_cart') }}
       </button>
     </div>
   </div>

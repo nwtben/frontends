@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { getSessionContext } from "@shopware-pwa/api-client";
 import { SessionContext } from "@shopware-pwa/types";
-import { getPrefix, getDefaultLocale } from "./i18n/src/helpers/prefix";
-
 /**
  * Init breadcrumbs context
  */
 useBreadcrumbs();
-
+const route = useRoute();
+const { apiInstance } = useShopwareContext();
 useHead({
   title: "Shopware Demo store",
   meta: [{ name: "description", content: "Shopware Demo store" }],
@@ -15,37 +14,46 @@ useHead({
     lang: "en",
   },
 });
+const { locale } = useI18n({ useScope: 'global' });
+const { data: sessionContextData } = await useAsyncData(
+  "sessionContext",
+  async () => {
+    return await getSessionContext(apiInstance);
+  }
+);
+const { sessionContext, refreshSessionContext } = useSessionContext(sessionContextData.value as SessionContext);
+const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
+const { fetchAvailableCurrencies } = useCurrency();
 
-const { apiInstance } = useShopwareContext();
-const sessionContextData = ref();
-sessionContextData.value = await getSessionContext(apiInstance);
+await useAsyncData(
+  "fetchLang",
+  async () => {
+    return await fetchLang();
+  }
+);
+await useAsyncData(
+  "fetchAvailableCurrencies",
+  async () => {
+    return await fetchAvailableCurrencies();
+  }
+);
 
-// If you enable runtimeConfig.shopware.useUserContextInSSR, then you can use this code to share session between server and client.
-// const { data: sessionContextData } = await useAsyncData(
-//   "sessionContext",
-//   async () => {
-//     return await getSessionContext(apiInstance);
-//   }
-// );
+// Navigation for default theme
+const { loadNavigationElements } = useNavigation();
 
-// read the locale/lang code from accept-language header (i.e. en, en-GB or de-DE)
-// and set configuration for price formatting globally
-const headers = useRequestHeaders();
-// Extract the first (with highest priority order) locale or lang code from accept-language header
-// for example: "en-US;q=0.7,en;q=0.3" will return "en-US"
-const localeFromHeader = headers?.["accept-language"]
-  ?.split(",")
-  ?.map(
-    (languageConfig) => languageConfig.match(/^([a-z]{2}(?:-[A-Z]{2})?)/)?.[0],
-  )
-  .find(Boolean);
-
-usePrice({
-  currencyCode: sessionContextData.value?.currency?.isoCode || "",
-  localeCode: localeFromHeader,
+const { data } = useAsyncData("mainNavigation", () => {
+  return loadNavigationElements({ depth: 2 });
 });
 
-useSessionContext(sessionContextData.value as SessionContext);
+const { loadNavigationElements: loadFooterNavigationElements } = useNavigation({
+  type: "footer-navigation",
+});
+const { data: footerData } = useAsyncData("mainFooterNavigation", () => {
+  return loadFooterNavigationElements({ depth: 2 });
+});
+
+provide("swNavigation-main-navigation", data);
+provide("swNavigation-footer-navigation", footerData);
 
 const { getWishlistProducts } = useWishlist();
 const { refreshCart } = useCart();
@@ -53,67 +61,166 @@ const { refreshCart } = useCart();
 useNotifications();
 useAddress();
 
-const { locale, availableLocales } = useI18n();
-const router = useRouter();
-const {
-  getAvailableLanguages,
-  getLanguageCodeFromId,
-  getLanguageIdFromCode,
-  changeLanguage,
-  languages: storeLanguages,
-} = useInternationalization();
-const { languageIdChain, refreshSessionContext } = useSessionContext();
-
-const { data: languages } = await useAsyncData("languages", async () => {
-  return await getAvailableLanguages();
+onBeforeMount(async () => {
+  await refreshSessionContext();
+  syncLanguageData(sessionContext.value?.salesChannel?.languageId!);
+  locale.value = currentLanguage.value?.translationCode?.code || '';
+  const [ dataTemp, footerDataTemp ]: any = await Promise.all([
+    loadNavigationElements({ depth: 2 }),
+    loadFooterNavigationElements({ depth: 2 })
+  ]);
+  data.value = dataTemp;
+  footerData.value = footerDataTemp;
 });
 
-if (languages.value?.elements.length && router.currentRoute.value.name) {
-  storeLanguages.value = languages.value?.elements;
-  // Prefix from url
-  const prefix = getPrefix(
-    availableLocales,
-    router.currentRoute.value.name as string,
-  );
+const path = computed(() => route.path || '');
 
-  // Language set on the backend side
-  const sessionLanguage = getLanguageCodeFromId(languageIdChain.value);
+const isSidebarOpen = ref(false);
+provide("isSidebarOpen", isSidebarOpen);
 
-  // If languages are not the same, set one from prefix
-  if (sessionLanguage !== prefix) {
-    await changeLanguage(
-      getLanguageIdFromCode(prefix ? prefix : getDefaultLocale()),
-    );
-    await refreshSessionContext();
+const modalContent = ref<string>("");
+const modalProps = ref<{
+  position?: string
+} | null | undefined>({});
+const modalHandler = {
+  open: (component: string, props?: object | null) => {
+    modalContent.value = component;
+    modalProps.value = props;
+  },
+  close: () => {
+    modalContent.value = "";
+    modalProps.value = {};
+  },
+};
+
+provide("modal", { modalContent, modalProps, ...modalHandler });
+
+const isSideMenuOpened = ref(false);
+provide("isSideMenuOpened", isSideMenuOpened);
+
+const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'transparent');
+const showBreadCrumb = useState<boolean>('showBreadCrumb');
+
+const scrollPos = ref(0);
+
+const handleScroll = () => {
+  if (path.value === '/') {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      headerMode.value = 'default';
+    } else {
+      headerMode.value = 'transparent';
+    }
   }
 
-  locale.value = prefix ? prefix : getDefaultLocale();
-  // Set prefix from CMS components
-  provide("urlPrefix", prefix);
+  let windowY = window.scrollY;
+  if (Math.abs(windowY - scrollPos.value) > 100) {
+    if (windowY < scrollPos.value) {
+      // Scrolling UP
+      document.body.classList.add('scrolling-up');
+      document.body.classList.remove('scrolling-down');
+    } else {
+      // Scrolling DOWN
+      document.body.classList.add('scrolling-down');
+      document.body.classList.remove('scrolling-up');
+    }
+    scrollPos.value = windowY;
+  }
 }
+
+const controlState = () => {
+  if (path.value === '/') {
+    showBreadCrumb.value = false;
+    headerMode.value = 'transparent';
+  } else {
+    showBreadCrumb.value = true;
+    headerMode.value = 'default';
+  }
+}
+
+watch(path, () => {
+  controlState();
+});
 
 onMounted(() => {
   refreshCart();
   getWishlistProducts();
-});
+  controlState();
+  window.addEventListener('scroll', handleScroll);
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+})
 </script>
 
 <template>
   <NuxtLayout>
+    <NuxtLoadingIndicator />
     <NuxtPage />
   </NuxtLayout>
 </template>
 
 <style>
-h2 {
-  @apply text-4xl py-4;
+:root {
+  font-family: 'Inter', sans-serif;
+  @apply text-gray-900;
 }
 
-select {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIGZpbGw9J25vbmUnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggc3Ryb2tlPScjNmI3MjgwJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnIHN0cm9rZS13aWR0aD0nMS41JyBkPSdNNiA4bDQgNCA0LTQnLz48L3N2Zz4=");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  appearance: none;
+h2 {
+  @apply text-4xl;
+}
+h3 {
+  @apply text-2xl md:text-3xl;
+}
+h4 {
+  @apply text-2xl;
+}
+h5 {
+  @apply text-xl;
+}
+h6 {
+  @apply text-lg font-medium;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #F1F2F3; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8D8F9A; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8D8F9A; 
+}
+input[type='checkbox']:checked {
+  background-color: currentColor;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  border: none;
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>

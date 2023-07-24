@@ -9,7 +9,7 @@ const localePath = useLocalePath();
 const { formatLink } = useInternationalization(localePath);
 useBreadcrumbs([
   {
-    name: t("breadcrumbs.accountOverview"),
+    name: "My Account",
     path: "/account",
   },
   {
@@ -25,19 +25,19 @@ useBreadcrumbs([
       <template #action>
         <div class="text-center space-y-2">
           <p class="py-2 px-4 text-lg text-brand-primary">
-            {{ $t("recoveryPassword.label") }}
+            {{ $t('have_account_yet') }}
           </p>
           <NuxtLink
-            :to="formatLink(`/register`)"
+            to="/register"
             class="text-sm font-medium px-4 text-gray-600 focus:outline-none underline"
           >
-            {{ $t("recoveryPassword.register") }}
+            {{ $t('register_today') }}
           </NuxtLink>
           <NuxtLink
-            :to="formatLink(`/login`)"
+            to="/login"
             class="flex justify-center align-center text-sm font-medium text-gray-600 py-2 px-4 focus:outline-none underline"
           >
-            {{ $t("recoveryPassword.orLogin") }}
+            {{ $t('try_login_again') }}
           </NuxtLink>
         </div>
       </template>

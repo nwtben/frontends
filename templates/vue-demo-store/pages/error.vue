@@ -44,10 +44,10 @@ export default {
           {{ errorMessage }}
         </p>
         <NuxtLink
-          :to="formatLink(`/`)"
+          to="/"
           class="w-full lg:w-auto justify-center py-3 px-8 border shadow-sm text-sm font-medium rounded-md text-white bg-brand-light hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
-          {{ $t("goBackHome") }}
+          Go back home
         </NuxtLink>
       </div>
     </div>

@@ -96,28 +96,21 @@ const srcPath = computed(() => {
         layoutType === 'image' ? 'h-80' : 'h-60',
       ]"
     >
-      <RouterLink
-        :to="formatLink(getProductRoute(product))"
-        class="overflow-hidden"
-      >
-        <img
-          ref="imageElement"
-          loading="lazy"
-          :src="srcPath"
-          :alt="getProductName({ product }) || ''"
-          class="transform transition duration-400 hover:scale-120"
-          :class="{
-            'w-full h-full': true,
-            'object-cover':
-              displayMode === 'cover' ||
-              (displayMode === 'standard' && layoutType === 'image'),
-            'object-contain': displayMode === 'contain',
-            'object-scale-down':
-              displayMode === 'standard' && layoutType !== 'image',
-          }"
-          data-testid="product-box-img"
-        />
-      </RouterLink>
+      <img
+        :src="getProductThumbnailUrl(product)"
+        :alt="getProductName({ product }) || ''"
+        :class="{
+          'w-full h-full': true,
+          'object-cover':
+            displayMode === 'cover' ||
+            (displayMode === 'standard' && layoutType === 'image'),
+          'object-contain': displayMode === 'contain',
+          'object-scale-down':
+            displayMode === 'standard' && layoutType !== 'image',
+        }"
+        data-testid="product-box-img"
+        loading="lazy"
+      />
     </div>
     <button
       aria-label="Add to wishlist"
@@ -142,24 +135,68 @@ const srcPath = computed(() => {
         </template>
       </client-only>
     </button>
-    <div class="min-h-20px px-2">
-      <span
-        v-for="option in product?.options"
-        :key="option.id"
-        class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
-      >
-        {{ (option as PropertyGroupOption).group.name }}:
-        {{ (option as PropertyGroupOption).name }}
-      </span>
+    <div class="mt-4 flex flex-col justify-between flex-1">
+      <div>
+        <h3 class="text-base font-bold">
+          <RouterLink
+            class="line-clamp-2 h-12"
+            :to="getProductUrl(product)"
+            data-testid="product-box-product-name-link"
+          >
+            {{ getProductName({ product }) }}
+          </RouterLink>
+        </h3>
+        <div
+          v-if="layoutType === 'standard'"
+          class="line-clamp-4 mt-2 text-sm text-gray-500 h-20 overflow-hidden"
+          data-testid="product-box-product-description"
+          v-html="getTranslatedProperty(product, 'description')"
+        />
+        <div class="mt-2 flex gap-2 flex-wrap">
+          <span
+            v-for="option in product?.options"
+            :key="(option as PropertyGroupOption).id"
+            class="bg-gray-400 text-sm text-white rounded py-1 px-2"
+            data-testid="product-box-product-options"
+          >
+            {{ (option as PropertyGroupOption).group.name }}:
+            {{ (option as PropertyGroupOption).name }}
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col mt-3 justify-between">
+        <SharedListingProductPrice
+          :product="product"
+          class="ml-auto"
+          data-testid="product-box-product-price"
+        />
+        <div
+          class="sw-product-rating inline-flex"
+          data-testid="product-box-product-rating"
+        >
+          <div v-for="value in ratingAverage" :key="value">
+            <div class="i-carbon-star-filled h-4 w-4 c-yellow-500" />
+          </div>
+          <div v-for="value in 5 - ratingAverage" :key="value">
+            <div class="i-carbon-star h-4 w-4 c-yellow-500" />
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="px-4 pb-4">
-      <RouterLink
-        class="line-clamp-2"
-        :to="formatLink(getProductRoute(product))"
-        data-testid="product-box-product-name-link"
+    <div class="mt-3">
+      <button
+        v-if="!fromPrice"
+        type="button"
+        class="mt-3 w-full justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        data-testid="add-to-cart-button"
+        @click="addToCartProxy"
       >
-        <h5
-          class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white min-h-60px"
+        {{ $t('add_to_cart') }}
+      </button>
+      <RouterLink v-else :to="getProductUrl(product)">
+        <button
+          class="mt-3 w-full justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          data-testid="product-box-product-show-details"
         >
           {{ getProductName({ product }) }}
         </h5>

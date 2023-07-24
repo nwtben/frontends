@@ -1,124 +1,210 @@
 <script setup lang="ts">
+import { getTranslatedProperty, getSmallestThumbnailUrl } from "@shopware-pwa/helpers-next";
+import { RouterLink } from "vue-router";
 import {
-  getCategoryRoute,
-  getCategoryImageUrl,
+  getCategoryUrl,
 } from "@shopware-pwa/helpers-next";
-import { Category } from "@shopware-pwa/types";
+import { Category, StoreNavigationElement } from "@shopware-pwa/types";
+import {
+  Dialog,
+  DialogPanel,
+  TransitionRoot,
+  TransitionChild
+} from '@headlessui/vue';
+import {
+  XMarkIcon,
+  Bars3Icon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/vue/24/outline'
 
 const { navigationElements } = useNavigation();
 
-const sideMenuController = useSideMenuModal();
-const localePath = useLocalePath();
-const { formatLink } = useInternationalization(localePath);
-const expandedIds = ref<Array<string>>([]);
+const currentNavigationElement = ref<StoreNavigationElement | null>();
+const currentChildNavigationElement = ref<StoreNavigationElement | null>();
 
-function isCollapsed(navigationelement: Category): boolean {
-  return !expandedIds.value.includes(navigationelement.id);
+const isSideMenuOpened = inject("isSideMenuOpened", ref(false));
+
+const close = () => {
+  isSideMenuOpened.value = false;
+  currentNavigationElement.value = null;
+  currentChildNavigationElement.value = null;
 }
 
-const toggleCollapse = (navigationElement: Category) => {
-  if (!isCollapsed(navigationElement)) {
-    expandedIds.value = expandedIds.value.filter(
-      (el) => el !== navigationElement.id,
-    );
-  } else {
-    expandedIds.value.push(navigationElement.id);
+const goBack = () => {
+  if (currentChildNavigationElement.value) {
+    currentChildNavigationElement.value = null;
+  } else if (currentNavigationElement.value) {
+    currentNavigationElement.value = null;
   }
-};
+}
+
+const firstNavigate = (value: Category) => {
+  currentNavigationElement.value = value;
+  if (!value.childCount) {
+    close();
+  }
+}
+
+const secondNavigate = (value: Category) => {
+  currentChildNavigationElement.value = value;
+  if (!value.childCount) {
+    close();
+  }
+}
+
 </script>
 
 <template>
-  <button class="lg:hidden" aria-label="menu" @click="sideMenuController.open">
-    <div class="i-carbon-menu w-8 h-8" />
+  <button
+    class="lg:hidden"
+    aria-label="menu"
+    @click="isSideMenuOpened = true"
+  >
+    <span class="sr-only">Open main menu</span>
+    <Bars3Icon
+      class="h-6 w-6"
+      aria-hidden="true"
+    />
   </button>
-  <LayoutSidebar :controller="sideMenuController" side="left">
-    <div class="flex px-4 py-5">
-      <button
-        type="button"
-        class="inline-flex items-center justify-center p-2 -m-2 text-gray-400 rounded-md"
-        @click="sideMenuController.close"
+  <TransitionRoot
+    :show="isSideMenuOpened"
+    appear
+    as="template"
+  >
+    <Dialog
+      as="div"
+      class="lg:hidden"
+      @close="close"
+    >
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-in-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-300 ease-out"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
       >
-        <span class="sr-only">Close menu</span>
-        <div class="i-carbon-close text-3xl" />
-      </button>
-    </div>
-    <div class="max-w-2xl">
-      <aside aria-label="Sidebar" class="flex flex-col">
-        <div class="w-full">
-          <LayoutStoreSearch @link-clicked="sideMenuController.close" />
-        </div>
-        <div class="overflow-y-auto">
-          <ul class="flex flex-col items-start p-x-2 space-y-2">
-            <li
-              v-for="navigationElement in navigationElements"
-              :key="navigationElement.id"
-              class="flex flex-col flex-1 w-full"
-            >
-              <NuxtLink
-                :to="formatLink(getCategoryRoute(navigationElement))"
-                class="flex items-center px-5 py-3 text-base font-normal text-gray-900 break-all hover:bg-gray-100"
-                @click="sideMenuController.close"
+        <div class="fixed inset-0 z-10 bg-gray-500 bg-opacity-60" />
+      </TransitionChild>
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-in-out"
+        enter-from="-translate-x-full"
+        enter-to="translate-x-0"
+        leave="duration-300 ease-out"
+        leave-from="translate-x-0"
+        leave-to="-translate-x-full"
+      >
+        <DialogPanel class="fixed inset-y-0 z-50 right-0 w-full overflow-y-auto bg-white pt-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div class="relative h-fit pb-10">
+            <div class="px-4 flex items-center justify-between">
+              <div>
+                <ChevronLeftIcon
+                  v-if="currentNavigationElement || currentChildNavigationElement"
+                  class="cursor-pointer h-6 w-6 text-gray-700"
+                  aria-hidden="true"
+                  @click="goBack"
+                />
+              </div>
+              <div>
+                <h4 class="font-medium text-lg">
+                  Menu
+                </h4>
+              </div>
+              <button
+                type="button"
+                class="-m-2.5 rounded-md p-2.5 text-gray-700 outline-none"
+                @click="close"
               >
-                <span class="flex">
-                  {{ navigationElement.name }}
-                </span>
-                <div class="flex flex-1" />
-                <button
-                  v-if="navigationElement?.children?.length"
-                  class="flex items-center w-12 p-4 h-2"
-                  @click.stop.prevent="toggleCollapse(navigationElement)"
-                >
-                  <span
-                    :class="[
-                      'text-xl',
-                      !isCollapsed(navigationElement)
-                        ? 'i-carbon-chevron-up '
-                        : 'i-carbon-chevron-down',
-                    ]"
-                  />
-                </button>
-              </NuxtLink>
-
-              <div
-                v-if="
-                  navigationElement.media && !isCollapsed(navigationElement)
-                "
-                class="relative"
-              >
-                <div class="overflow-hidden">
-                  <img
-                    :src="getCategoryImageUrl(navigationElement)"
-                    class="object-cover object-center"
-                    alt="Category image"
-                  />
+                <span class="sr-only">Close menu</span>
+                <XMarkIcon
+                  class="h-6 w-6"
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+            <div class="border-t border-gray-200 mt-6 flow-root relative">
+              <div class="divide-y divide-gray-500/10">
+                <div class="">
+                  <template v-if="!currentNavigationElement && !currentChildNavigationElement">
+                    <RouterLink
+                      v-for="navigationElement in navigationElements"
+                      :key="navigationElement.id"
+                      :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)"
+                      class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block py-3 text-base leading-7 text-gray-700 hover:bg-gray-50"
+                      @click="firstNavigate(navigationElement)"
+                    >
+                      {{ getTranslatedProperty(navigationElement, "name") }}
+                      <ChevronRightIcon
+                        v-if="navigationElement.childCount"
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </RouterLink>
+                    <div class="my-6 mx-4 flex flex-col gap-8">
+                      <template v-for="(navigationElement, index) in navigationElements" :key="navigationElement.id">
+                        <div v-if="navigationElement.media" class="flex flex-col gap-4">
+                          <img
+                            :src="getSmallestThumbnailUrl(navigationElement.media)"
+                            class="object-cover w-full aspect-square"
+                            alt="Category image"
+                          />
+                          <div v-html="navigationElement.description" />
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template v-else-if="currentNavigationElement && !currentChildNavigationElement">
+                    <RouterLink
+                      v-for="navigationElement in currentNavigationElement.children"
+                      :key="navigationElement.id"
+                      :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)"
+                      class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block rounded-lg py-3 text-base leading-7 hover:bg-gray-50"
+                      @click="secondNavigate(navigationElement)"
+                    >
+                      {{ getTranslatedProperty(navigationElement, "name") }}
+                      <ChevronRightIcon
+                        v-if="navigationElement.childCount"
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </RouterLink>
+                    <div class="my-6 mx-4 flex flex-col gap-8">
+                      <template v-for="(navigationElement, index) in currentNavigationElement.children" :key="navigationElement.id">
+                        <div v-if="navigationElement.media" class="flex flex-col gap-4">
+                          <img
+                            :src="getSmallestThumbnailUrl(navigationElement.media)"
+                            class="object-cover w-full aspect-square"
+                            alt="Category image"
+                          />
+                          <div v-html="navigationElement.description" />
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template v-else-if="currentChildNavigationElement">
+                    <RouterLink
+                      v-for="navigationElement in currentChildNavigationElement.children"
+                      :key="navigationElement.id"
+                      :to="getCategoryUrl(navigationElement)"
+                      class="cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block rounded-lg py-3 text-base leading-7 hover:bg-gray-50"
+                      @click="close"
+                    >
+                      {{ getTranslatedProperty(navigationElement, "name") }}
+                    </RouterLink>
+                  </template>
                 </div>
               </div>
-              <ul
-                v-if="
-                  navigationElement?.children?.length &&
-                  !isCollapsed(navigationElement)
-                "
-                class="px-0 py-2 m-0"
-              >
-                <li
-                  v-for="childElement in navigationElement.children"
-                  :key="childElement.id"
-                >
-                  <NuxtLink
-                    :to="formatLink(getCategoryRoute(childElement))"
-                    class="flex items-center p-3 text-base font-normal text-gray-500 break-all hover:bg-gray-100 pl-11"
-                    @click="sideMenuController.close"
-                  >
-                    <span>
-                      {{ childElement.name }}
-                    </span>
-                  </NuxtLink>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </aside>
-    </div>
-  </LayoutSidebar>
+            </div>
+            <div class="py-2.5 fixed w-full bottom-0 left-0 flex gap-5 items-center bg-gray-50 px-6 block text-base leading-7 hover:bg-gray-50">
+              <LayoutCurrency position="top-left" />
+              <LayoutLanguage position="top-left" />
+            </div>
+          </div>
+        </DialogPanel>
+      </TransitionChild>
+    </Dialog>
+  </TransitionRoot>
 </template>

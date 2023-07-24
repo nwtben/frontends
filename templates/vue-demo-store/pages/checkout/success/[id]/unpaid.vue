@@ -1,4 +1,5 @@
 <script lang="ts">
+
 export default {
   name: "CheckoutSuccessUnpaidPage",
 };
@@ -13,21 +14,21 @@ const { formatLink } = useInternationalization(localePath);
     <h1
       class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
     >
-      {{ $t("checkout.yourOrder") }}
+      {{ $t('your_order') }}
       <span
         class="underline underline-offset-3 decoration-8 decoration-red-400 dark:decoration-red-600"
-        >{{ $t("checkout.orderUnpaid") }}</span
-      >
+      >{{ $t('is_not_paid') }}</span>
     </h1>
     <p class="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-      {{ $t("checkout.unpaidStatus") }}
+      Unfortunately, your order couldn't be paid.<br>You can try to pay it
+      again or contact us.
     </p>
     <div class="mt-12 text-center">
       <NuxtLink
-        :to="formatLink(`/checkout/success/${params.id}`)"
+        :to="`/checkout/success/${$route.params.id}`"
         class="inline-flex justify-center items-center py-2 px-4 text-base font-medium text-center text-white bg-brand-primary rounded-lg hover:bg-gray-400 focus:ring-4 focus:ring-brand-primary dark:focus:ring-brand-primary"
       >
-        {{ $t("checkout.checkOrderDetails") }}
+        {{ $t('check_order_details') }}
         <div class="i-carbon-undo ml-2" />
       </NuxtLink>
     </div>
