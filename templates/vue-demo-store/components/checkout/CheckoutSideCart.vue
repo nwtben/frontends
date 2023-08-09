@@ -11,6 +11,7 @@ import {
 const isOpen = inject<boolean>("isSidebarOpen");
 
 const { cartItems, count, subtotal, shippingTotal, totalPrice, isEmpty } = useCart();
+const localePath = useLocalePath();
 
 const close = () => {
   (isOpen as any).value = false;
@@ -73,7 +74,7 @@ const close = () => {
                 <div v-if="isEmpty" class="flex-1 min-h-0 text-center flex flex-col justify-center">
                   <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{$t('your_cart_empty')}}</h4>
                   <p class="mb-6 text-base text-gray-500">{{$t('your_cart_empty_desc')}}</p>
-                  <nuxt-link to="/" @click="close" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+                  <nuxt-link :to="localePath('/')" @click="close" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
                 </div>
 
                 <div v-else class="flex flex-col flex-1 min-h-0 gap-4 sm:gap-6 mt-6">
@@ -104,7 +105,7 @@ const close = () => {
                     <div class="flex flex-col">
                       <nuxt-link
                         class="mt-3 flex text-white items-center justify-center px-5 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
-                        :to="'/checkout'"
+                        :to="localePath('/checkout')"
                         @click="close"
                       >
                         {{ $t('go_to_checkout') }}
@@ -112,7 +113,7 @@ const close = () => {
                       <nuxt-link
                         class="font-medium text-gray-900 mt-6 text-center underline underline-offset-4"
                         @click="close"
-                        :to="'/checkout/cart'">
+                        :to="localePath('/checkout/cart')">
                         {{ $t('show_shopping_cart') }}
                       </nuxt-link>
                     </div>

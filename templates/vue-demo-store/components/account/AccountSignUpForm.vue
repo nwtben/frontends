@@ -93,6 +93,7 @@ const rules = computed(() => ({
 }));
 
 const $v = useVuelidate(rules, formData);
+const localePath = useLocalePath();
 
 const invokeSubmit = async () => {
   $v.value.$touch();
@@ -103,7 +104,7 @@ const invokeSubmit = async () => {
       const response = await register(formData.value as any);
       if (response) {
         emits("close");
-        router.push("/account");
+        router.push(localePath("/account"));
       }
     } catch (error) {
       let message =

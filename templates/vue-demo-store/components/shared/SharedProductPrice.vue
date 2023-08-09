@@ -6,16 +6,25 @@ import {
 } from "@shopware-pwa/helpers-next";
 
 const { getFormattedPrice } = usePrice();
-const props = defineProps<{
-  product: Product;
-}>();
+
+const props = withDefaults(
+  defineProps<{
+    product: Product;
+    size?: 'small' | 'medium';
+    showSaveText?: boolean;
+  }>(),
+  {
+    size: 'medium',
+    showSaveText: false
+  }
+);
 
 const price = computed(() => {
   if (props.product) {
     const tierPrices = getProductTierPrices(props.product);
     return (
       tierPrices?.[0]?.unitPrice ||
-      getProductCalculatedListingPrice(props.product)
+      props.product?.calculatedPrice?.unitPrice
     );
   } else {
     return null;
@@ -49,14 +58,22 @@ const percent = computed(() => {
     <p class="flex">
       <span 
         :class="[
-          'text-lg',
-          oldPrice ? 'font-medium text-red-900' : ''
+          size === 'medium' ? 'text-lg' : 'text-sm font-normal',
+          oldPrice ? 'font-medium text-red-900' : 'text-dark-primary'
         ]
       ">
         {{ getFormattedPrice(price!) }}
       </span>
-      <span v-if="oldPrice" class="pl-2 line-through text-lg">{{ getFormattedPrice(oldPrice!) }}</span>
+      <span 
+        v-if="oldPrice"
+        :class="[
+          'pl-2 line-through',
+          size === 'medium' ? 'text-lg' : 'text-sm font-normal'
+        ]"
+      >
+        {{ getFormattedPrice(oldPrice!) }}
+      </span>
     </p>
-    <p v-if="oldPrice" class="text-xs text-red-900">Save {{ getFormattedPrice(oldPrice - price) }} (-{{percent }}%)</p>
+    <p v-if="oldPrice && showSaveText" class="text-xs text-red-900">Save {{ getFormattedPrice(oldPrice - price) }} (-{{percent }}%)</p>
   </div>
 </template>

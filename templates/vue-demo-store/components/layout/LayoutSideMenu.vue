@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getTranslatedProperty, getSmallestThumbnailUrl } from "@shopware-pwa/helpers-next";
-import { RouterLink } from "vue-router";
 import {
   getCategoryUrl,
 } from "@shopware-pwa/helpers-next";
@@ -19,6 +18,7 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const { navigationElements } = useNavigation();
+const localePath = useLocalePath();
 
 const currentNavigationElement = ref<StoreNavigationElement | null>();
 const currentChildNavigationElement = ref<StoreNavigationElement | null>();
@@ -129,10 +129,10 @@ const secondNavigate = (value: Category) => {
               <div class="divide-y divide-gray-500/10">
                 <div class="">
                   <template v-if="!currentNavigationElement && !currentChildNavigationElement">
-                    <RouterLink
+                    <NuxtLink
                       v-for="navigationElement in navigationElements"
                       :key="navigationElement.id"
-                      :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)"
+                      :to="localePath(navigationElement.childCount ? '' : getCategoryUrl(navigationElement))"
                       class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block py-3 text-base leading-7 text-gray-700 hover:bg-gray-50"
                       @click="firstNavigate(navigationElement)"
                     >
@@ -142,7 +142,7 @@ const secondNavigate = (value: Category) => {
                         class="h-6 w-6"
                         aria-hidden="true"
                       />
-                    </RouterLink>
+                    </NuxtLink>
                     <div class="my-6 mx-4 flex flex-col gap-8">
                       <template v-for="(navigationElement, index) in navigationElements" :key="navigationElement.id">
                         <div v-if="navigationElement.media" class="flex flex-col gap-4">
@@ -157,10 +157,10 @@ const secondNavigate = (value: Category) => {
                     </div>
                   </template>
                   <template v-else-if="currentNavigationElement && !currentChildNavigationElement">
-                    <RouterLink
+                    <NuxtLink
                       v-for="navigationElement in currentNavigationElement.children"
                       :key="navigationElement.id"
-                      :to="navigationElement.childCount ? '' : getCategoryUrl(navigationElement)"
+                      :to="localePath(navigationElement.childCount ? '' : getCategoryUrl(navigationElement))"
                       class="font-medium cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block rounded-lg py-3 text-base leading-7 hover:bg-gray-50"
                       @click="secondNavigate(navigationElement)"
                     >
@@ -170,7 +170,7 @@ const secondNavigate = (value: Category) => {
                         class="h-6 w-6"
                         aria-hidden="true"
                       />
-                    </RouterLink>
+                    </NuxtLink>
                     <div class="my-6 mx-4 flex flex-col gap-8">
                       <template v-for="(navigationElement, index) in currentNavigationElement.children" :key="navigationElement.id">
                         <div v-if="navigationElement.media" class="flex flex-col gap-4">
@@ -185,15 +185,15 @@ const secondNavigate = (value: Category) => {
                     </div>
                   </template>
                   <template v-else-if="currentChildNavigationElement">
-                    <RouterLink
+                    <NuxtLink
                       v-for="navigationElement in currentChildNavigationElement.children"
                       :key="navigationElement.id"
-                      :to="getCategoryUrl(navigationElement)"
+                      :to="localePath(getCategoryUrl(navigationElement))"
                       class="cursor-pointer flex justify-between items-center border-b border-gray-200 px-4 block rounded-lg py-3 text-base leading-7 hover:bg-gray-50"
                       @click="close"
                     >
                       {{ getTranslatedProperty(navigationElement, "name") }}
-                    </RouterLink>
+                    </NuxtLink>
                   </template>
                 </div>
               </div>

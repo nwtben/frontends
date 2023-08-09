@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@headlessui/vue':
     specifier: ^1.7.12
@@ -15,25 +19,25 @@ dependencies:
     version: 3.0.0
   '@shopware-pwa/api-client':
     specifier: canary
-    version: 0.0.0-canary-20230713092547
+    version: 0.0.0-canary-20230718191814
   '@shopware-pwa/cms-base':
     specifier: canary
-    version: 0.0.0-canary-20230713092547(vue@3.3.4)
+    version: 0.0.0-canary-20230718191814(vue@3.3.4)
   '@shopware-pwa/composables-next':
     specifier: canary
-    version: 0.0.0-canary-20230713092547(vue@3.3.4)
+    version: 0.0.0-canary-20230718191814(vue@3.3.4)
   '@shopware-pwa/helpers':
     specifier: ^1.6.1
     version: 1.6.1
   '@shopware-pwa/helpers-next':
     specifier: canary
-    version: 0.0.0-canary-20230713092547
+    version: 0.0.0-canary-20230718191814
   '@shopware-pwa/nuxt3-module':
     specifier: canary
-    version: 0.0.0-canary-20230713092547(vue@3.3.4)
+    version: 0.0.0-canary-20230725064840(vue@3.3.4)
   '@shopware-pwa/types':
     specifier: canary
-    version: 0.0.0-canary-20230713092547
+    version: 0.0.0-canary-20230718191814
   '@unocss/nuxt':
     specifier: ^0.50.1
     version: 0.50.8(postcss@8.4.24)(vite@4.1.5)(webpack@5.85.0)
@@ -52,6 +56,12 @@ dependencies:
   nuxt3-meta-pixel:
     specifier: ^1.0.9
     version: 1.0.9
+  requrl:
+    specifier: ^3.0.2
+    version: 3.0.2
+  sitemap:
+    specifier: ^7.1.1
+    version: 7.1.1
   vue:
     specifier: ^3.2.47
     version: 3.3.4
@@ -1245,32 +1255,6 @@ packages:
       - supports-color
     dev: true
 
-  /@nuxt/kit@3.3.1:
-    resolution: {integrity: sha512-zb7/2FUIB1g7nl6K6qozUzfG5uu4yrs9TQjZvpASnPBZ/x1EuJX5k3AA71hMMIVBEX9Adxvh9AuhDEHE5W26Zg==}
-    engines: {node: ^14.18.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0}
-    dependencies:
-      '@nuxt/schema': 3.3.1
-      c12: 1.4.2
-      consola: 2.15.3
-      defu: 6.1.2
-      globby: 13.2.0
-      hash-sum: 2.0.0
-      ignore: 5.2.4
-      jiti: 1.18.2
-      knitwork: 1.0.0
-      lodash.template: 4.5.0
-      mlly: 1.4.0
-      pathe: 1.1.1
-      pkg-types: 1.0.3
-      scule: 1.0.0
-      semver: 7.5.3
-      unctx: 2.3.1
-      unimport: 3.0.10
-      untyped: 1.3.2
-    transitivePeerDependencies:
-      - rollup
-      - supports-color
-
   /@nuxt/kit@3.3.1(rollup@3.23.0):
     resolution: {integrity: sha512-zb7/2FUIB1g7nl6K6qozUzfG5uu4yrs9TQjZvpASnPBZ/x1EuJX5k3AA71hMMIVBEX9Adxvh9AuhDEHE5W26Zg==}
     engines: {node: ^14.18.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0}
@@ -1317,7 +1301,7 @@ packages:
       scule: 1.0.0
       semver: 7.5.3
       unctx: 2.3.1
-      unimport: 3.0.10
+      unimport: 3.0.10(rollup@3.23.0)
       untyped: 1.3.2
     transitivePeerDependencies:
       - rollup
@@ -1368,7 +1352,7 @@ packages:
       scule: 1.0.0
       semver: 7.5.3
       unctx: 2.3.1
-      unimport: 3.0.10
+      unimport: 3.0.10(rollup@3.23.0)
       untyped: 1.3.2
     transitivePeerDependencies:
       - rollup
@@ -1395,27 +1379,6 @@ packages:
       semver: 7.5.3
       unctx: 2.3.1
       unimport: 3.0.14
-      untyped: 1.3.2
-    transitivePeerDependencies:
-      - rollup
-      - supports-color
-
-  /@nuxt/schema@3.3.1:
-    resolution: {integrity: sha512-E8HWzU43rXzqwDTmWduTLHY4xIwRSAUt1LbpuE9IjZ4uJZq5Mbaj4nfhANNsTQGw2c+O+rL81yzAP3i61LEJDw==}
-    engines: {node: ^14.18.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0}
-    dependencies:
-      c12: 1.4.2
-      create-require: 1.1.1
-      defu: 6.1.2
-      hookable: 5.5.3
-      jiti: 1.18.2
-      pathe: 1.1.1
-      pkg-types: 1.0.3
-      postcss-import-resolver: 2.0.0
-      scule: 1.0.0
-      std-env: 3.3.3
-      ufo: 1.1.2
-      unimport: 3.0.10
       untyped: 1.3.2
     transitivePeerDependencies:
       - rollup
@@ -1453,7 +1416,7 @@ packages:
       postcss-import-resolver: 2.0.0
       std-env: 3.3.3
       ufo: 1.1.2
-      unimport: 3.0.10
+      unimport: 3.0.10(rollup@3.23.0)
       untyped: 1.3.2
     transitivePeerDependencies:
       - rollup
@@ -1470,7 +1433,7 @@ packages:
       postcss-import-resolver: 2.0.0
       std-env: 3.3.3
       ufo: 1.1.2
-      unimport: 3.0.10
+      unimport: 3.0.10(rollup@3.23.0)
       untyped: 1.3.2
     transitivePeerDependencies:
       - rollup
@@ -1488,7 +1451,7 @@ packages:
       postcss-import-resolver: 2.0.0
       std-env: 3.3.3
       ufo: 1.1.2
-      unimport: 3.0.10
+      unimport: 3.0.10(rollup@3.23.0)
       untyped: 1.3.2
     transitivePeerDependencies:
       - rollup
@@ -1807,19 +1770,6 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
 
-  /@rollup/pluginutils@5.0.2:
-    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.1
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
-
   /@rollup/pluginutils@5.0.2(rollup@3.23.0):
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
@@ -1834,23 +1784,33 @@ packages:
       picomatch: 2.3.1
       rollup: 3.23.0
 
-  /@shopware-pwa/api-client@0.0.0-canary-20230713092547:
-    resolution: {integrity: sha512-qjgCRINybVhO1ggs1858mGwk5vMAUui+NPV9AF9+y9d4NINdm85pUEXqwWdMmghCEyid/JxO+/RMcXAksbDw/A==}
+  /@shopware-pwa/api-client@0.0.0-canary-20230718191814:
+    resolution: {integrity: sha512-MwQsPOJCndDKGgdirfjCTEuVgxyQpiNUgskb02eHew0W4e/JaX2a9cqDPvDrDLMdpqTdogNunu/noIUTq1hHFQ==}
     dependencies:
-      '@shopware-pwa/types': 0.0.0-canary-20230713092547
+      '@shopware-pwa/types': 0.0.0-canary-20230718191814
       axios: 0.27.2
       query-string: 8.1.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@shopware-pwa/cms-base@0.0.0-canary-20230713092547(vue@3.3.4):
-    resolution: {integrity: sha512-eSyW0PDZdBIYK+uA6J8+XYqRqEjxaKOcWwNwMYca4rGhIIU2zhVxQdAWfCs+UTKp+BfBuRNTzaKVrgdkB7/XYg==}
+  /@shopware-pwa/api-client@0.5.2:
+    resolution: {integrity: sha512-mJZWfvAbr+piXYRfWulB8aSfXZHItXpFp6IBc+GXRJTtjTwNcNMyfZjNiQIBs0O4K+DWSnsLDRn9zQvs15wCAA==}
+    dependencies:
+      '@shopware-pwa/types': 0.5.6
+      axios: 0.27.2
+      query-string: 8.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@shopware-pwa/cms-base@0.0.0-canary-20230718191814(vue@3.3.4):
+    resolution: {integrity: sha512-zEoHXjB3o9WV9p+r5VeL3QBfUERuIO6wXFfEPCJldZFqIdwYVB1NeURSjIPMY2sCC8Q44jx1LUXm0Qfdy4lR/g==}
     dependencies:
       '@nuxt/kit': 3.6.3
-      '@shopware-pwa/api-client': 0.0.0-canary-20230713092547
-      '@shopware-pwa/composables-next': 0.0.0-canary-20230713092547(vue@3.3.4)
-      '@shopware-pwa/helpers-next': 0.0.0-canary-20230713092547
+      '@shopware-pwa/api-client': 0.0.0-canary-20230718191814
+      '@shopware-pwa/composables-next': 0.0.0-canary-20230718191814(vue@3.3.4)
+      '@shopware-pwa/helpers-next': 0.0.0-canary-20230718191814
       '@vuelidate/core': 2.0.3(vue@3.3.4)
       '@vuelidate/validators': 2.0.3(vue@3.3.4)
       entities: 4.5.0
@@ -1863,11 +1823,11 @@ packages:
       - vue
     dev: false
 
-  /@shopware-pwa/composables-next@0.0.0-canary-20230713092547(vue@3.3.4):
-    resolution: {integrity: sha512-xg1GrL5+LXlnCrDX21n0y4wEu9QD03qRF2CzO31qkL9u483/2EiSv+yXNS6qqUf+rdN7Mg1nuMbSF+2JZVcHLw==}
+  /@shopware-pwa/composables-next@0.0.0-canary-20230718191814(vue@3.3.4):
+    resolution: {integrity: sha512-17LhspcRueUWO+MbCHT+8vI0yua1C1JA6S98UVTzLGC6hb5eL5YR0aWfcYnErAhqT/priQI4mipDlrGAvzac9Q==}
     dependencies:
-      '@shopware-pwa/api-client': 0.0.0-canary-20230713092547
-      '@shopware-pwa/helpers-next': 0.0.0-canary-20230713092547
+      '@shopware-pwa/api-client': 0.0.0-canary-20230718191814
+      '@shopware-pwa/helpers-next': 0.0.0-canary-20230718191814
       '@vueuse/core': 10.2.1(vue@3.3.4)
       scule: 1.0.0
     transitivePeerDependencies:
@@ -1876,10 +1836,29 @@ packages:
       - vue
     dev: false
 
-  /@shopware-pwa/helpers-next@0.0.0-canary-20230713092547:
-    resolution: {integrity: sha512-xf5VPNqs7MvIRiuiRUqaUYSazGxqeYw6sfdk4pFkJ6SgmTdReHKgTqrYBXQm4+nZg/NXJpRgCqcckxiHDrpb5Q==}
+  /@shopware-pwa/composables-next@0.12.0(vue@3.3.4):
+    resolution: {integrity: sha512-yvW1K9RepdnrPul8+M0pFfZy7AxVQ3mBnVX1cY/fRFLj+em3bZk7qmaMdRdcvyRg/FqEw85RLNoBRKNqjseJEw==}
     dependencies:
-      '@shopware-pwa/types': 0.0.0-canary-20230713092547
+      '@shopware-pwa/api-client': 0.5.2
+      '@shopware-pwa/helpers-next': 0.3.2
+      '@vueuse/core': 10.2.1(vue@3.3.4)
+      scule: 1.0.0
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - debug
+      - vue
+    dev: false
+
+  /@shopware-pwa/helpers-next@0.0.0-canary-20230718191814:
+    resolution: {integrity: sha512-NuTzMZz33/WvChFQ/iDz+TblhBt4fOk+yGHCGH+AXOZkdOdnpRMkzFTJur8Az8vIG8WfWcNluUizghhRhl7nyg==}
+    dependencies:
+      '@shopware-pwa/types': 0.0.0-canary-20230718191814
+    dev: false
+
+  /@shopware-pwa/helpers-next@0.3.2:
+    resolution: {integrity: sha512-1KwdFW2CAc/Y9SUrdVXVh+V7E0+6BufMgZ2kdJFFAGVwXNJxlm4S0UixA42EotReCDyth5JPn9vkRFfseglcEg==}
+    dependencies:
+      '@shopware-pwa/types': 0.5.6
     dev: false
 
   /@shopware-pwa/helpers@1.6.1:
@@ -1888,12 +1867,12 @@ packages:
       query-string: 7.1.3
     dev: false
 
-  /@shopware-pwa/nuxt3-module@0.0.0-canary-20230713092547(vue@3.3.4):
-    resolution: {integrity: sha512-qYxVbjB7eS5VG50M8PseJcFU2rXCTWJLMgUt7aXpgErp1P7w1yY82yfn5ZEhFE9GMznyTX842paPgTFMTsiJlQ==}
+  /@shopware-pwa/nuxt3-module@0.0.0-canary-20230725064840(vue@3.3.4):
+    resolution: {integrity: sha512-OA8ZpjEOaQibW4UyF+re1Cx9MtCk/PHRCbEQPsGa+nXmo5rADvlYUJ+gm6YF8lMYL4ijz2fAVEizwTpr/PiPRw==}
     dependencies:
       '@nuxt/kit': 3.6.3
-      '@shopware-pwa/api-client': 0.0.0-canary-20230713092547
-      '@shopware-pwa/composables-next': 0.0.0-canary-20230713092547(vue@3.3.4)
+      '@shopware-pwa/api-client': 0.5.2
+      '@shopware-pwa/composables-next': 0.12.0(vue@3.3.4)
       js-cookie: 3.0.5
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -1903,8 +1882,12 @@ packages:
       - vue
     dev: false
 
-  /@shopware-pwa/types@0.0.0-canary-20230713092547:
-    resolution: {integrity: sha512-Egk4IUiTppAIbrW75IHUKlABbNSv961bElHq+IhaneEfPQYjI6tzR7M/FFVibhpHS0at/oQxyMfehaWc8+n8yw==}
+  /@shopware-pwa/types@0.0.0-canary-20230718191814:
+    resolution: {integrity: sha512-yTepP6ldbZSvAyTG9AS4WcsdsMYPy780guUtba9/SOZ5gU5H0UBcX9lB9jD6e9hmb2pv5/tFtw41bLZjosPYCg==}
+    dev: false
+
+  /@shopware-pwa/types@0.5.6:
+    resolution: {integrity: sha512-MwzScpgGUwbHb8bB6TCTmGd7OO12qcMGPhlnH3tOp76dYrfW019aQ3nUDwyIu+a4acJdHROGcF0WC6EOMpJQDA==}
     dev: false
 
   /@sigstore/protobuf-specs@0.1.0:
@@ -2063,6 +2046,10 @@ packages:
     resolution: {integrity: sha512-VmVm7gXwhkUimRfBwVI1CHhwp86jDWR04B5FGebMMyxV90SlCmFujwUHrxTD4oO+SOYU86SoxvhgeRQJY7iXFg==}
     dev: false
 
+  /@types/node@17.0.45:
+    resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+    dev: false
+
   /@types/node@20.2.5:
     resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
     dev: false
@@ -2091,6 +2078,12 @@ packages:
 
   /@types/resolve@1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+
+  /@types/sax@1.2.4:
+    resolution: {integrity: sha512-pSAff4IAxJjfAXUG6tFkO7dsSbTmf8CtUpfhhZ5VhkRpC4628tJhh3+V6H1E+/Gs9piSzYKT5yzHO5M4GG9jkw==}
+    dependencies:
+      '@types/node': 20.2.5
+    dev: false
 
   /@types/semver@7.5.0:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
@@ -2352,7 +2345,7 @@ packages:
     hasBin: true
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       '@unocss/config': 0.50.8
       '@unocss/core': 0.50.8
       '@unocss/preset-uno': 0.50.8
@@ -2528,7 +2521,7 @@ packages:
       vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       '@unocss/config': 0.50.8
       '@unocss/core': 0.50.8
       '@unocss/inspector': 0.50.8
@@ -2548,7 +2541,7 @@ packages:
       webpack: ^4 || ^5
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       '@unocss/config': 0.50.8
       '@unocss/core': 0.50.8
       chokidar: 3.5.3
@@ -3167,6 +3160,10 @@ packages:
       delegates: 1.0.0
       readable-stream: 3.6.2
     dev: true
+
+  /arg@5.0.2:
+    resolution: {integrity: sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==}
+    dev: false
 
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -5923,8 +5920,8 @@ packages:
     hasBin: true
     dependencies:
       '@nuxt/devalue': 2.0.2
-      '@nuxt/kit': 3.3.1
-      '@nuxt/schema': 3.3.1
+      '@nuxt/kit': 3.3.1(rollup@3.23.0)
+      '@nuxt/schema': 3.3.1(rollup@3.23.0)
       '@nuxt/telemetry': 2.2.0
       '@nuxt/ui-templates': 1.1.1
       '@nuxt/vite-builder': 3.3.1(eslint@8.41.0)(typescript@4.9.5)(vue-tsc@1.6.5)(vue@3.3.4)
@@ -6720,6 +6717,10 @@ packages:
   /requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
 
+  /requrl@3.0.2:
+    resolution: {integrity: sha512-f3gjR6d8MhOpn46PP+DSJywbmxi95fxQm3coXBFwognjFLla9X6tr8BdNyaIKNOEkaRbRcm0/zYAqN19N1oyhg==}
+    dev: false
+
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -6814,6 +6815,10 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  /sax@1.2.4:
+    resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
+    dev: false
 
   /schema-utils@3.1.2:
     resolution: {integrity: sha512-pvjEHOgWc9OWA/f/DE3ohBWTD6EleVLf7iFUkoSwAxttdBhB9QUebQgxER2kWueOvRJXPHNnyrvvh9eZINB8Eg==}
@@ -6970,6 +6975,17 @@ packages:
       '@polka/url': 1.0.0-next.21
       mrmime: 1.0.1
       totalist: 3.0.1
+
+  /sitemap@7.1.1:
+    resolution: {integrity: sha512-mK3aFtjz4VdJN0igpIJrinf3EO8U8mxOPsTBzSsy06UtjZQJ3YY3o3Xa7zSc5nMqcMrRwlChHZ18Kxg0caiPBg==}
+    engines: {node: '>=12.0.0', npm: '>=5.6.0'}
+    hasBin: true
+    dependencies:
+      '@types/node': 17.0.45
+      '@types/sax': 1.2.4
+      arg: 5.0.2
+      sax: 1.2.4
+    dev: false
 
   /slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -7439,7 +7455,7 @@ packages:
   /unimport@2.2.4:
     resolution: {integrity: sha512-qMgmeEGqqrrmEtm0dqxMG37J6xBtrriqxq9hILvDb+e6l2F0yTnJomLoCCp0eghLR7bYGeBsUU5Y0oyiUYhViw==}
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       escape-string-regexp: 5.0.0
       fast-glob: 3.2.12
       local-pkg: 0.4.3
@@ -7453,23 +7469,6 @@ packages:
     transitivePeerDependencies:
       - rollup
     dev: true
-
-  /unimport@3.0.10:
-    resolution: {integrity: sha512-rKxlbbjxVQR+6dL7OxJSuVOu96MtTvoRY0VBasGQTgZGTzKPrawZ4zMv7bmhLHRmUqG/CUAJ4uNZlaip+F/6+A==}
-    dependencies:
-      '@rollup/pluginutils': 5.0.2
-      escape-string-regexp: 5.0.0
-      fast-glob: 3.2.12
-      local-pkg: 0.4.3
-      magic-string: 0.30.0
-      mlly: 1.4.0
-      pathe: 1.1.1
-      pkg-types: 1.0.3
-      scule: 1.0.0
-      strip-literal: 1.0.1
-      unplugin: 1.3.1
-    transitivePeerDependencies:
-      - rollup
 
   /unimport@3.0.10(rollup@3.23.0):
     resolution: {integrity: sha512-rKxlbbjxVQR+6dL7OxJSuVOu96MtTvoRY0VBasGQTgZGTzKPrawZ4zMv7bmhLHRmUqG/CUAJ4uNZlaip+F/6+A==}
@@ -7491,7 +7490,7 @@ packages:
   /unimport@3.0.14:
     resolution: {integrity: sha512-67Rh/sGpEuVqdHWkXaZ6NOq+I7sKt86o+DUtKeGB6dh4Hk1A8AQrzyVGg2+LaVEYotStH7HwvV9YSaRjyT7Uqg==}
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       escape-string-regexp: 5.0.0
       fast-glob: 3.3.0
       local-pkg: 0.4.3
@@ -7508,7 +7507,7 @@ packages:
   /unimport@3.0.7:
     resolution: {integrity: sha512-2dVQUxJEGcrSZ0U4qtwJVODrlfyGcwmIOoHVqbAFFUx7kPoEN5JWr1cZFhLwoAwTmZOvqAm3YIkzv1engIQocg==}
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       escape-string-regexp: 5.0.0
       fast-glob: 3.2.12
       local-pkg: 0.4.3
@@ -7774,7 +7773,7 @@ packages:
       vite: ^3.1.0 || ^4.0.0
     dependencies:
       '@antfu/utils': 0.7.4
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
       debug: 4.3.4
       fs-extra: 11.1.1
       open: 9.1.0
@@ -8215,7 +8214,3 @@ packages:
       archiver-utils: 2.1.0
       compress-commons: 4.1.1
       readable-stream: 3.6.2
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

@@ -109,6 +109,7 @@ const breakpoints = ref({
           v-for="image of mediaGallery"
           class="w-full"
           :key="image.media.url"
+          :loading="'preload'"
           :content="{ data: image, config: props.content.config } as any"
         />
       </SwSlider>

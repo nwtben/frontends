@@ -15,6 +15,7 @@ const { items } = useWishlist();
 const products = ref<any[]>([]);
 const { refreshCart } = useCart();
 const isAddingCart = ref();
+const localePath = useLocalePath();
 
 const addAllToCart = async () => {
   try {
@@ -134,7 +135,7 @@ watch(
         <div v-else-if="!items.length" class="flex-1 min-h-0 text-center flex flex-col justify-center">
           <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{$t('your_cart_empty')}}</h4>
           <p class="mb-6 text-base text-gray-500">{{$t('your_cart_empty_desc')}}</p>
-          <nuxt-link to="/" @click="emits('close')" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+          <nuxt-link :to="localePath('/')" @click="emits('close')" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
         </div>
 
         <div v-else class="flex flex-col flex-1 min-h-0 gap-4 sm:gap-6 mt-6">

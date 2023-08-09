@@ -65,9 +65,10 @@ const scrollToReviews = async (e: any) => {
       <SharedProductPrice
         :product="product"
         class="text-gray-500 text-lg"
+        :showSaveText="true"
       />
       <div class="flex flex-col">
-        <a 
+        <a
           @click="scrollToReviews" class="underline font-medium cursor-pointer"
         >
           <SharedReviews :product="product" :numberOfReviews="(props.content.data as any).totalReviews" />
@@ -86,9 +87,17 @@ const scrollToReviews = async (e: any) => {
         <p class="text-lg font-medium mb-2">
           {{ product.stock }} in stock
         </p>
-        <p class="text-base text-gray-500">
-          1 day delivery (Order before 3.30 pm)
-        </p>
+        <div>
+            <p class="text-base text-gray-500" v-if="availableStock >= minPurchase && deliveryTime"
+              >{{ $t('available_delivery_time') }} {{ deliveryTime?.name }}
+            </p>
+            <p class="text-base text-gray-500"
+              v-else-if="availableStock < minPurchase && deliveryTime && restockTime"
+              >{{ $t('available_in') }} {{ restockTime }} {{ $t('day_delivery_time') }}
+              {{ deliveryTime?.name }}
+            </p>
+            <p class="text-base text-gray-500" v-else>No longer available</p>
+       </div>
       </div>
     </div>
     <SwProductAddToCart

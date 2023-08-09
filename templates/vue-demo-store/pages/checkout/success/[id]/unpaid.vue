@@ -1,8 +1,5 @@
-<script lang="ts">
-
-export default {
-  name: "CheckoutSuccessUnpaidPage",
-};
+<script lang="ts" setup>
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -21,7 +18,7 @@ export default {
     </p>
     <div class="mt-12 text-center">
       <NuxtLink
-        :to="`/checkout/success/${$route.params.id}`"
+        :to="localePath(`/checkout/success/${$route.params.id}`)"
         class="inline-flex justify-center items-center py-2 px-4 text-base font-medium text-center text-white bg-brand-primary rounded-lg hover:bg-gray-400 focus:ring-4 focus:ring-brand-primary dark:focus:ring-brand-primary"
       >
         {{ $t('check_order_details') }}

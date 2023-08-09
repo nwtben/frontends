@@ -17,11 +17,13 @@ const { clearBreadcrumbs } = useBreadcrumbs();
 const NOT_FOUND_COMPONENT = "errors/RoutingNotFound";
 const { resolvePath } = useNavigationSearch();
 const route = useRoute();
+const { locales } = useI18n({ useScope: 'global' });
 
 const { data: seoResult } = await useAsyncData(
   "cmsResponse" + route.path,
   async () => {
-    const seoUrl = await resolvePath(route.path);
+    const localesRegex = new RegExp(`/${locales.value.map((x: any) => x.code).join('|')}`);
+    const seoUrl = await resolvePath(route.path.replace(localesRegex, '') || '/');
     return seoUrl;
   }
 );

@@ -13,6 +13,7 @@ definePageMeta({
 });
 const router = useRouter();
 const loadingData = ref(true);
+const localePath = useLocalePath();
 const { pushSuccess, pushError } = useNotifications();
 const { refreshSessionContext } = useSessionContext();
 const {
@@ -142,7 +143,7 @@ const setDefaultBillingAddress = async (id: string) => {
       </div>
       <button
         class="text-base font-medium text-white bg-gray-800 shadow-sm py-2 px-5"
-        @click="router.push('/account/address/new')"
+        @click="router.push(localePath('/account/address/new'))"
       >
         {{ $t('add_address') }}
       </button>
@@ -187,7 +188,7 @@ const setDefaultBillingAddress = async (id: string) => {
                   <div class="flex gap-3">
                     <button
                       class="text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
-                      @click="router.push(`/account/address/${customerAddress.id}`)"
+                      @click="router.push(localePath(`/account/address/${customerAddress.id}`))"
                     >
                       {{ $t('edit') }}
                     </button>

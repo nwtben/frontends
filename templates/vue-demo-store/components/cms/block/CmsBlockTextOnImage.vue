@@ -4,6 +4,7 @@ import { CmsBlockTextOnImage } from "@shopware-pwa/composables-next";
 const props = defineProps<{
   content: CmsBlockTextOnImage;
 }>();
+const localePath = useLocalePath();
 
 const { getSlotContent } = useCmsBlock(props.content);
 
@@ -18,7 +19,7 @@ const slotContent = getSlotContent("content");
   />
   <NuxtLink
     v-else-if="slotContent"
-    to="/Women/Clothing/"
+    :to="localePath('/Women/Clothing')"
     class="cms-block-text-on-image min-h-[80vh] relative"
   >
     <div class="absolute bottom-0 left-1/2 translate -translate-x-1/2 text-white text-center">

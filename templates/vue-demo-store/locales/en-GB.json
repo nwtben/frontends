@@ -169,8 +169,14 @@
   "request_email": "Request email",
   "back_to_log_in": "Back to Log in",
   "password_recovery": "Password recovery",
+  "hello": "Hello",
   "shop_now": "Shop now",
   "wishlist": "wishlist",
   "add_all_to_cart": "Add all to cart",
-  "add_to_cart": "Add to cart"
+  "add_to_cart": "Add to cart",
+  "no_longer_available": "No longer available",
+  "available_delivery_time": "Available, delivery time",
+  "days": "days",
+  "available_in": "Available in",
+  "day_delivery_time": "day, delivery time"
 }

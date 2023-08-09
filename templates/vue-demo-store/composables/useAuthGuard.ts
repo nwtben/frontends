@@ -6,12 +6,13 @@ export function useAuthGuardRedirection(params?: { to: "string" }) {
   const { isLoggedIn } = useUser();
   const router = useRouter();
   const { pushInfo } = useNotifications();
+  const localePath = useLocalePath();
 
   watch(
     isLoggedIn,
     (isLoggedIn) => {
       if (!isLoggedIn) {
-        router.push(params?.to || "/");
+        router.push(localePath(params?.to || "/"));
         pushInfo(`You're logged out.`);
       }
     },

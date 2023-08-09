@@ -21,6 +21,7 @@ const {
   getSelectedOptions,
   findVariantForSelectedOptions,
 } = useProductConfigurator();
+const localePath = useLocalePath();
 
 const selectedOptions: ComputedRef<any> = computed(() =>
   Object.values(unref(getSelectedOptions))
@@ -36,7 +37,7 @@ const onHandleChange = async () => {
   const selectedOptionsVariantPath = variantFound?.seoUrls?.[0]?.seoPathInfo;
   if (props.allowRedirect && selectedOptionsVariantPath) {
     try {
-      router.push("/" + selectedOptionsVariantPath);
+      router.push(localePath("/" + selectedOptionsVariantPath));
     } catch (error) {
       console.error("incorrect URL", selectedOptionsVariantPath);
     }

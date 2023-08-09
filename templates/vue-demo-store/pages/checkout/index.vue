@@ -15,11 +15,13 @@ import {
 import {
   PencilSquareIcon
 } from '@heroicons/vue/24/outline';
+import Ingrid from "~~/components/checkout/Ingrid.vue";
 
 definePageMeta({
   layout: "checkout",
 });
 
+const localePath = useLocalePath();
 const isSameBillingAndShipping = ref(true);
 const submitBtn = ref();
 const isAgree = ref();
@@ -62,6 +64,18 @@ const selectedShippingMethod = computed({
     await setShippingMethod({ id: shippingMethodId });
     await refreshCart();
     isLoading[shippingMethodId] = false;
+  },
+});
+
+const selectedShippingMethodName = computed({
+  get(): string {
+    return shippingMethod.value?.name || "";
+  },
+  async set(shippingMethodName: string) {
+    isLoading[shippingMethodName] = true;
+    await setShippingMethod({ name: shippingMethodName });
+    await refreshCart();
+    isLoading[shippingMethodName] = false;
   },
 });
 const selectedPaymentMethod = computed({
@@ -426,7 +440,7 @@ const getCountriesOptions = computed(() => {
               </button>
             </div>
             <span class="text-base text-dark-variant">{{ $t('or_fill_the_details_below') }}</span>
-            <div>
+            <div v-if="selectedShippingMethodName !='ingrid'">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('personal_information') }}</h6>
               <div class="flex flex-col gap-6">
                 <div>
@@ -589,7 +603,12 @@ const getCountriesOptions = computed(() => {
               </div>
               <div class="border-b border-gray-200"></div>
             </template>
-            <div>
+            <div v-if="selectedShippingMethodName == 'ingrid'">
+              <!-- ingrid -->
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping') }}</h6>
+              <Ingrid />
+            </div>
+            <div v-else>
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{  $t('shipping_method') }}</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <li
@@ -703,7 +722,7 @@ const getCountriesOptions = computed(() => {
                 {{ $t('log_out') }}
               </button>
             </div>
-            <div>
+            <div v-if="selectedShippingMethodName !='ingrid'">
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_address') }}</h6>
               <div class="flex flex-col gap-4">
                 <div>
@@ -830,7 +849,19 @@ const getCountriesOptions = computed(() => {
               </div>
             </div>
             <div v-if="!isSameBillingAndShipping" class="border-b border-gray-200"></div>
-            <div>
+            <div v-if="selectedShippingMethodName == 'ingrid'">
+                <SharedCheckbox
+                  :content="$t('use_same_for_billing_information')"
+                  v-model="isSameBillingAndShipping"
+                />
+              </div>
+            <div v-if="selectedShippingMethodName == 'ingrid'" class="border-b border-gray-200"></div>
+            <div v-if="selectedShippingMethodName == 'ingrid'">
+              <!-- ingrid -->
+              <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping') }}</h6>
+              <Ingrid />
+            </div>
+            <div v-else>
               <h6 class="text-lg font-medium text-dark-primary mb-4">{{ $t('shipping_method') }}</h6>
               <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <li
@@ -950,7 +981,7 @@ const getCountriesOptions = computed(() => {
       <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{ $t('your_cart_empty') }}</h4>
       <p class="mb-6 text-base text-gray-500">{{  $t('your_cart_empty_desc') }}</p>
       <div>
-        <nuxt-link to="/" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+        <nuxt-link :to="localePath('/')" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
       </div>
     </div>
   </div>

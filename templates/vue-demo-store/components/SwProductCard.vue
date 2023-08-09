@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import {
   BoxLayout,
   DisplayMode,
@@ -35,11 +34,11 @@ const props = withDefaults(
   }
 );
 const router = useRouter();
-
+const localePath = useLocalePath();
 const { product } = toRefs(props);
 
 const goToProductDetail =  () => {
-  router.push(getProductUrl(product.value))
+  router.push(localePath(getProductUrl(product.value)))
 }
 </script>
 

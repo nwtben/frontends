@@ -14,7 +14,6 @@ useHead({
     lang: "en",
   },
 });
-const { locale } = useI18n({ useScope: 'global' });
 const { data: sessionContextData } = await useAsyncData(
   "sessionContext",
   async () => {
@@ -24,6 +23,8 @@ const { data: sessionContextData } = await useAsyncData(
 const { sessionContext, refreshSessionContext } = useSessionContext(sessionContextData.value as SessionContext);
 const { fetchLang, currentLanguage, syncLanguageData } = useLanguage();
 const { fetchAvailableCurrencies } = useCurrency();
+const { locales } = useI18n({ useScope: 'global' });
+const localesRegex = new RegExp(`/${locales.value.map((x: any) => x.code).join('|')}`);
 
 await useAsyncData(
   "fetchLang",
@@ -62,9 +63,7 @@ useNotifications();
 useAddress();
 
 onBeforeMount(async () => {
-  await refreshSessionContext();
-  syncLanguageData(sessionContext.value?.salesChannel?.languageId!);
-  locale.value = currentLanguage.value?.translationCode?.code || '';
+  await syncLanguageData(sessionContext.value!);
   const [ dataTemp, footerDataTemp ]: any = await Promise.all([
     loadNavigationElements({ depth: 2 }),
     loadFooterNavigationElements({ depth: 2 })
@@ -104,7 +103,8 @@ const showBreadCrumb = useState<boolean>('showBreadCrumb');
 const scrollPos = ref(0);
 
 const handleScroll = () => {
-  if (path.value === '/') {
+  const checkPath = path.value.replace(localesRegex, '') || '/';
+  if (checkPath === '/') {
     if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
       headerMode.value = 'default';
     } else {
@@ -128,7 +128,8 @@ const handleScroll = () => {
 }
 
 const controlState = () => {
-  if (path.value === '/') {
+  const checkPath = path.value.replace(localesRegex, '') || '/';
+  if (checkPath === '/') {
     showBreadCrumb.value = false;
     headerMode.value = 'transparent';
   } else {

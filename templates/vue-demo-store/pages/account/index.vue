@@ -18,6 +18,7 @@ import {
 definePageMeta({
   layout: "account",
 });
+const localePath = useLocalePath();
 const newsletter = ref(false);
 const router = useRouter();
 // const { getCountries } = useCountries();
@@ -109,7 +110,7 @@ onBeforeMount(async () => {
             <template #actions>
               <button
                 class="text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
-                @click="() => router.push('/account/profile')"
+                @click="() => router.push(localePath('/account/profile'))"
               >
                 {{ $t('edit_profile') }}
               </button>
@@ -135,7 +136,7 @@ onBeforeMount(async () => {
             <template #actions>
               <button
                 class="text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
-                @click="() => router.push('/account/payment')"
+                @click="() => router.push(localePath('/account/payment'))"
               >
                 {{ $t('change_payment_method') }}
               </button>
@@ -179,7 +180,7 @@ onBeforeMount(async () => {
             <template #actions>
               <button
                 class="text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
-                @click="() => router.push('/account/address')"
+                @click="() => router.push(localePath('/account/address'))"
               >
                 {{ $t('change_billing_address') }}
               </button>
@@ -209,7 +210,7 @@ onBeforeMount(async () => {
             <template #actions>
               <button
                 class="text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
-                @click="() => router.push('/account/address')"
+                @click="() => router.push(localePath('/account/address'))"
               >
                 {{ $t('change_billing_address') }}
               </button>
@@ -225,7 +226,7 @@ onBeforeMount(async () => {
       <SharedOrders :orders="orders || []" />
       <button
         class="mt-6 text-sm font-medium text-white bg-gray-800 shadow-sm py-2 px-4"
-        @click="() => router.push('/account/order')"
+        @click="() => router.push(localePath('/account/order'))"
       >
         {{ $t('show_all_orders') }}
       </button>

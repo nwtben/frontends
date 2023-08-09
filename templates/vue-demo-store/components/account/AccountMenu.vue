@@ -9,8 +9,8 @@ import {
   Dialog,
   DialogPanel, TransitionChild, TransitionRoot,
 } from '@headlessui/vue';
-
-const { isLoggedIn, logout } = useUser();
+const localePath = useLocalePath();
+const { isLoggedIn, logout, user } = useUser();
 const modal = inject<SharedModal>("modal") as SharedModal;
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
 const router = useRouter();
@@ -25,7 +25,7 @@ const openAccountOnDesktop = () => {
       position: 'side'
     })
   } else {
-    router.push('/account');
+    router.push(localePath('/account'));
   }
 }
 
@@ -99,7 +99,7 @@ const invokeLogout = () => {
           <div class="container py-6 flex items-center justify-between">
             <div>
               <h4 class="font-medium text-lg">
-                Hello, Jonas Lindeborg
+                {{ $t('hello') }}, {{ user?.firstName }} {{ user?.lastName }}
               </h4>
             </div>
             <button
@@ -117,7 +117,7 @@ const invokeLogout = () => {
           <ul class="container space-y-1 mb-6">
             <li>
               <NuxtLink
-                to="/account"
+                :to="localePath('/account')"
                 class="flex items-center px-3 py-2 text-gray-600 text-base font-medium"
                 @click="close"
               >
@@ -126,7 +126,7 @@ const invokeLogout = () => {
             </li>
             <li>
               <NuxtLink
-                to="/account/profile"
+                :to="localePath('/account/profile')"
                 class="flex items-center px-3 py-2 text-gray-600 text-base font-medium"
                 @click="close"
               >
@@ -135,7 +135,7 @@ const invokeLogout = () => {
             </li>
             <li>
               <NuxtLink
-                to="/account/address"
+                :to="localePath('/account/address')"
                 class="flex items-center px-3 py-2 text-gray-600 text-base font-medium"
                 @click="close"
               >
@@ -144,7 +144,7 @@ const invokeLogout = () => {
             </li>
             <li>
               <NuxtLink
-                to="/account/payment"
+                :to="localePath('/account/payment')"
                 class="flex items-center px-3 py-2 text-gray-600 text-base font-medium"
                 @click="close"
               >
@@ -153,7 +153,7 @@ const invokeLogout = () => {
             </li>
             <li>
               <NuxtLink
-                to="/account/order"
+                :to="localePath('/account/order')"
                 class="flex items-center px-3 py-2 text-gray-600 text-base font-medium"
                 @click="close"
               >

@@ -169,8 +169,14 @@
   "request_email": "Begär e-post",
   "back_to_log_in": "Tillbaka till login",
   "password_recovery": "Återställning av lösenord",
+  "hello": "Hallå",
   "shop_now": "Shoppa nu",
   "wishlist": "önskelista",
   "add_all_to_cart": "Lägg allt i varukorgen",
-  "add_to_cart": "Lägg till i kundvagn"
+  "add_to_cart": "Lägg till i kundvagn",
+  "no_longer_available": "Inte längre tillgänglig",
+  "available_delivery_time": "Tillgänglig leveranstid",
+  "days": "dagar",
+  "available_in": "Versandfertig inom",
+  "day_delivery_time": "dagar, leveranstid"
 }

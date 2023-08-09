@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import {
   HeartIcon,
   ShoppingCartIcon
 } from '@heroicons/vue/24/outline';
 import { SharedModal } from "../shared/SharedModal.vue";
 
+const localePath = useLocalePath();
 const { count } = useCart();
 const { count: wishlistCount } = useWishlist();
 const isSidebarOpen = inject("isSidebarOpen");
 const headerMode = useState<'default' | 'transparent'>('headerMode', () => 'default');
-const { locale } = useI18n({ useScope: 'global' });
-const { currentLanguage, syncLanguageData } = useLanguage();
 const modal = inject<SharedModal>("modal") as SharedModal;
 
 const openWishlist = () => {
@@ -42,14 +40,14 @@ const openWishlist = () => {
           </div>
           <div class="flex-1 flex justify-center">
             <div>
-              <RouterLink to="/" class="text-current">
+              <NuxtLink :to="localePath('/')" class="text-current">
                 <span class="sr-only">LUXED</span>
                 <div :class="[
                     'w-40 h-5 i-custom:logo',
                     headerMode === 'transparent' ? 'text-white' : 'text-black'
                   ]"
                 />
-              </RouterLink>
+              </NuxtLink>
             </div>
           </div>
 
@@ -110,14 +108,14 @@ const openWishlist = () => {
           </div>
           <div class="flex-1 flex justify-center">
             <div>
-              <RouterLink to="/" class="text-current">
+              <NuxtLink :to="localePath('/')" class="text-current">
                 <span class="sr-only">LUXED</span>
                 <div :class="[
                     'w-40 h-5 i-custom:logo',
                     headerMode === 'transparent' ? 'text-white' : 'text-black'
                   ]"
                 />
-              </RouterLink>
+              </NuxtLink>
             </div>
           </div>
 

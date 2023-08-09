@@ -11,12 +11,13 @@ import {
 } from '@heroicons/vue/24/outline';
 useAuthGuardRedirection();
 
-const { logout } = useUser();
+const { logout, user } = useUser();
 const router = useRouter();
+const localePath = useLocalePath();
 
 async function invokeLogout() {
   logout();
-  router.push("/");
+  router.push(localePath("/"));
 }
 
 </script>
@@ -29,11 +30,13 @@ async function invokeLogout() {
           'w-70 hidden md:block': true,
         }"
       >
-        <h4 class="font-medium text-lg mb-8">Hello, Jonas Lindeborg</h4>
+        <h4 class="font-medium text-lg mb-8">
+          {{ $t('hello') }}, {{ user?.firstName }} {{ user?.lastName }}
+        </h4>
         <ul class="space-y-1 mb-8">
           <li>
             <NuxtLink
-              to="/account"
+              :to="localePath('/account')"
               class="flex items-center px-3 py-2 text-gray-700 text-sm font-medium"
             >
               <span>Account Overview</span>
@@ -41,7 +44,7 @@ async function invokeLogout() {
           </li>
           <li>
             <NuxtLink
-              to="/account/profile"
+              :to="localePath('/account/profile')"
               class="flex items-center px-3 py-2 text-gray-700 text-sm font-medium"
             >
               <span>My profile</span>
@@ -49,7 +52,7 @@ async function invokeLogout() {
           </li>
           <li>
             <NuxtLink
-              to="/account/address"
+              :to="localePath('/account/address')"
               class="flex items-center px-3 py-2 text-gray-700 text-sm font-medium"
             >
               <span>Addresses</span>
@@ -57,7 +60,7 @@ async function invokeLogout() {
           </li>
           <li>
             <NuxtLink
-              to="/account/payment"
+              :to="localePath('/account/payment')"
               class="flex items-center px-3 py-2 text-gray-700 text-sm font-medium"
             >
               <span>Payment methods</span>
@@ -65,7 +68,7 @@ async function invokeLogout() {
           </li>
           <li>
             <NuxtLink
-              to="/account/order"
+              :to="localePath('/account/order')"
               class="flex items-center px-3 py-2 text-gray-700 text-sm font-medium"
             >
               <span>Orders</span>

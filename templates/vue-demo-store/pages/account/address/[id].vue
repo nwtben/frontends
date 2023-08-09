@@ -12,6 +12,7 @@ definePageMeta({
 });
 const route = useRoute();
 const isCreation = ref(route.params.id === "new");
+const localePath = useLocalePath();
 
 const {
   loadCustomerAddresses,
@@ -149,7 +150,7 @@ const invokeChange = async (): Promise<void> => {
     }
     pushSuccess(isCreation ? "Created successfully" : "Updated successfully");
     refreshSessionContext();
-    router.push("/account/address");
+    router.push(localePath("/account/address"));
   } catch (e) {
     pushError("Something went wrong!");
   }

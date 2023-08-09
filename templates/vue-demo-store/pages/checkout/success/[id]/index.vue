@@ -7,6 +7,7 @@ export default {
 <script setup lang="ts">
 import { watchDebounced } from "@vueuse/core";
 import { getTranslatedProperty } from "@shopware-pwa/helpers-next";
+const localePath = useLocalePath();
 
 definePageMeta({
   layout: "checkout",
@@ -18,7 +19,7 @@ const { refreshCart } = useCart();
 const orderId = params.id as string;
 const { isLoggedIn, isGuestSession } = useUser();
 if (!isLoggedIn.value && !isGuestSession.value) {
-  router.push("/");
+  router.push(localePath("/"));
 }
 const {
   loadOrderDetails,
@@ -158,12 +159,12 @@ const sortLineItems = computed(() => {
       </div>
       <div class="border-b border-gray-200" />
       <div class="mt-10 flex items-center justify-center">
-        <RouterLink
-          to="/"
+        <NuxtLink
+          :to="localePath('/')"
           class="px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800 disabled:opacity-70"
         >
           {{ $t('continue_method') }}
-        </RouterLink>
+        </NuxtLink>
       </div>
     </div>
     <template #placeholder>

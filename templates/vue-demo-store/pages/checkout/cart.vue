@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import SharedProductOrders from '../../components/shared/SharedProductOrders.vue';
 import SharedValueProposition from '../../components/shared/SharedValueProposition.vue';
 import { ShopwareSearchParams } from "@shopware-pwa/types";
 import { searchProducts } from "@shopware-pwa/api-client";
+const localePath = useLocalePath();
 
 const defaultConfig = ref<any>({
   "type": "product-slider",
@@ -116,13 +116,13 @@ export default {
       <aside class="w-full md:w-1/2 md:max-w-[469px]">
         <SharedOrdersSummary :show-title="true" :shipping-estimate="true">
           <template #action>
-            <RouterLink
+            <NuxtLink
               class="flex items-center justify-center mt-8 px-6 py-3 text-base font-medium text-white shadow-sm bg-gray-800"
-              to="/checkout"
+              :to="localePath('/checkout')"
               data-testid="cart-checkout-link"
             >
               {{ $t('go_to_checkout') }}
-            </RouterLink>
+            </NuxtLink>
           </template>
         </SharedOrdersSummary>
         <div class="mt-6">
@@ -134,7 +134,7 @@ export default {
       <h4 class="mb-2 font-medium text-2xl text-dark-primary">{{ $t('your_cart_empty') }}</h4>
       <p class="mb-6 text-base text-gray-500">{{  $t('your_cart_empty_desc') }}</p>
       <div>
-        <nuxt-link to="/" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
+        <nuxt-link :to="localePath('/')" class="bg-gray-100 shadow-sm px-6 py-3 text-base font-medium">{{ $t('start_shopping') }}</nuxt-link>
       </div>
     </div>
     <div

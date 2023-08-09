@@ -9,6 +9,7 @@ const { navigationElements, loadNavigationElements } = useNavigation({
 });
 const fakeContainer = ref<any>(null);
 const styling = ref({});
+const localePath = useLocalePath();
 
 onMounted(async () => {
   try {
@@ -80,7 +81,7 @@ const handleMouseMove = (e: any) => {
       <nuxt-link
         v-for="subCategory of navigationElements"
         class="font-medium py-2 px-5 text-white bg-gray-800 hover:bg-brand-dark hover:cursor-pointer"
-        :to="'/' + subCategory?.seoUrls?.[0]?.seoPathInfo"
+        :to="localePath('/' + subCategory?.seoUrls?.[0]?.seoPathInfo)"
       >
         {{ getTranslatedProperty(subCategory, 'name') }}
       </nuxt-link>

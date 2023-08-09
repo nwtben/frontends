@@ -4,49 +4,35 @@ import {
   getSmallestThumbnailUrl,
   getTranslatedProperty,
 } from "@shopware-pwa/helpers-next";
+import SharedProductPrice from "../shared/SharedProductPrice.vue";
 
 const props = defineProps<{ product: Product }>();
 
 const { product } = toRefs(props);
-const { unitPrice, displayFrom } =
-  useProductPrice(product);
 </script>
 <template>
   <div
-    class="p-3 h-14 text-sm flex items-center gap-3 hover:bg-gray-100 cursor-pointer transition duration-300 bg-white"
+    class="p-3 text-sm flex gap-3 hover:bg-gray-100 cursor-pointer transition duration-300 bg-white"
   >
-    <div class="rounded-md border-1 border-gray-300 overflow-hidden flex-none">
+    <div class="overflow-hidden flex-none">
       <img
         data-testid="layout-search-suggest-image"
         :src="getSmallestThumbnailUrl(product.cover.media)"
-        class="h-8 w-8 object-cover"
+        class="h-16 w-16 object-cover"
         alt="Product image"
         loading="lazy"
       />
     </div>
-    <div class="flex items-center justify-between overflow-hidden gap-5 grow">
-      <div
-        data-testid="layout-search-suggest-name"
-        class="text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis"
+    <div class="flex flex-col overflow-hidden">
+      <h5
+        class="text-gray-900 font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis"
       >
         {{ getTranslatedProperty(product, "name") }}
-      </div>
-      <div class="flex-none text-right">
-        <SharedPrice
-          v-if="unitPrice"
-          data-testid="layout-search-suggest-price"
-          class="justify-end"
-          :value="unitPrice"
-        >
-          <template #beforePrice>
-            <span v-if="displayFrom">from</span>
-          </template>
-        </SharedPrice>
-        <ProductUnits
-          data-testid="layout-search-suggest-units"
+      </h5>
+      <div class="flex-none">
+        <SharedProductPrice
           :product="product"
-          :show-content="false"
-          class="text-3"
+          :size="'small'"
         />
       </div>
     </div>

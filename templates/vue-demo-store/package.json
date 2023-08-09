@@ -28,6 +28,8 @@
     "@vueuse/nuxt": "^9.13.0",
     "date-fns": "^2.29.3",
     "nuxt3-meta-pixel": "^1.0.9",
+    "requrl": "^3.0.2",
+    "sitemap": "^7.1.1",
     "vue": "^3.2.47",
     "vue-gtag-next": "^1.14.0",
     "vue3-carousel": "^0.3.1"

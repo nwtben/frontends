@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { breadcrumbs } = useBreadcrumbs();
+const localePath = useLocalePath();
 </script>
 <template>
   <nav
@@ -9,7 +10,7 @@ const { breadcrumbs } = useBreadcrumbs();
     <ol class="flex-wrap inline-flex items-center space-x-2">
       <li class="inline-flex items-center">
         <nuxt-link
-          to="/"
+          :to="localePath('/')"
           class="text-gray-500 inline-flex items-center text-xs md:text-sm font-medium"
         >
           {{ $t('home') }}
@@ -23,7 +24,7 @@ const { breadcrumbs } = useBreadcrumbs();
       >
         <nuxt-link
           v-if="breadcrumb.path"
-          :to="breadcrumb.path"
+          :to="localePath(breadcrumb.path)"
           :class="[
             'inline-flex items-center text-xs md:text-sm font-medium text-gray-500',
             (index === breadcrumbs.length - 1) ? 'text-gray-900' : 'text-gray-500'

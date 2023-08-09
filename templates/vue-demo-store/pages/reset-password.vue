@@ -1,14 +1,12 @@
-<script lang="ts">
-export default {
-  name: "ResetPassword",
-};
-
+<script lang="ts" setup>
 useBreadcrumbs([
   {
     name: "Password reset",
     path: "/reset-password",
   },
 ]);
+
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -16,7 +14,7 @@ useBreadcrumbs([
     <AccountResetPasswordForm>
       <template #action>
         <NuxtLink
-          to="/"
+          :to="localePath('/')"
           class="w-full flex justify-center py-2 px-4 border border-brand-primary text-sm font-medium rounded-md text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
           Return to Homepage

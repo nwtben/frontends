@@ -1,7 +1,5 @@
-<script lang="ts">
-export default {
-  name: "RecoverPassword",
-};
+<script lang="ts" setup>
+const localePath = useLocalePath();
 
 useBreadcrumbs([
   {
@@ -24,13 +22,13 @@ useBreadcrumbs([
             {{ $t('have_account_yet') }}
           </p>
           <NuxtLink
-            to="/register"
+            :to="localePath('/register')"
             class="text-sm font-medium px-4 text-gray-600 focus:outline-none underline"
           >
             {{ $t('register_today') }}
           </NuxtLink>
           <NuxtLink
-            to="/login"
+            :to="localePath('/login')"
             class="flex justify-center align-center text-sm font-medium text-gray-600 py-2 px-4 focus:outline-none underline"
           >
             {{ $t('try_login_again') }}

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import { getProductUrl } from "@shopware-pwa/helpers-next";
 
 import { onClickOutside, useFocus, useMagicKeys } from "@vueuse/core";
@@ -8,6 +7,7 @@ import {
 } from '@heroicons/vue/24/outline';
 
 const headerMode = useState<'default' | 'transparent'>('headerMode');
+const localePath = useLocalePath();
 
 withDefaults(
   defineProps<{
@@ -76,7 +76,7 @@ watch(enter, (value) => {
 <template>
   <div
     ref="searchContainer"
-    class="sw-search-input lg:min-w-[240px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 inline-block"
+    class="sw-search-input lg:min-w-[300px] relative group py-2.25 px-3 md:py-2 pr-0 transition duration-300 inline-block focus-within:ring-1 focus-within:ring-gray-700"
     :class="[headerMode === 'transparent' ? 'bg-white bg-opacity-25 text-white' : 'bg-gray-100 text-gray-400']"
   >
     <div class="flex items-center">
@@ -93,7 +93,7 @@ watch(enter, (value) => {
         data-testid="layout-search-input"
         type="text"
         :class="[
-          'sw-search-input text-base md:text-sm placeholder:capitalize font-normal mx-2.5 md:ml-0 xl:ml-2 grow h-6 transition duration-200 focus:outline-none w-56 md:w-10/12',
+          'sw-search-input border-none outline-none text-base md:text-sm placeholder:capitalize font-normal mx-2.5 md:ml-0 xl:ml-2 grow h-6 transition duration-200 w-56 md:w-10/12',
           headerMode === 'transparent' ? 'bg-transparent placeholder:text-white text-white' : 'bg-gray-100 placeholder:text-gray-500 text-gray-700'
         ]"
         :placeholder="$t('search')"
@@ -102,37 +102,37 @@ watch(enter, (value) => {
     </div>
     <div
       v-if="showSuggest"
-      class="absolute border-gray-100 border-t-1 duration-300 left-0 mt-2 overflow-hidden right-0 rounded-b-md shadow-md transition-height w-auto z-1"
+      class="absolute border-gray-100 border-t-1 duration-300 left-0 -bottom-0.25 translate translate-y-full mt-2 overflow-hidden right-0 shadow-md transition-height w-auto z-1"
     >
-      <RouterLink
+      <NuxtLink
         v-for="product in getProducts.slice(0, displayTotal)"
         :key="product.id"
-        :to="getProductUrl(product)"
+        :to="localePath(getProductUrl(product))"
         data-testid="layout-search-suggest-link"
         @click="[(active = false), (isSideMenuOpened = false)]"
       >
         <ProductSuggestSearch :product="product" />
-      </RouterLink>
+      </NuxtLink>
 
       <div
-        class="h-11 text-sm rounded-b-md p-3 text-center transition"
+        class="h-11 text-sm p-3 text-white text-center transition font-medium"
         style="clip-path: inset(0% 0% 0% 0%)"
-        :class="[loading ? ['bg-brand-primary'] : ['bg-gray-100']]"
+        :class="[loading ? ['bg-brand-primary'] : ['bg-gray-800']]"
       >
         <div
           v-if="loading"
           class="w-80 h-40 bg-brand-light blur-2xl fixed animate-spin"
         />
         <div v-else>
-          <RouterLink
+          <NuxtLink
             v-if="getTotal > 0"
-            :to="`/search?query=${typingQuery}`"
+            :to="localePath(`/search?query=${typingQuery}`)"
             @click="[(active = false), (isSideMenuOpened = false)]"
           >
             See <span v-if="getTotal !== 1">all</span> {{ getTotal }}
             <span v-if="getTotal !== 1">results</span>
             <span v-if="getTotal == 1">result</span>
-          </RouterLink>
+          </NuxtLink>
           <div v-else>
             No results :(
           </div>

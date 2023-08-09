@@ -9,6 +9,7 @@ const props = withDefaults(
     errorMessage: "",
   }
 );
+const localePath = useLocalePath();
 
 const errorMessageMap: { [key: number]: string } = {
   404: "We can't find what you are looking for. Are you lost?",
@@ -40,7 +41,7 @@ export default {
           {{ errorMessage }}
         </p>
         <NuxtLink
-          to="/"
+          :to="localePath('/')"
           class="w-full lg:w-auto justify-center py-3 px-8 border shadow-sm text-sm font-medium rounded-md text-white bg-brand-light hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
           Go back home

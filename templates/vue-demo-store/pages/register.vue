@@ -13,6 +13,7 @@ const { getSalutations } = useSalutations();
 const { getCountries } = useCountries();
 const { register } = useUser();
 const { pushError } = useNotifications();
+const localePath = useLocalePath();
 
 const router = useRouter();
 const loading = ref<boolean>();
@@ -77,7 +78,7 @@ const invokeSubmit = async () => {
     try {
       loading.value = true;
       const response = await register(state);
-      if (response) router.push("/");
+      if (response) router.push(localePath("/"));
     } catch (error) {
       let message =
         (error as ClientApiError)?.messages?.[0]?.detail ||

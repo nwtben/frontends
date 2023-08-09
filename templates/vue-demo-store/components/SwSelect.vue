@@ -28,18 +28,18 @@ const props = withDefaults(
 const value = ref('');
 const emit = defineEmits(['update:modelValue'])
 
-const attrs = useAttrs();
+// const attrs = useAttrs();
 
-const remainingAttrs = computed(()=>{
-  let returnObj: any = {}
-  // use const below
-  for (const attr in attrs) {
-    if (attr !== 'class') {
-      returnObj[attr] = attrs[attr]
-    }
-  }
-  return returnObj;
-});
+// const remainingAttrs = computed(()=>{
+//   let returnObj: any = {}
+//   // use const below
+//   for (const attr in attrs) {
+//     if (attr !== 'class') {
+//       returnObj[attr] = attrs[attr]
+//     }
+//   }
+//   return returnObj;
+// });
 
 const getValueOption = computed(() => {
   return props.options?.find(x => x.value === value?.value);
@@ -82,11 +82,11 @@ watch(() => props.modelValue, (v) => {
       <ListboxButton class="relative w-full cursor-default font-medium pr-6 bg-transparent cursor-pointer text-sm">
         <span
           :class="{
+            'block truncate text-left': true,
             'opacity-50': !getValueOption?.label,
-            'block truncate text-left': true
           }"
         >
-          {{ getValueOption?.label || props.placeholder }}
+          {{ getValueOption?.label || props.placeholder }} 
         </span>
         <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
           <ChevronDownIcon class="h-5 w-5 text-current" />

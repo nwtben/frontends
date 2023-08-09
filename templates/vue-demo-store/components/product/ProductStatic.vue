@@ -10,6 +10,7 @@ const props = defineProps<{
 const reviews: Ref<ProductReview[]> = ref([]);
 const route = useRoute();
 const router = useRouter();
+const localePath = useLocalePath();
 
 const { apiInstance } = useShopwareContext();
 onMounted(async () => {
@@ -36,7 +37,7 @@ const properties = computed(() => props.product?.properties || []);
 const handleVariantChange = (val: Product) => {
   const path = val.seoUrls?.[0].seoPathInfo;
   if (path && route.path !== `/${path}`) {
-    router.push(`/${path}`);
+    router.push(localePath(`/${path}`));
   }
 };
 </script>

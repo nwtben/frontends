@@ -12,6 +12,7 @@ const props = defineProps<{
   enableActions?: boolean;
   preventLastItem?: boolean;
 }>();
+const localePath = useLocalePath();
 const { addToCart } = useAddToCart(props.lineItem as any);
 const { lineItem } = toRefs(props);
 const isOpen = inject<boolean>("isSidebarOpen");
@@ -67,6 +68,11 @@ const addToCartProxy = async () => {
   pushSuccess(`${(props.lineItem as any)?.translated?.name} has been added to cart.`);
 };
 
+const img = computed(() => {
+  const smallestThumb = getSmallestThumbnailUrl(lineItem?.value.cover);
+  return getPath(smallestThumb || lineItem.value?.cover?.url || '');
+})
+
 </script>
 <template>
   <li 
@@ -79,9 +85,9 @@ const addToCartProxy = async () => {
       v-if="['product', 'product-wishlist'].includes(lineItem.type ?? '')"
       class="shrink-0 aspect-[2/3] w-[7.5rem] overflow-hidden bg-gray-200 mr-4 md:mr-6"
     >
-      <nuxt-link :to="getProductUrl(lineItem as any)" @click="isOpen = false">
+      <nuxt-link :to="localePath(getProductUrl(lineItem as any))" @click="isOpen = false">
         <nuxt-img
-          :src="getPath(getSmallestThumbnailUrl(lineItem.cover) ?? '')"
+          :src="img"
           :alt="lineItem.label || ''"
           class="h-full w-full object-cover object-center"
           loading="lazy"
@@ -89,7 +95,7 @@ const addToCartProxy = async () => {
       </nuxt-link>
     </div>
     <div>
-      <component :is="lineItem.type !== 'promotion' ? 'nuxt-link' : 'span'" :to="getProductUrl(lineItem as any)" @click="isOpen = false" class="text-md text-gray-900 font-medium mb-2 block">
+      <component :is="lineItem.type !== 'promotion' ? 'nuxt-link' : 'span'" :to="localePath(getProductUrl(lineItem as any))" @click="isOpen = false" class="text-md text-gray-900 font-medium mb-2 block">
         {{ lineItem.label }}
       </component>
       <div class="gap-2 text-sm mb-4">

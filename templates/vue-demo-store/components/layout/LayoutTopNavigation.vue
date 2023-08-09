@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import { getTranslatedProperty, getSmallestThumbnailUrl } from "@shopware-pwa/helpers-next";
 import {
   Popover,
@@ -14,11 +13,12 @@ import {
 import { Category } from "@shopware-pwa/types";
 
 const { navigationElements } = useNavigation();
+const localePath = useLocalePath();
 const router = useRouter();
 
 const test = (item: Category) => {
   if (!item?.children?.length) {
-    router.push(`/${item?.seoUrls?.[0]?.seoPathInfo}`);
+    router.push(localePath(`/${item?.seoUrls?.[0]?.seoPathInfo}`));
   }
 }
 </script>
@@ -47,9 +47,9 @@ const test = (item: Category) => {
             <div class="flex gap-8">
               <div v-for="(childElement, index) in navigationElement.children" :key="childElement.id" class="group min-w-[218px] relative flex text-sm leading-6">
                 <div class="flex-auto">
-                  <RouterLink :to="'/' + childElement?.seoUrls?.[0]?.seoPathInfo" @click="close" class="block font-medium text-gray-900 text-sm">
+                  <NuxtLink :to="localePath('/' + childElement?.seoUrls?.[0]?.seoPathInfo)" @click="close" class="block font-medium text-gray-900 text-sm">
                     {{ getTranslatedProperty(childElement, "name") }}
-                  </RouterLink>
+                  </NuxtLink>
                   <ul
                     class="flex flex-col gap-4 mt-4"
                   >
@@ -57,12 +57,12 @@ const test = (item: Category) => {
                       v-for="(subChildElement, ind) in childElement.children"
                       :key="subChildElement.id"
                     >
-                      <RouterLink
+                      <NuxtLink
                         v-if="
                           typeof subChildElement?.seoUrls?.[0]?.seoPathInfo !==
                             'undefined'
                         "
-                        :to="'/' + subChildElement?.seoUrls?.[0]?.seoPathInfo"
+                        :to="localePath('/' + subChildElement?.seoUrls?.[0]?.seoPathInfo)"
                         @click="close"
                       >
                         <div
@@ -75,7 +75,7 @@ const test = (item: Category) => {
                             {{ getTranslatedProperty(subChildElement, "name") }}
                           </p>
                         </div>
-                      </RouterLink>
+                      </NuxtLink>
                     </template>
                   </ul>
                 </div>
